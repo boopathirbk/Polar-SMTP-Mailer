@@ -32,8 +32,9 @@ $logs_table->prepare_items();
         </button>
     </div>
 
-    <form method="get" class="ssm-logs-form">
+    <form method="post" class="ssm-logs-form">
         <input type="hidden" name="page" value="simple-smtp-mail-logs">
+        <?php wp_nonce_field( 'bulk-email-logs' ); ?>
         <?php $logs_table->search_box( __( 'Search', 'simple-smtp-mail' ), 'ssm-search' ); ?>
         
         <div class="ssm-table-responsive">

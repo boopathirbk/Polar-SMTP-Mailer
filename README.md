@@ -85,7 +85,8 @@ A powerful, open-source WordPress SMTP plugin with comprehensive email logging, 
 - **Debug Mode** - Enable detailed SMTP debugging output
 - **Multisite Compatible** - Works on WordPress multisite installations
 - **Translation Ready** - Full internationalization support with text domain
-- **Clean Uninstall** - Optional complete data removal on plugin deletion
+- **Clean Uninstall** - Optional complete data removal on plugin deletion (configurable in settings)
+- **Self-Healing Database** - Automatic table creation and repair on admin load
 - **Database Migration** - Automatic table updates on plugin upgrades
 - **Filter Hooks** - Extensible via WordPress filters (e.g., `ssm_smtp_providers`, `ssm_bypass_queue`)
 
@@ -236,12 +237,16 @@ Your support helps keep this project alive and free for everyone! 🙏
 - Email resend functionality
 - Email queue with background processing
 - Priority-based queue processing
-- Backup SMTP failover
+- Backup SMTP failover with separate provider selection
 - GDPR-compliant privacy features (exporter & eraser)
 - Modern admin dashboard with statistics
 - Rate limiting and security logging
 - Debug mode for troubleshooting
 - Full internationalization support
+- **Clean uninstall option** - Optionally delete all settings and logs on plugin removal
+- **Hostinger SMTP fix** - Explicit Sender header to prevent "address rejected" errors
+- **Self-healing database** - Automatic table creation/repair on admin load
+- **Test connection UX** - Clear message when password re-entry is required after save
 
 ---
 

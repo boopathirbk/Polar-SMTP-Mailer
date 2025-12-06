@@ -141,7 +141,8 @@
     // Test Email page
     const SSMTestEmail = {
         init: function () {
-            $('#ssm-test-email-form').on('submit', this.sendTestEmail);
+            // Use .off().on() to prevent double binding
+            $('#ssm-test-email-form').off('submit').on('submit', this.sendTestEmail);
         },
 
         sendTestEmail: function (e) {
@@ -202,8 +203,14 @@
             }
         },
 
-        viewLog: function () {
+        viewLog: function (e) {
+            e.preventDefault();
             const id = $(this).data('id');
+
+            if (!id) {
+                alert('Error: Invalid log ID');
+                return;
+            }
 
             $.ajax({
                 url: ssm_ajax.ajax_url,
@@ -231,16 +238,21 @@
 
                         // Safely display message content - use text() for plain text or create iframe sandbox for HTML
                         const messageContainer = $('#ssm-log-message');
-                        if (log.message.indexOf('<') !== -1 && log.message.indexOf('>') !== -1) {
+                        if (log.message && log.message.indexOf('<') !== -1 && log.message.indexOf('>') !== -1) {
                             // HTML content - use srcdoc iframe for sandboxed display
                             messageContainer.html('<iframe sandbox="" srcdoc="' + $('<div>').text(log.message).html().replace(/"/g, '&quot;') + '" style="width:100%;min-height:200px;border:none;"></iframe>');
                         } else {
                             // Plain text - safe to use text()
-                            messageContainer.text(log.message);
+                            messageContainer.text(log.message || '(no content)');
                         }
                         $('#ssm-log-modal').show();
                         $('.ssm-modal-close').focus();
+                    } else {
+                        alert('Error: ' + (response.data ? response.data.message : 'Failed to load log'));
                     }
+                },
+                error: function (xhr, status, error) {
+                    alert('AJAX Error: ' + error);
                 }
             });
         },

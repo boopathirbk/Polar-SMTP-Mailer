@@ -64,6 +64,12 @@ class SSM_Logs_Table extends WP_List_Table {
         $per_page = 20;
         $current_page = $this->get_pagenum();
 
+        // Set column headers - this is required for the table to display properly
+        $columns = $this->get_columns();
+        $hidden = array();
+        $sortable = $this->get_sortable_columns();
+        $this->_column_headers = array( $columns, $hidden, $sortable );
+
         $args = array(
             'per_page' => $per_page,
             'page'     => $current_page,

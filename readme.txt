@@ -31,6 +31,8 @@ Simple SMTP Mail helps you configure any SMTP provider to send WordPress emails 
 * **Export Logs** - Download logs as CSV or JSON format
 * **Debug Mode** - Detailed logging for troubleshooting
 * **Multisite Ready** - Works with WordPress Multisite
+* **Clean Uninstall** - Optionally delete all settings and logs on plugin removal
+* **Self-Healing Database** - Automatic table creation and repair on admin load
 
 = Pre-configured SMTP Providers =
 
@@ -115,12 +117,16 @@ Go to SMTP Mail → Email Logs and click the "Export CSV" or "Export JSON" butto
 * Email resend functionality
 * Email queue with background processing
 * Priority-based queue processing
-* Backup SMTP failover
+* Backup SMTP failover with separate provider selection
 * GDPR-compliant privacy features (exporter & eraser)
 * Modern admin dashboard with statistics
 * Rate limiting and security logging
 * Debug mode for troubleshooting
 * Full internationalization support
+* Clean uninstall option - optionally delete all data on removal
+* Hostinger SMTP sender fix - explicit Sender header
+* Self-healing database - automatic table creation/repair
+* Test connection UX - clear password re-entry message
 
 == Upgrade Notice ==
 
