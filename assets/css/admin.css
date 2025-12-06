@@ -348,7 +348,19 @@
     width: 100%;
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
     border-radius: 4px;
-    overflow: hidden;
+    overflow: visible;
+}
+
+.ssm-wrap .wp-list-table thead {
+    display: table-header-group !important;
+}
+
+.ssm-wrap .wp-list-table tbody {
+    display: table-row-group !important;
+}
+
+.ssm-wrap .wp-list-table tr {
+    display: table-row !important;
 }
 
 .ssm-wrap .wp-list-table thead th,
@@ -516,6 +528,27 @@
 
 .ssm-test-result.error {
     color: var(--ssm-error);
+    display: inline-block;
+    max-width: 400px;
+    vertical-align: middle;
+}
+
+/* Test Connection Note */
+.ssm-test-note {
+    margin-top: 12px !important;
+    padding: 10px 12px;
+    background: #f0f6fc;
+    border-left: 3px solid #72aee6;
+    border-radius: 0 4px 4px 0;
+}
+
+.ssm-test-note .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    vertical-align: text-bottom;
+    color: #2271b1;
+    margin-right: 4px;
 }
 
 /* ==========================================================================
@@ -718,14 +751,38 @@
     visibility: visible !important;
     width: 100%;
     border-collapse: collapse;
+    table-layout: auto;
 }
 
-.ssm-wrap .wp-list-table thead,
-.ssm-wrap .wp-list-table tbody,
-.ssm-wrap .wp-list-table tr,
+.ssm-wrap .wp-list-table thead {
+    display: table-header-group !important;
+    visibility: visible !important;
+}
+
+.ssm-wrap .wp-list-table tbody {
+    display: table-row-group !important;
+    visibility: visible !important;
+}
+
+.ssm-wrap .wp-list-table tr {
+    display: table-row !important;
+    visibility: visible !important;
+}
+
 .ssm-wrap .wp-list-table th,
 .ssm-wrap .wp-list-table td {
-    display: revert !important;
+    display: table-cell !important;
+    visibility: visible !important;
+}
+
+.ssm-wrap .wp-list-table tfoot {
+    display: table-footer-group !important;
+    visibility: visible !important;
+}
+
+/* Ensure tablenav is visible */
+.ssm-wrap .tablenav {
+    display: block !important;
     visibility: visible !important;
 }
 

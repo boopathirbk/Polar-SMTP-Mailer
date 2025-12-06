@@ -93,6 +93,10 @@ $encryption_options = SSM_Providers::get_encryption_options();
                     <button type="button" class="button button-secondary" id="ssm-test-connection"><?php esc_html_e( 'Test Connection', 'simple-smtp-mail' ); ?></button>
                     <span class="ssm-test-result"></span>
                 </p>
+                <p class="description ssm-test-note">
+                    <span class="dashicons dashicons-info"></span>
+                    <?php esc_html_e( 'Note: After saving settings, you must re-enter your password to test the connection. Saved passwords are masked for security and cannot be used for testing.', 'simple-smtp-mail' ); ?>
+                </p>
             </div>
 
             <!-- From Settings -->
@@ -175,8 +179,8 @@ $encryption_options = SSM_Providers::get_encryption_options();
                         <th scope="row"><label for="ssm_backup_smtp_provider"><?php esc_html_e( 'Backup Provider', 'simple-smtp-mail' ); ?></label></th>
                         <td>
                             <select name="ssm_backup_smtp_provider" id="ssm_backup_smtp_provider">
-                                <?php foreach ( $providers as $key => $provider_name ) : ?>
-                                    <option value="<?php echo esc_attr( $key ); ?>" <?php selected( $settings['backup_smtp_provider'], $key ); ?>><?php echo esc_html( $provider_name ); ?></option>
+                                <?php foreach ( $providers as $key => $provider ) : ?>
+                                    <option value="<?php echo esc_attr( $key ); ?>" <?php selected( $settings['backup_smtp_provider'], $key ); ?>><?php echo esc_html( $provider['name'] ); ?></option>
                                 <?php endforeach; ?>
                             </select>
                             <p class="description" id="ssm-backup-provider-description"></p>

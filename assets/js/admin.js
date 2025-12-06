@@ -97,6 +97,14 @@
         testConnection: function () {
             const $btn = $(this);
             const $result = $('.ssm-test-result');
+            const password = $('#ssm_smtp_password').val();
+            const isAuthEnabled = $('#ssm_smtp_auth').is(':checked');
+
+            // Check if password is the masked placeholder (bullets)
+            if (isAuthEnabled && password && /^[•]+$/.test(password)) {
+                $result.addClass('error').html('✗ Please re-enter your password to test the connection. For security, saved passwords are masked and cannot be used for testing.');
+                return;
+            }
 
             $btn.prop('disabled', true).text(ssm_ajax.strings.testing);
             $result.removeClass('success error').text('');
@@ -110,9 +118,9 @@
                     host: $('#ssm_smtp_host').val(),
                     port: $('#ssm_smtp_port').val(),
                     encryption: $('#ssm_smtp_encryption').val(),
-                    auth: $('#ssm_smtp_auth').is(':checked') ? 'true' : 'false',
+                    auth: isAuthEnabled ? 'true' : 'false',
                     username: $('#ssm_smtp_username').val(),
-                    password: $('#ssm_smtp_password').val()
+                    password: password
                 },
                 success: function (response) {
                     if (response.success) {
