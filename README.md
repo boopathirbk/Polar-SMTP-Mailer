@@ -6,9 +6,30 @@
 [![License](https://img.shields.io/badge/License-GPLv2-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://paypal.me/boopathirbk)
 
-A powerful, open-source WordPress SMTP plugin with comprehensive email logging, queue management, backup SMTP failover, and a modern admin dashboard.
+### 🚀 *The lightweight, feature-packed SMTP plugin WordPress deserves.*
+
+> **Stop losing emails. Start delivering with confidence.**  
+> A 100% open-source SMTP mailer with email logging, queue management, backup failover, and a beautiful dashboard — no premium upsells, no feature restrictions.
 
 ![Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen.svg)
+
+---
+
+## 🏆 Why Choose Simple SMTP Mail?
+
+| Feature | Simple SMTP Mail | WP Mail SMTP | Post SMTP | FluentSMTP | Easy WP SMTP |
+|---------|:----------------:|:------------:|:---------:|:----------:|:------------:|
+| **100% Free & Open Source** | ✅ | ❌ Pro | ❌ Pro | ✅ | ❌ Pro |
+| **Email Logging** | ✅ | ❌ Pro | ✅ | ✅ | ✅ |
+| **Backup SMTP Failover** | ✅ | ❌ Pro | ✅ | ❌ | ❌ |
+| **Email Queue** | ✅ | ❌ Pro | ✅ | ❌ | ❌ |
+| **15+ Provider Presets** | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Password Encryption** | ✅ AES-256 | ✅ | ✅ | ✅ | ✅ |
+| **GDPR Privacy Tools** | ✅ | ❌ Pro | ❌ | ❌ | ❌ |
+| **Modern Dashboard** | ✅ | ❌ Pro | ✅ | ✅ | ❌ |
+| **Self-Healing Database** | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **Clean Uninstall Option** | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **No Upsells/Ads** | ✅ | ❌ | ❌ | ✅ | ❌ |
 
 ---
 

@@ -73,6 +73,15 @@ class SSM_Admin {
             'simple-smtp-mail-test',
             array( $this, 'render_test' )
         );
+
+        add_submenu_page(
+            'simple-smtp-mail',
+            __( 'About', 'simple-smtp-mail' ),
+            __( 'About', 'simple-smtp-mail' ),
+            'manage_options',
+            'simple-smtp-mail-about',
+            array( $this, 'render_about' )
+        );
     }
 
     /**
@@ -150,5 +159,12 @@ class SSM_Admin {
      */
     public function render_test() {
         require_once SSM_PLUGIN_DIR . 'admin/views/test-page.php';
+    }
+
+    /**
+     * Render about page.
+     */
+    public function render_about() {
+        require_once SSM_PLUGIN_DIR . 'admin/views/about-page.php';
     }
 }

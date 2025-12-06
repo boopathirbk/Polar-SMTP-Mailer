@@ -8,11 +8,24 @@ Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-A powerful, open-source SMTP mailer plugin with comprehensive email logging, queue management, backup SMTP failover, and a modern admin dashboard.
+Stop losing emails. Start delivering with confidence. The lightweight, feature-packed SMTP plugin WordPress deserves — 100% free, no upsells.
 
 == Description ==
 
-Simple SMTP Mail helps you configure any SMTP provider to send WordPress emails reliably. It includes comprehensive email logging, a modern dashboard, and advanced features like email queuing and backup SMTP.
+**Simple SMTP Mail** is a powerful, 100% open-source SMTP mailer with everything you need to ensure reliable email delivery — no premium upsells, no feature restrictions.
+
+= 🚀 Why Choose Simple SMTP Mail? =
+
+Unlike other SMTP plugins that lock essential features behind paywalls, Simple SMTP Mail gives you **everything for free**:
+
+* ✅ **Email Logging** - Track all sent, failed, and queued emails
+* ✅ **Backup SMTP Failover** - Automatic switch when primary fails
+* ✅ **Email Queue** - Background processing with priority & retry
+* ✅ **GDPR Privacy Tools** - Built-in exporter, eraser, anonymization
+* ✅ **Modern Dashboard** - Beautiful stats and quick actions
+* ✅ **Self-Healing Database** - Automatic table creation & repair
+* ✅ **Clean Uninstall** - Optionally remove all data on deletion
+* ✅ **No Ads or Upsells** - Pure, clean experience
 
 = ✨ Key Features =
 
