@@ -165,7 +165,8 @@ class SSM_Queue {
     public function clear_queue() {
         global $wpdb;
         $table = SSM_DB::get_queue_table();
-        return $wpdb->query( $wpdb->prepare( "TRUNCATE TABLE %i", $table ) );
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
+        return $wpdb->query( "TRUNCATE TABLE " . $table );
     }
 
     /**
