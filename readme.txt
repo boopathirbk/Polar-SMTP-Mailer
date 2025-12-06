@@ -19,7 +19,7 @@ Simple SMTP Mail helps you configure any SMTP provider to send WordPress emails 
 = Key Features =
 
 * **Easy SMTP Configuration** - Configure your SMTP settings in minutes with pre-configured provider templates
-* **15+ Provider Presets** - Gmail, Outlook, SendGrid, Mailgun, Amazon SES, Brevo, Postmark, and more
+* **15+ Provider Presets** - Gmail, Outlook, Hostinger, SendGrid, Mailgun, Amazon SES, Brevo, Postmark, and more
 * **Secure Password Storage** - Passwords are encrypted using AES-256 encryption
 * **Email Logging** - Track all sent, failed, and queued emails with detailed logs
 * **Modern Dashboard** - Beautiful stats, charts, and quick actions
@@ -38,6 +38,7 @@ Simple SMTP Mail helps you configure any SMTP provider to send WordPress emails 
 * Outlook / Microsoft 365
 * Yahoo Mail
 * Zoho Mail
+* Hostinger
 * SendGrid
 * Mailgun
 * Amazon SES
@@ -106,7 +107,9 @@ Go to SMTP Mail → Email Logs and click the "Export CSV" or "Export JSON" butto
 * Enhanced UI/UX with improved accessibility (WCAG AA)
 * Mobile-optimized responsive tables
 * Memory optimization for large log exports
-* SMTP configuration with 15+ provider presets
+* Added Hostinger SMTP provider preset
+* Upgraded Admin UX (Hostinger support, Port selection Datalist, Placeholders)
+* SMTP configuration with 15+ provider presets (including Hostinger)
 * Support for TLS, SSL, and no encryption
 * Email logging with search, filter, and export
 * Email resend functionality

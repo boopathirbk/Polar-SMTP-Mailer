@@ -48,7 +48,16 @@ $encryption_options = SSM_Providers::get_encryption_options();
                     </tr>
                     <tr>
                         <th scope="row"><label for="ssm_smtp_port"><?php esc_html_e( 'SMTP Port', 'simple-smtp-mail' ); ?></label></th>
-                        <td><input type="number" name="ssm_smtp_port" id="ssm_smtp_port" value="<?php echo esc_attr( $settings['smtp_port'] ); ?>" class="small-text" min="1" max="65535"></td>
+                        <td>
+                            <input type="number" name="ssm_smtp_port" id="ssm_smtp_port" value="<?php echo esc_attr( $settings['smtp_port'] ); ?>" class="small-text" min="1" max="65535" list="ssm_port_options" placeholder="587">
+                            <datalist id="ssm_port_options">
+                                <option value="25" label="None">
+                                <option value="465" label="SSL">
+                                <option value="587" label="TLS">
+                                <option value="2525" label="Alt">
+                            </datalist>
+                            <p class="description"><?php esc_html_e( 'Select a common port or enter a custom one.', 'simple-smtp-mail' ); ?></p>
+                        </td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="ssm_smtp_encryption"><?php esc_html_e( 'Encryption', 'simple-smtp-mail' ); ?></label></th>
@@ -68,12 +77,12 @@ $encryption_options = SSM_Providers::get_encryption_options();
                     </tr>
                     <tr class="ssm-auth-field">
                         <th scope="row"><label for="ssm_smtp_username"><?php esc_html_e( 'Username', 'simple-smtp-mail' ); ?></label></th>
-                        <td><input type="text" name="ssm_smtp_username" id="ssm_smtp_username" value="<?php echo esc_attr( $settings['smtp_username'] ); ?>" class="regular-text" autocomplete="off"></td>
+                        <td><input type="text" name="ssm_smtp_username" id="ssm_smtp_username" value="<?php echo esc_attr( $settings['smtp_username'] ); ?>" class="regular-text" autocomplete="off" placeholder="user@example.com"></td>
                     </tr>
                     <tr class="ssm-auth-field">
                         <th scope="row"><label for="ssm_smtp_password"><?php esc_html_e( 'Password', 'simple-smtp-mail' ); ?></label></th>
                         <td>
-                            <input type="password" name="ssm_smtp_password" id="ssm_smtp_password" value="<?php echo esc_attr( $settings['smtp_password'] ); ?>" class="regular-text" autocomplete="new-password">
+                            <input type="password" name="ssm_smtp_password" id="ssm_smtp_password" value="<?php echo esc_attr( $settings['smtp_password'] ); ?>" class="regular-text" autocomplete="new-password" placeholder="<?php esc_attr_e( 'Enter your SMTP password', 'simple-smtp-mail' ); ?>">
                             <button type="button" class="button ssm-toggle-password" aria-label="<?php esc_attr_e( 'Show password', 'simple-smtp-mail' ); ?>"><span class="dashicons dashicons-visibility"></span></button>
                             <p class="description"><?php esc_html_e( 'Password is encrypted before storage.', 'simple-smtp-mail' ); ?></p>
                         </td>

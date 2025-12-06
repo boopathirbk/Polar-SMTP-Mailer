@@ -192,6 +192,16 @@ class SSM_Providers {
                 'auth'        => true,
                 'icon'        => 'dashicons-cloud',
             ),
+            'hostinger'   => array(
+                'name'        => __( 'Hostinger', 'simple-smtp-mail' ),
+                'description' => __( 'Use Hostinger SMTP mail service.', 'simple-smtp-mail' ),
+                'host'        => 'smtp.hostinger.com',
+                'port'        => 465,
+                'encryption'  => 'ssl',
+                'auth'        => true,
+                'icon'        => 'dashicons-email-alt',
+                'help_url'    => 'https://support.hostinger.com/en/articles/1583465-how-to-find-email-configuration-settings',
+            ),
         );
 
         /**
@@ -292,6 +302,7 @@ class SSM_Providers {
             'in-v3.mailjet.com'      => 'Mailjet',
             'smtp.pepipost.com'      => 'Pepipost',
             'smtp.mail.yahoo.com'    => 'Yahoo',
+            'smtp.hostinger.com'     => 'Hostinger',
         );
 
         foreach ( $provider_map as $domain => $name ) {

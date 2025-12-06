@@ -13,7 +13,7 @@ A powerful, open-source WordPress SMTP plugin with comprehensive email logging, 
 ## ✨ Features
 
 ### 📧 SMTP Configuration
-- **15+ Pre-configured Providers** - Gmail, Outlook, Office 365, Yahoo, Zoho, SendGrid, Mailgun, Amazon SES, Brevo (Sendinblue), Postmark, SparkPost, SMTP.com, Elastic Email, Mailjet, Pepipost
+- **15+ Pre-configured Providers** - Gmail, Outlook, Office 365, Yahoo, Zoho, Hostinger, SendGrid, Mailgun, Amazon SES, Brevo (Sendinblue), Postmark, SparkPost, SMTP.com, Elastic Email, Mailjet, Pepipost
 - **Custom SMTP Support** - Use any SMTP server with manual configuration
 - **Encryption Options** - TLS (port 587), SSL (port 465), or None (port 25)
 - **Secure Authentication** - Username/password with AES-256-CBC encrypted storage
@@ -132,6 +132,7 @@ A powerful, open-source WordPress SMTP plugin with comprehensive email logging, 
 | Elastic Email | smtp.elasticemail.com | 2525 | - |
 | Mailjet | in-v3.mailjet.com | 587 | 465 |
 | Pepipost (Netcore) | smtp.pepipost.com | 587 | 465 |
+| Hostinger | smtp.hostinger.com | 587 | 465 |
 
 > **Note:** Use TLS (port 587) as the preferred option. SSL (port 465) is available as an alternative for providers that support it.
 
@@ -227,7 +228,9 @@ Your support helps keep this project alive and free for everyone! 🙏
 - Enhanced UI/UX with improved accessibility (WCAG AA)
 - Mobile-optimized responsive tables
 - Memory optimization for large log exports
-- SMTP configuration with 15+ provider presets
+- Added Hostinger SMTP provider preset
+- Upgraded Admin UX (Hostinger support, Port selection Datalist, Placeholders)
+- SMTP configuration with 15+ provider presets (including Hostinger)
 - Support for TLS, SSL, and no encryption
 - Email logging with search, filter, and export
 - Email resend functionality
