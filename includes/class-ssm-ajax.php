@@ -53,6 +53,8 @@ class SSM_Ajax {
     public function test_connection() {
         $this->verify_request();
 
+        // Nonce verified in verify_request() above.
+        // phpcs:disable WordPress.Security.NonceVerification.Missing
         $settings = array(
             'host'       => isset( $_POST['host'] ) ? sanitize_text_field( wp_unslash( $_POST['host'] ) ) : '',
             'port'       => isset( $_POST['port'] ) ? absint( $_POST['port'] ) : 587,
@@ -61,6 +63,7 @@ class SSM_Ajax {
             'username'   => isset( $_POST['username'] ) ? sanitize_text_field( wp_unslash( $_POST['username'] ) ) : '',
             'password'   => isset( $_POST['password'] ) ? sanitize_text_field( wp_unslash( $_POST['password'] ) ) : '',
         );
+        // phpcs:enable
 
         $mailer = new SSM_Mailer();
         $result = $mailer->test_connection( $settings );
@@ -108,6 +111,7 @@ class SSM_Ajax {
             $attempt_count = 0;
         }
 
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in verify_request().
         $to = isset( $_POST['to'] ) ? sanitize_email( wp_unslash( $_POST['to'] ) ) : '';
 
         if ( ! is_email( $to ) ) {
@@ -137,6 +141,7 @@ class SSM_Ajax {
     public function view_log() {
         $this->verify_request();
 
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in verify_request().
         $id = isset( $_POST['id'] ) ? absint( $_POST['id'] ) : 0;
 
         if ( ! $id ) {
@@ -171,6 +176,7 @@ class SSM_Ajax {
     public function delete_log() {
         $this->verify_request();
 
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in verify_request().
         $id = isset( $_POST['id'] ) ? absint( $_POST['id'] ) : 0;
 
         if ( ! $id ) {
@@ -192,6 +198,7 @@ class SSM_Ajax {
     public function resend_email() {
         $this->verify_request();
 
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in verify_request().
         $id = isset( $_POST['id'] ) ? absint( $_POST['id'] ) : 0;
 
         if ( ! $id ) {
@@ -214,8 +221,10 @@ class SSM_Ajax {
     public function export_logs() {
         $this->verify_request();
 
+        // phpcs:disable WordPress.Security.NonceVerification.Missing
         $format = isset( $_POST['format'] ) ? sanitize_text_field( wp_unslash( $_POST['format'] ) ) : 'csv';
         $status = isset( $_POST['status'] ) ? sanitize_text_field( wp_unslash( $_POST['status'] ) ) : '';
+        // phpcs:enable
 
         $logger = new SSM_Logger();
         $args = array( 'status' => $status );
@@ -243,6 +252,7 @@ class SSM_Ajax {
     public function get_stats() {
         $this->verify_request();
 
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in verify_request().
         $period = isset( $_POST['period'] ) ? sanitize_text_field( wp_unslash( $_POST['period'] ) ) : 'all';
 
         $stats = SSM_DB::get_stats( $period );
@@ -272,6 +282,7 @@ class SSM_Ajax {
     public function get_provider() {
         $this->verify_request();
 
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in verify_request().
         $provider_key = isset( $_POST['provider'] ) ? sanitize_text_field( wp_unslash( $_POST['provider'] ) ) : '';
         $provider = SSM_Providers::get_provider( $provider_key );
 

@@ -70,6 +70,7 @@ class SSM_Logs_Table extends WP_List_Table {
         $sortable = $this->get_sortable_columns();
         $this->_column_headers = array( $columns, $hidden, $sortable );
 
+        // phpcs:disable WordPress.Security.NonceVerification.Recommended
         $args = array(
             'per_page' => $per_page,
             'page'     => $current_page,
@@ -78,6 +79,7 @@ class SSM_Logs_Table extends WP_List_Table {
             'orderby'  => isset( $_GET['orderby'] ) ? sanitize_text_field( wp_unslash( $_GET['orderby'] ) ) : 'created_at',
             'order'    => isset( $_GET['order'] ) ? sanitize_text_field( wp_unslash( $_GET['order'] ) ) : 'DESC',
         );
+        // phpcs:enable
 
         $this->items = SSM_DB::get_logs( $args );
         $total_items = SSM_DB::get_logs_count( $args );
@@ -201,9 +203,13 @@ class SSM_Logs_Table extends WP_List_Table {
         <div class="alignleft actions">
             <select name="status">
                 <option value=""><?php esc_html_e( 'All Statuses', 'simple-smtp-mail' ); ?></option>
-                <option value="sent" <?php selected( isset( $_GET['status'] ) ? sanitize_text_field( wp_unslash( $_GET['status'] ) ) : '', 'sent' ); ?>><?php esc_html_e( 'Sent', 'simple-smtp-mail' ); ?></option>
-                <option value="failed" <?php selected( isset( $_GET['status'] ) ? sanitize_text_field( wp_unslash( $_GET['status'] ) ) : '', 'failed' ); ?>><?php esc_html_e( 'Failed', 'simple-smtp-mail' ); ?></option>
-                <option value="queued" <?php selected( isset( $_GET['status'] ) ? sanitize_text_field( wp_unslash( $_GET['status'] ) ) : '', 'queued' ); ?>><?php esc_html_e( 'Queued', 'simple-smtp-mail' ); ?></option>
+                <?php
+                // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- WP_List_Table filtering uses GET params.
+                $current_status = isset( $_GET['status'] ) ? sanitize_text_field( wp_unslash( $_GET['status'] ) ) : '';
+                ?>
+                <option value="sent" <?php selected( $current_status, 'sent' ); ?>><?php esc_html_e( 'Sent', 'simple-smtp-mail' ); ?></option>
+                <option value="failed" <?php selected( $current_status, 'failed' ); ?>><?php esc_html_e( 'Failed', 'simple-smtp-mail' ); ?></option>
+                <option value="queued" <?php selected( $current_status, 'queued' ); ?>><?php esc_html_e( 'Queued', 'simple-smtp-mail' ); ?></option>
             </select>
             <?php submit_button( __( 'Filter', 'simple-smtp-mail' ), '', 'filter_action', false ); ?>
         </div>

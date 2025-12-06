@@ -271,11 +271,10 @@ class SSM_Logger {
      * @return string CSV content.
      */
     public function export_csv( $args = array() ) {
-        // Prepare file handle.
-        $output = fopen( 'php://temp', 'r+' );
+        $csv_content = '';
         
         // Header row.
-        fputcsv( $output, array(
+        $csv_content .= $this->array_to_csv_line( array(
             __( 'ID', 'simple-smtp-mail' ),
             __( 'To', 'simple-smtp-mail' ),
             __( 'CC', 'simple-smtp-mail' ),
@@ -302,7 +301,7 @@ class SSM_Logger {
             }
 
             foreach ( $logs as $log ) {
-                fputcsv( $output, array(
+                $csv_content .= $this->array_to_csv_line( array(
                     $log->id,
                     $log->to_email,
                     $log->cc_email,
@@ -327,11 +326,24 @@ class SSM_Logger {
 
         } while ( true );
 
-        rewind( $output );
-        $csv_content = stream_get_contents( $output );
-        fclose( $output );
-
         return $csv_content;
+    }
+
+    /**
+     * Convert array to CSV line.
+     *
+     * @since 1.0.0
+     * @param array $fields Array of fields.
+     * @return string CSV formatted line.
+     */
+    private function array_to_csv_line( $fields ) {
+        $csv_line = array();
+        foreach ( $fields as $field ) {
+            // Escape double quotes and wrap in quotes.
+            $field = str_replace( '"', '""', (string) $field );
+            $csv_line[] = '"' . $field . '"';
+        }
+        return implode( ',', $csv_line ) . "\n";
     }
 
     /**

@@ -1,6 +1,6 @@
 === Simple SMTP Mail ===
 Contributors: boopathir
-Tags: smtp, email, mail, email log, wp mail, gmail smtp, outlook smtp, sendgrid, mailgun
+Tags: smtp, email, wp mail, email log, gmail
 Requires at least: 6.0
 Tested up to: 6.9
 Stable tag: 1.0.0

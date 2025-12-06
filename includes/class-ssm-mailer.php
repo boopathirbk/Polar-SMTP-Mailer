@@ -448,6 +448,7 @@ class SSM_Mailer {
 
         // Check for 220 response (ready).
         if ( 0 !== strpos( $response, '220' ) ) {
+            // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Required for SMTP socket.
             fclose( $connection );
             return array(
                 'success' => false,
@@ -460,6 +461,7 @@ class SSM_Mailer {
         }
 
         // Send EHLO.
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite -- Required for SMTP socket.
         fwrite( $connection, "EHLO " . wp_parse_url( home_url(), PHP_URL_HOST ) . "\r\n" );
         $response = '';
         while ( $line = fgets( $connection, 512 ) ) {
@@ -471,10 +473,12 @@ class SSM_Mailer {
 
         // Check for STARTTLS if TLS encryption.
         if ( 'tls' === $settings['encryption'] ) {
+            // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite -- Required for SMTP socket.
             fwrite( $connection, "STARTTLS\r\n" );
             $tls_response = fgets( $connection, 512 );
 
             if ( 0 !== strpos( $tls_response, '220' ) ) {
+                // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Required for SMTP socket.
                 fclose( $connection );
                 return array(
                     'success' => false,
@@ -484,6 +488,7 @@ class SSM_Mailer {
 
             // Enable TLS.
             if ( ! stream_socket_enable_crypto( $connection, true, STREAM_CRYPTO_METHOD_TLS_CLIENT ) ) {
+                // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Required for SMTP socket.
                 fclose( $connection );
                 return array(
                     'success' => false,
@@ -492,6 +497,7 @@ class SSM_Mailer {
             }
 
             // Send EHLO again after TLS.
+            // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite -- Required for SMTP socket.
             fwrite( $connection, "EHLO " . wp_parse_url( home_url(), PHP_URL_HOST ) . "\r\n" );
             while ( $line = fgets( $connection, 512 ) ) {
                 if ( ' ' === substr( $line, 3, 1 ) ) {
@@ -502,12 +508,13 @@ class SSM_Mailer {
 
         // Test authentication if enabled.
         if ( $settings['auth'] && ! empty( $settings['username'] ) ) {
+            // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite -- Required for SMTP socket.
             fwrite( $connection, "AUTH LOGIN\r\n" );
             $auth_response = fgets( $connection, 512 );
 
             if ( 0 === strpos( $auth_response, '334' ) ) {
                 // Send username.
-                // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+                // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode, WordPress.WP.AlternativeFunctions.file_system_operations_fwrite
                 fwrite( $connection, base64_encode( $settings['username'] ) . "\r\n" );
                 fgets( $connection, 512 );
 
@@ -516,11 +523,12 @@ class SSM_Mailer {
                 if ( SSM_Encryption::is_encrypted( $password ) ) {
                     $password = SSM_Encryption::decrypt( $password );
                 }
-                // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+                // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode, WordPress.WP.AlternativeFunctions.file_system_operations_fwrite
                 fwrite( $connection, base64_encode( $password ) . "\r\n" );
                 $auth_result = fgets( $connection, 512 );
 
                 if ( 0 !== strpos( $auth_result, '235' ) ) {
+                    // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Required for SMTP socket.
                     fclose( $connection );
 
                     // Log failed authentication attempt for security monitoring.
@@ -535,7 +543,9 @@ class SSM_Mailer {
         }
 
         // Send QUIT.
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite -- Required for SMTP socket.
         fwrite( $connection, "QUIT\r\n" );
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Required for SMTP socket.
         fclose( $connection );
 
         return array(
@@ -568,11 +578,7 @@ class SSM_Mailer {
         $message = sprintf(
             /* translators: 1: Site name, 2: Current date and time */
             __(
-                "This is a test email from Simple SMTP Mail.\n\n" .
-                "If you received this email, your SMTP settings are configured correctly.\n\n" .
-                "Site: %1\$s\n" .
-                "Date: %2\$s\n\n" .
-                "Thank you for using Simple SMTP Mail!",
+                "This is a test email from Simple SMTP Mail.\n\nIf you received this email, your SMTP settings are configured correctly.\n\nSite: %1\$s\nDate: %2\$s\n\nThank you for using Simple SMTP Mail!",
                 'simple-smtp-mail'
             ),
             get_bloginfo( 'name' ),

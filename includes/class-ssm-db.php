@@ -252,13 +252,14 @@ class SSM_DB {
 
         self::init_table_names();
 
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL, PluginCheck.Security.DirectDB
         $result = $wpdb->get_row(
             $wpdb->prepare(
                 "SELECT * FROM " . self::$logs_table . " WHERE id = %d",
                 $id
             )
         );
+        // phpcs:enable
 
         return $result;
     }
@@ -330,10 +331,11 @@ class SSM_DB {
         $values[] = $args['per_page'];
         $values[] = $offset;
 
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL, PluginCheck.Security.DirectDB
         $results = $wpdb->get_results(
             $wpdb->prepare( $query, $values )
         );
+        // phpcs:enable
 
         return $results ? $results : array();
     }
@@ -389,7 +391,7 @@ class SSM_DB {
 
         $where_clause = implode( ' AND ', $where );
 
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL, WordPress.DB.PreparedSQLPlaceholders, PluginCheck.Security.DirectDB
         if ( empty( $values ) ) {
             $count = $wpdb->get_var( "SELECT COUNT(*) FROM " . self::$logs_table . " WHERE $where_clause" );
         } else {
@@ -397,6 +399,7 @@ class SSM_DB {
                 $wpdb->prepare( "SELECT COUNT(*) FROM " . self::$logs_table . " WHERE $where_clause", $values )
             );
         }
+        // phpcs:enable
 
         return (int) $count;
     }
@@ -442,13 +445,14 @@ class SSM_DB {
         $ids = array_map( 'absint', $ids );
         $placeholders = implode( ',', array_fill( 0, count( $ids ), '%d' ) );
 
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL, WordPress.DB.PreparedSQLPlaceholders, PluginCheck.Security.DirectDB
         $result = $wpdb->query(
             $wpdb->prepare(
                 "DELETE FROM " . self::$logs_table . " WHERE id IN ($placeholders)",
                 $ids
             )
         );
+        // phpcs:enable
 
         return $result ? $result : 0;
     }
@@ -467,13 +471,14 @@ class SSM_DB {
 
         $date = gmdate( 'Y-m-d H:i:s', strtotime( "-{$days} days" ) );
 
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL, PluginCheck.Security.DirectDB
         $result = $wpdb->query(
             $wpdb->prepare(
                 "DELETE FROM " . self::$logs_table . " WHERE created_at < %s",
                 $date
             )
         );
+        // phpcs:enable
 
         return $result ? $result : 0;
     }
@@ -504,7 +509,7 @@ class SSM_DB {
                 break;
         }
 
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL, PluginCheck.Security.DirectDB
         $stats = $wpdb->get_row(
             "SELECT 
                 COUNT(*) as total,
@@ -515,6 +520,7 @@ class SSM_DB {
             WHERE $where",
             ARRAY_A
         );
+        // phpcs:enable
 
         return array(
             'total'  => (int) ( $stats['total'] ?? 0 ),
@@ -536,7 +542,7 @@ class SSM_DB {
 
         self::init_table_names();
 
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL, PluginCheck.Security.DirectDB
         $results = $wpdb->get_results(
             $wpdb->prepare(
                 "SELECT 
@@ -552,6 +558,7 @@ class SSM_DB {
             ),
             ARRAY_A
         );
+        // phpcs:enable
 
         return $results ? $results : array();
     }
@@ -632,7 +639,7 @@ class SSM_DB {
 
         $now = current_time( 'mysql' );
 
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL, PluginCheck.Security.DirectDB
         $results = $wpdb->get_results(
             $wpdb->prepare(
                 "SELECT * FROM " . self::$queue_table . " 
@@ -645,6 +652,7 @@ class SSM_DB {
                 $limit
             )
         );
+        // phpcs:enable
 
         return $results ? $results : array();
     }
@@ -661,7 +669,7 @@ class SSM_DB {
 
         self::init_table_names();
 
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL, PluginCheck.Security.DirectDB
         $result = $wpdb->query(
             $wpdb->prepare(
                 "UPDATE " . self::$queue_table . " SET locked_at = %s WHERE id = %d AND (locked_at IS NULL OR locked_at < DATE_SUB(NOW(), INTERVAL 5 MINUTE))",
@@ -669,6 +677,7 @@ class SSM_DB {
                 $id
             )
         );
+        // phpcs:enable
 
         return $result > 0;
     }
@@ -707,13 +716,14 @@ class SSM_DB {
 
         self::init_table_names();
 
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL, PluginCheck.Security.DirectDB
         $result = $wpdb->query(
             $wpdb->prepare(
                 "UPDATE " . self::$queue_table . " SET attempts = attempts + 1, locked_at = NULL WHERE id = %d",
                 $id
             )
         );
+        // phpcs:enable
 
         return false !== $result;
     }
@@ -729,8 +739,9 @@ class SSM_DB {
 
         self::init_table_names();
 
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL, PluginCheck.Security.DirectDB
         $count = $wpdb->get_var( "SELECT COUNT(*) FROM " . self::$queue_table );
+        // phpcs:enable
 
         return (int) $count;
     }
@@ -744,6 +755,9 @@ class SSM_DB {
     public static function check_tables_exist() {
         global $wpdb;
         self::init_table_names();
-        return $wpdb->get_var( "SHOW TABLES LIKE '" . self::$logs_table . "'" ) === self::$logs_table;
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL, PluginCheck.Security.DirectDB
+        $result = $wpdb->get_var( "SHOW TABLES LIKE '" . self::$logs_table . "'" );
+        // phpcs:enable
+        return $result === self::$logs_table;
     }
 }

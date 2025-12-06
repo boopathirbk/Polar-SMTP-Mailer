@@ -30,7 +30,9 @@ $recent_logs = SSM_Dashboard::get_recent_logs( 5 );
                 <h3><?php echo $status['smtp_configured'] ? esc_html__( 'SMTP Configured', 'simple-smtp-mail' ) : esc_html__( 'SMTP Not Configured', 'simple-smtp-mail' ); ?></h3>
                 <p>
                     <?php if ( $status['smtp_configured'] ) : ?>
-                        <?php printf( esc_html__( 'Sending via %s', 'simple-smtp-mail' ), esc_html( $status['smtp_host'] ) ); ?>
+                        <?php
+                        /* translators: %s: SMTP host/server name */
+                        printf( esc_html__( 'Sending via %s', 'simple-smtp-mail' ), esc_html( $status['smtp_host'] ) ); ?>
                     <?php else : ?>
                         <?php esc_html_e( 'Configure your SMTP settings to start sending emails reliably.', 'simple-smtp-mail' ); ?>
                     <?php endif; ?>
@@ -156,7 +158,9 @@ $recent_logs = SSM_Dashboard::get_recent_logs( 5 );
                         <li>
                             <span class="ssm-status-label"><?php esc_html_e( 'Email Queue', 'simple-smtp-mail' ); ?></span>
                             <span class="ssm-status-value <?php echo $status['queue_enabled'] ? 'ssm-enabled' : 'ssm-disabled'; ?>">
-                                <?php echo $status['queue_enabled'] ? sprintf( esc_html__( 'Enabled (%d)', 'simple-smtp-mail' ), $status['queue_count'] ) : esc_html__( 'Disabled', 'simple-smtp-mail' ); ?>
+                            <?php
+                            /* translators: %d: Number of emails in queue */
+                            echo $status['queue_enabled'] ? sprintf( esc_html__( 'Enabled (%d)', 'simple-smtp-mail' ), esc_html( $status['queue_count'] ) ) : esc_html__( 'Disabled', 'simple-smtp-mail' ); ?>
                             </span>
                         </li>
                         <li>

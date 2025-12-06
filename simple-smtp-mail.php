@@ -178,8 +178,6 @@ final class Simple_SMTP_Mail {
         // Initialize plugin after plugins are loaded.
         add_action( 'plugins_loaded', array( $this, 'init' ) );
 
-        // Load text domain.
-        add_action( 'init', array( $this, 'load_textdomain' ) );
 
         // Add settings link to plugins page.
         add_filter( 'plugin_action_links_' . SSM_PLUGIN_BASENAME, array( $this, 'add_settings_link' ) );
@@ -288,19 +286,7 @@ final class Simple_SMTP_Mail {
         }
     }
 
-    /**
-     * Load plugin text domain.
-     *
-     * @since 1.0.0
-     * @return void
-     */
-    public function load_textdomain() {
-        load_plugin_textdomain(
-            'simple-smtp-mail',
-            false,
-            dirname( SSM_PLUGIN_BASENAME ) . '/languages'
-        );
-    }
+
 
     /**
      * Add settings link to plugins page.

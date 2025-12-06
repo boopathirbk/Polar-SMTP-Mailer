@@ -52,6 +52,7 @@ class SSM_Queue {
         $interval = (int) get_option( 'ssm_queue_interval', 5 );
         $schedules['ssm_queue_interval'] = array(
             'interval' => $interval * MINUTE_IN_SECONDS,
+            /* translators: %d: Number of minutes for queue interval */
             'display'  => sprintf( __( 'Every %d minutes', 'simple-smtp-mail' ), $interval ),
         );
         return $schedules;
@@ -165,7 +166,7 @@ class SSM_Queue {
     public function clear_queue() {
         global $wpdb;
         $table = SSM_DB::get_queue_table();
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         return $wpdb->query( "TRUNCATE TABLE " . $table );
     }
 
@@ -177,6 +178,7 @@ class SSM_Queue {
         return array(
             'success'   => true,
             'processed' => $processed,
+            /* translators: %d: Number of emails processed */
             'message'   => sprintf( _n( '%d email processed.', '%d emails processed.', $processed, 'simple-smtp-mail' ), $processed ),
         );
     }

@@ -126,6 +126,7 @@ class SSM_Admin {
     public function maybe_redirect() {
         if ( get_transient( 'ssm_activation_redirect' ) ) {
             delete_transient( 'ssm_activation_redirect' );
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Safe read-only check for multi-activation.
             if ( ! isset( $_GET['activate-multi'] ) ) {
                 wp_safe_redirect( admin_url( 'admin.php?page=simple-smtp-mail' ) );
                 exit;
