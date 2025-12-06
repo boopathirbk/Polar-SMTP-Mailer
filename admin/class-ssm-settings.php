@@ -52,6 +52,7 @@ class SSM_Settings {
 
         // Backup SMTP Settings.
         register_setting( 'ssm_settings', 'ssm_enable_backup_smtp', array( 'sanitize_callback' => 'rest_sanitize_boolean' ) );
+        register_setting( 'ssm_settings', 'ssm_backup_smtp_provider', array( 'sanitize_callback' => 'sanitize_text_field' ) );
         register_setting( 'ssm_settings', 'ssm_backup_smtp_host', array( 'sanitize_callback' => 'sanitize_text_field' ) );
         register_setting( 'ssm_settings', 'ssm_backup_smtp_port', array( 'sanitize_callback' => 'absint' ) );
         register_setting( 'ssm_settings', 'ssm_backup_smtp_encryption', array( 'sanitize_callback' => 'sanitize_text_field' ) );
@@ -64,6 +65,9 @@ class SSM_Settings {
         // Privacy Settings (GDPR Compliance).
         register_setting( 'ssm_settings', 'ssm_privacy_exclude_content', array( 'sanitize_callback' => 'rest_sanitize_boolean' ) );
         register_setting( 'ssm_settings', 'ssm_privacy_anonymize', array( 'sanitize_callback' => 'rest_sanitize_boolean' ) );
+        
+        // Uninstall Settings.
+        register_setting( 'ssm_settings', 'ssm_delete_data_on_uninstall', array( 'sanitize_callback' => 'rest_sanitize_boolean' ) );
     }
 
     /**
@@ -131,12 +135,14 @@ class SSM_Settings {
             'queue_batch_size'       => get_option( 'ssm_queue_batch_size', 10 ),
             'queue_interval'         => get_option( 'ssm_queue_interval', 5 ),
             'enable_backup_smtp'     => get_option( 'ssm_enable_backup_smtp', false ),
+            'backup_smtp_provider'   => get_option( 'ssm_backup_smtp_provider', 'custom' ),
             'backup_smtp_host'       => get_option( 'ssm_backup_smtp_host', '' ),
             'backup_smtp_port'       => get_option( 'ssm_backup_smtp_port', 587 ),
             'backup_smtp_encryption' => get_option( 'ssm_backup_smtp_encryption', 'tls' ),
             'backup_smtp_username'   => get_option( 'ssm_backup_smtp_username', '' ),
             'backup_smtp_password'   => $backup_password_display,
             'debug_mode'             => get_option( 'ssm_debug_mode', false ),
+            'delete_data_on_uninstall' => get_option( 'ssm_delete_data_on_uninstall', false ),
         );
     }
 }

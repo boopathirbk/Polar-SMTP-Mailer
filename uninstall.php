@@ -20,6 +20,11 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
  * @return void
  */
 function ssm_uninstall() {
+    // Check if user has opted to delete data.
+    if ( ! get_option( 'ssm_delete_data_on_uninstall', false ) ) {
+        return;
+    }
+
     global $wpdb;
 
     // Delete plugin options.
@@ -41,6 +46,7 @@ function ssm_uninstall() {
         'ssm_queue_batch_size',
         'ssm_queue_interval',
         'ssm_enable_backup_smtp',
+        'ssm_backup_smtp_provider',
         'ssm_backup_smtp_host',
         'ssm_backup_smtp_port',
         'ssm_backup_smtp_encryption',
@@ -51,6 +57,7 @@ function ssm_uninstall() {
         'ssm_privacy_exclude_content',
         'ssm_privacy_anonymize',
         'ssm_auth_failures',
+        'ssm_delete_data_on_uninstall',
     );
 
     foreach ( $options as $option ) {
@@ -65,7 +72,7 @@ function ssm_uninstall() {
 
     foreach ( $tables as $table ) {
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-        $wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i', $table ) );
+        $wpdb->query( "DROP TABLE IF EXISTS $table" );
     }
 
     // Clear scheduled events.

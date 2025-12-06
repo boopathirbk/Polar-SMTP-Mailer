@@ -255,8 +255,7 @@ class SSM_DB {
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $result = $wpdb->get_row(
             $wpdb->prepare(
-                "SELECT * FROM %i WHERE id = %d",
-                self::$logs_table,
+                "SELECT * FROM " . self::$logs_table . " WHERE id = %d",
                 $id
             )
         );
@@ -327,14 +326,13 @@ class SSM_DB {
         $offset = ( $args['page'] - 1 ) * $args['per_page'];
 
         // Build query.
-        $query = "SELECT * FROM %i WHERE $where_clause ORDER BY $orderby $order LIMIT %d OFFSET %d";
-
-        // Prepare query with values.
-        $prepared_values = array_merge( array( self::$logs_table ), $values, array( $args['per_page'], $offset ) );
+        $query = "SELECT * FROM " . self::$logs_table . " WHERE $where_clause ORDER BY $orderby $order LIMIT %d OFFSET %d";
+        $values[] = $args['per_page'];
+        $values[] = $offset;
 
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
         $results = $wpdb->get_results(
-            $wpdb->prepare( $query, $prepared_values )
+            $wpdb->prepare( $query, $values )
         );
 
         return $results ? $results : array();
@@ -391,13 +389,14 @@ class SSM_DB {
 
         $where_clause = implode( ' AND ', $where );
 
-        $query = "SELECT COUNT(*) FROM %i WHERE $where_clause";
-        $prepared_values = array_merge( array( self::$logs_table ), $values );
-
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
-        $count = $wpdb->get_var(
-            $wpdb->prepare( $query, $prepared_values )
-        );
+        if ( empty( $values ) ) {
+            $count = $wpdb->get_var( "SELECT COUNT(*) FROM " . self::$logs_table . " WHERE $where_clause" );
+        } else {
+            $count = $wpdb->get_var(
+                $wpdb->prepare( "SELECT COUNT(*) FROM " . self::$logs_table . " WHERE $where_clause", $values )
+            );
+        }
 
         return (int) $count;
     }
@@ -446,8 +445,8 @@ class SSM_DB {
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
         $result = $wpdb->query(
             $wpdb->prepare(
-                "DELETE FROM %i WHERE id IN ($placeholders)",
-                array_merge( array( self::$logs_table ), $ids )
+                "DELETE FROM " . self::$logs_table . " WHERE id IN ($placeholders)",
+                $ids
             )
         );
 
@@ -471,8 +470,7 @@ class SSM_DB {
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $result = $wpdb->query(
             $wpdb->prepare(
-                "DELETE FROM %i WHERE created_at < %s",
-                self::$logs_table,
+                "DELETE FROM " . self::$logs_table . " WHERE created_at < %s",
                 $date
             )
         );
@@ -508,16 +506,13 @@ class SSM_DB {
 
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
         $stats = $wpdb->get_row(
-            $wpdb->prepare(
-                "SELECT 
-                    COUNT(*) as total,
-                    SUM(CASE WHEN status = 'sent' THEN 1 ELSE 0 END) as sent,
-                    SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) as failed,
-                    SUM(CASE WHEN status = 'queued' THEN 1 ELSE 0 END) as queued
-                FROM %i 
-                WHERE $where",
-                self::$logs_table
-            ),
+            "SELECT 
+                COUNT(*) as total,
+                SUM(CASE WHEN status = 'sent' THEN 1 ELSE 0 END) as sent,
+                SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) as failed,
+                SUM(CASE WHEN status = 'queued' THEN 1 ELSE 0 END) as queued
+            FROM " . self::$logs_table . " 
+            WHERE $where",
             ARRAY_A
         );
 
@@ -549,11 +544,10 @@ class SSM_DB {
                     COUNT(*) as total,
                     SUM(CASE WHEN status = 'sent' THEN 1 ELSE 0 END) as sent,
                     SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) as failed
-                FROM %i 
+                FROM " . self::$logs_table . " 
                 WHERE created_at >= DATE_SUB(NOW(), INTERVAL %d DAY)
                 GROUP BY DATE(created_at)
                 ORDER BY date ASC",
-                self::$logs_table,
                 $days
             ),
             ARRAY_A
@@ -736,12 +730,20 @@ class SSM_DB {
         self::init_table_names();
 
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-        $count = $wpdb->get_var(
-            $wpdb->prepare(
-                "SELECT COUNT(*) FROM " . self::$queue_table
-            )
-        );
+        $count = $wpdb->get_var( "SELECT COUNT(*) FROM " . self::$queue_table );
 
         return (int) $count;
+    }
+
+    /**
+     * Check if tables exist.
+     *
+     * @since 1.0.1
+     * @return bool True if tables exist, false otherwise.
+     */
+    public static function check_tables_exist() {
+        global $wpdb;
+        self::init_table_names();
+        return $wpdb->get_var( "SHOW TABLES LIKE '" . self::$logs_table . "'" ) === self::$logs_table;
     }
 }

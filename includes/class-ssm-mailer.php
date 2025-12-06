@@ -151,6 +151,11 @@ class SSM_Mailer {
             $phpmailer->FromName = $this->settings['from_name'];
         }
 
+        // Force 'Sender' (Return-Path) to match 'From' email to satisfy strict SMTP providers (Hostinger, etc).
+        if ( ! empty( $phpmailer->From ) ) {
+            $phpmailer->Sender = $phpmailer->From;
+        }
+
         // Debug mode.
         if ( $this->settings['debug_mode'] ) {
             $phpmailer->SMTPDebug = 2;
@@ -574,8 +579,12 @@ class SSM_Mailer {
             wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ) )
         );
 
+        $from_email = $this->settings['from_email'];
+        $from_name  = $this->settings['from_name'];
+
         $headers = array(
             'Content-Type: text/plain; charset=UTF-8',
+            sprintf( 'From: %s <%s>', $from_name, $from_email ),
         );
 
         // Send the email.

@@ -183,6 +183,9 @@ final class Simple_SMTP_Mail {
 
         // Add settings link to plugins page.
         add_filter( 'plugin_action_links_' . SSM_PLUGIN_BASENAME, array( $this, 'add_settings_link' ) );
+
+        // DB Migration check.
+        add_action( 'admin_init', array( $this, 'check_db_version' ) );
     }
 
     /**
@@ -268,12 +271,14 @@ final class Simple_SMTP_Mail {
             'queue_batch_size'    => 10,
             'queue_interval'      => 5,
             'enable_backup_smtp'  => false,
+            'backup_smtp_provider' => 'custom',
             'backup_smtp_host'    => '',
             'backup_smtp_port'    => 587,
             'backup_smtp_encryption' => 'tls',
             'backup_smtp_username'   => '',
             'backup_smtp_password'   => '',
             'debug_mode'          => false,
+            'delete_data_on_uninstall' => false,
         );
 
         foreach ( $defaults as $key => $value ) {
@@ -377,6 +382,18 @@ final class Simple_SMTP_Mail {
      */
     public function __wakeup() {
         throw new Exception( 'Cannot unserialize singleton' );
+    }
+
+    /**
+     * Check DB version and update if necessary.
+     *
+     * @since 1.0.0
+     * @return void
+     */
+    public function check_db_version() {
+        if ( get_option( 'ssm_db_version' ) !== SSM_DB::DB_VERSION || ! SSM_DB::check_tables_exist() ) {
+            SSM_DB::create_tables();
+        }
     }
 }
 

@@ -49,7 +49,7 @@ $encryption_options = SSM_Providers::get_encryption_options();
                     <tr>
                         <th scope="row"><label for="ssm_smtp_port"><?php esc_html_e( 'SMTP Port', 'simple-smtp-mail' ); ?></label></th>
                         <td>
-                            <input type="number" name="ssm_smtp_port" id="ssm_smtp_port" value="<?php echo esc_attr( $settings['smtp_port'] ); ?>" class="small-text" min="1" max="65535" list="ssm_port_options" placeholder="587">
+                            <input type="text" name="ssm_smtp_port" id="ssm_smtp_port" value="<?php echo esc_attr( $settings['smtp_port'] ); ?>" class="regular-text" list="ssm_port_options" placeholder="587" pattern="[0-9]*" inputmode="numeric">
                             <datalist id="ssm_port_options">
                                 <option value="25" label="None">
                                 <option value="465" label="SSL">
@@ -172,12 +172,26 @@ $encryption_options = SSM_Providers::get_encryption_options();
                         </td>
                     </tr>
                     <tr class="ssm-backup-field">
+                        <th scope="row"><label for="ssm_backup_smtp_provider"><?php esc_html_e( 'Backup Provider', 'simple-smtp-mail' ); ?></label></th>
+                        <td>
+                            <select name="ssm_backup_smtp_provider" id="ssm_backup_smtp_provider">
+                                <?php foreach ( $providers as $key => $provider_name ) : ?>
+                                    <option value="<?php echo esc_attr( $key ); ?>" <?php selected( $settings['backup_smtp_provider'], $key ); ?>><?php echo esc_html( $provider_name ); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <p class="description" id="ssm-backup-provider-description"></p>
+                        </td>
+                    </tr>
+                    <tr class="ssm-backup-field">
                         <th scope="row"><label for="ssm_backup_smtp_host"><?php esc_html_e( 'Backup Host', 'simple-smtp-mail' ); ?></label></th>
                         <td><input type="text" name="ssm_backup_smtp_host" id="ssm_backup_smtp_host" value="<?php echo esc_attr( $settings['backup_smtp_host'] ); ?>" class="regular-text" placeholder="smtp.backup-provider.com"></td>
                     </tr>
                     <tr class="ssm-backup-field">
                         <th scope="row"><label for="ssm_backup_smtp_port"><?php esc_html_e( 'Backup Port', 'simple-smtp-mail' ); ?></label></th>
-                        <td><input type="number" name="ssm_backup_smtp_port" id="ssm_backup_smtp_port" value="<?php echo esc_attr( $settings['backup_smtp_port'] ); ?>" class="small-text" placeholder="587"></td>
+                        <td>
+                            <input type="text" name="ssm_backup_smtp_port" id="ssm_backup_smtp_port" value="<?php echo esc_attr( $settings['backup_smtp_port'] ); ?>" class="regular-text" list="ssm_port_options" placeholder="587" pattern="[0-9]*" inputmode="numeric">
+                            <p class="description"><?php esc_html_e( 'Select a common port or enter a custom one.', 'simple-smtp-mail' ); ?></p>
+                        </td>
                     </tr>
                     <tr class="ssm-backup-field">
                         <th scope="row"><label for="ssm_backup_smtp_encryption"><?php esc_html_e( 'Encryption', 'simple-smtp-mail' ); ?></label></th>
@@ -191,11 +205,15 @@ $encryption_options = SSM_Providers::get_encryption_options();
                     </tr>
                     <tr class="ssm-backup-field">
                         <th scope="row"><label for="ssm_backup_smtp_username"><?php esc_html_e( 'Username', 'simple-smtp-mail' ); ?></label></th>
-                        <td><input type="text" name="ssm_backup_smtp_username" id="ssm_backup_smtp_username" value="<?php echo esc_attr( $settings['backup_smtp_username'] ); ?>" class="regular-text" placeholder="your_username"></td>
+                        <td><input type="text" name="ssm_backup_smtp_username" id="ssm_backup_smtp_username" value="<?php echo esc_attr( $settings['backup_smtp_username'] ); ?>" class="regular-text" placeholder="user@example.com"></td>
                     </tr>
                     <tr class="ssm-backup-field">
                         <th scope="row"><label for="ssm_backup_smtp_password"><?php esc_html_e( 'Password', 'simple-smtp-mail' ); ?></label></th>
-                        <td><input type="password" name="ssm_backup_smtp_password" id="ssm_backup_smtp_password" value="<?php echo esc_attr( $settings['backup_smtp_password'] ); ?>" class="regular-text" placeholder="••••••••"></td>
+                        <td>
+                            <input type="password" name="ssm_backup_smtp_password" id="ssm_backup_smtp_password" value="<?php echo esc_attr( $settings['backup_smtp_password'] ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'Enter your SMTP password', 'simple-smtp-mail' ); ?>">
+                            <button type="button" class="button ssm-toggle-password" aria-label="<?php esc_attr_e( 'Show password', 'simple-smtp-mail' ); ?>"><span class="dashicons dashicons-visibility"></span></button>
+                            <p class="description"><?php esc_html_e( 'Password is encrypted before storage.', 'simple-smtp-mail' ); ?></p>
+                        </td>
                     </tr>
                 </table>
             </div>
@@ -247,6 +265,20 @@ $encryption_options = SSM_Providers::get_encryption_options();
                     </ul>
                     <p><a href="<?php echo esc_url( admin_url( 'options-privacy.php' ) ); ?>" class="button"><?php esc_html_e( 'View Privacy Policy Guide', 'simple-smtp-mail' ); ?></a></p>
                 </div>
+            </div>
+
+            <!-- Uninstall Settings -->
+            <div class="ssm-card">
+                <h2><?php esc_html_e( 'Uninstall Settings', 'simple-smtp-mail' ); ?></h2>
+                <table class="form-table">
+                    <tr>
+                        <th scope="row"><?php esc_html_e( 'Delete All Data', 'simple-smtp-mail' ); ?></th>
+                        <td>
+                            <label><input type="checkbox" name="ssm_delete_data_on_uninstall" value="1" <?php checked( $settings['delete_data_on_uninstall'] ); ?>> <?php esc_html_e( 'Delete all plugin settings and logs on uninstall', 'simple-smtp-mail' ); ?></label>
+                            <p class="description"><?php esc_html_e( 'If enabled, all configuration and log data will be permanently removed when you delete the plugin.', 'simple-smtp-mail' ); ?></p>
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
 

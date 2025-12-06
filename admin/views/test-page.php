@@ -50,7 +50,7 @@ $smtp_configured = ! empty( get_option( 'ssm_smtp_host', '' ) );
                 </table>
 
                 <p class="submit">
-                    <button type="submit" class="button button-primary button-hero" id="ssm-send-test" <?php disabled( ! $smtp_configured ); ?>>
+                    <button type="submit" class="button button-primary" id="ssm-send-test" <?php disabled( ! $smtp_configured ); ?>>
                         <span class="dashicons dashicons-email-alt"></span>
                         <?php esc_html_e( 'Send Test Email', 'simple-smtp-mail' ); ?>
                     </button>

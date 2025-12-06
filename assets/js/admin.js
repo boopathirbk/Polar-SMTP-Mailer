@@ -20,7 +20,9 @@
             $('#ssm_smtp_auth').on('change', this.toggleAuthFields);
             $('[name="ssm_enable_queue"]').on('change', this.toggleQueueFields);
             $('#ssm_enable_backup_smtp').on('change', this.toggleBackupFields);
-            $('#ssm_smtp_provider').on('change', this.onProviderChange);
+            $('#ssm_enable_backup_smtp').on('change', this.toggleBackupFields);
+            $('#ssm_smtp_provider').on('change', function () { SSMSettings.onProviderChange(this, 'primary'); });
+            $('#ssm_backup_smtp_provider').on('change', function () { SSMSettings.onProviderChange(this, 'backup'); });
             $('#ssm-test-connection').on('click', this.testConnection);
             $('.ssm-toggle-password').on('click', this.togglePassword);
         },
@@ -54,12 +56,16 @@
             }
         },
 
-        onProviderChange: function () {
-            const provider = $(this).val();
+        onProviderChange: function (element, context) {
+            const provider = $(element).val();
+            const prefix = context === 'backup' ? '#ssm_backup_' : '#ssm_';
+            const descId = context === 'backup' ? '#ssm-backup-provider-description' : '#ssm-provider-description';
+
             if (provider === 'custom') {
-                $('#ssm_smtp_host').val('').prop('readonly', false);
-                $('#ssm_smtp_port').val(587);
-                $('#ssm_smtp_encryption').val('tls');
+                $(prefix + 'smtp_host').val('').prop('readonly', false);
+                $(prefix + 'smtp_port').val(587);
+                $(prefix + 'smtp_encryption').val('tls');
+                $(descId).text('');
                 return;
             }
 
@@ -74,11 +80,14 @@
                 success: function (response) {
                     if (response.success && response.data.provider) {
                         const p = response.data.provider;
-                        $('#ssm_smtp_host').val(p.host);
-                        $('#ssm_smtp_port').val(p.port);
-                        $('#ssm_smtp_encryption').val(p.encryption);
+                        $(prefix + 'smtp_host').val(p.host);
+                        $(prefix + 'smtp_port').val(p.port);
+                        $(prefix + 'smtp_encryption').val(p.encryption);
+
                         if (p.help_text) {
-                            $('#ssm-provider-description').text(p.help_text);
+                            $(descId).text(p.help_text);
+                        } else {
+                            $(descId).text('');
                         }
                     }
                 }
