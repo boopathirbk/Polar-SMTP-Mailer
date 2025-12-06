@@ -1,6 +1,6 @@
 === Simple SMTP Mail ===
 Contributors: boopathir
-Tags: smtp, email, mail, email log, wp mail, gmail smtp, outlook smtp
+Tags: smtp, email, mail, email log, wp mail, gmail smtp, outlook smtp, sendgrid, mailgun
 Requires at least: 6.0
 Tested up to: 6.9
 Stable tag: 1.0.0
@@ -14,27 +14,24 @@ A powerful, open-source SMTP mailer plugin with comprehensive email logging, que
 
 Simple SMTP Mail helps you configure any SMTP provider to send WordPress emails reliably. It includes comprehensive email logging, a modern dashboard, and advanced features like email queuing and backup SMTP.
 
-**Now with Enhanced UI/UX and Accessibility (WCAG AA) support!**
+= ✨ Key Features =
 
-= Key Features =
-
-* **Easy SMTP Configuration** - Configure your SMTP settings in minutes with pre-configured provider templates
-* **15+ Provider Presets** - Gmail, Outlook, Hostinger, SendGrid, Mailgun, Amazon SES, Brevo, Postmark, and more
-* **Secure Password Storage** - Passwords are encrypted using AES-256 encryption
+* **Easy SMTP Configuration** - Pre-configured templates for 15+ providers
+* **15+ Provider Presets** - Gmail, Outlook, Hostinger, SendGrid, Mailgun, Amazon SES, and more
+* **Secure Password Storage** - AES-256-CBC encryption with WordPress salts
 * **Email Logging** - Track all sent, failed, and queued emails with detailed logs
-* **Modern Dashboard** - Beautiful stats, charts, and quick actions
-* **Modern Typography** - Sleek, legible interface using the Geist font family
-* **User Experience & Accessibility** - WCAG AA Compliant, screen reader friendly, and mobile-optimized responsive tables
-* **Email Queue** - Schedule bulk emails with rate limiting and background processing
-* **Backup SMTP** - Automatic fallback when primary SMTP fails (Failover)
-* **Privacy & GDPR** - Integrated personal data exporter, eraser, and anonymization options
+* **Email Queue** - Background processing with WP-Cron
+* **Backup SMTP** - Automatic failover when primary SMTP fails
+* **Modern Dashboard** - Statistics, charts, and quick actions
+* **Privacy & GDPR** - Integrated personal data exporter, eraser, and anonymization
 * **Export Logs** - Download logs as CSV or JSON format
 * **Debug Mode** - Detailed logging for troubleshooting
 * **Multisite Ready** - Works with WordPress Multisite
-* **Clean Uninstall** - Optionally delete all settings and logs on plugin removal
-* **Self-Healing Database** - Automatic table creation and repair on admin load
+* **Clean Uninstall** - Optionally delete all settings and logs on removal
+* **Self-Healing Database** - Automatic table creation and repair
+* **WCAG AA Compliant** - Screen reader friendly, mobile-optimized
 
-= Pre-configured SMTP Providers =
+= 📧 Supported SMTP Providers =
 
 * Gmail / Google Workspace
 * Outlook / Microsoft 365
@@ -51,20 +48,38 @@ Simple SMTP Mail helps you configure any SMTP provider to send WordPress emails 
 * Elastic Email
 * Mailjet
 * Pepipost (Netcore)
-* Custom SMTP
+* Custom SMTP (any provider)
+
+= 🔒 Security Features =
+
+* AES-256-CBC password encryption
+* CSRF protection with nonces
+* Rate limiting (5 test emails per 10 minutes)
+* Capability checks (admin only)
+* Prepared SQL statements
+* Input sanitization & output escaping
+
+= 🔐 Privacy & GDPR =
+
+* WordPress Privacy Exporter integration
+* WordPress Privacy Eraser integration
+* Email anonymization option
+* Content exclusion from logs
+* Configurable data retention
 
 = Requirements =
 
 * WordPress 6.0 or higher
 * PHP 7.4 or higher
-* OpenSSL extension
+* OpenSSL extension (for encryption)
 
 == Installation ==
 
 1. Upload the plugin files to `/wp-content/plugins/simple-smtp-mail/`
 2. Activate the plugin through the 'Plugins' screen in WordPress
-3. Go to SMTP Mail → Settings to configure your SMTP server
-4. Send a test email to verify your configuration
+3. Go to **SMTP Mail → Settings** to configure your SMTP server
+4. Click **Test Connection** to verify settings
+5. Send a test email to confirm delivery
 
 == Frequently Asked Questions ==
 
@@ -92,45 +107,39 @@ Yes! Simple SMTP Mail works with all WordPress emails including WooCommerce orde
 
 Go to SMTP Mail → Email Logs and click the "Export CSV" or "Export JSON" button.
 
+= What if my primary SMTP fails? =
+
+Enable Backup SMTP in Settings. When primary SMTP fails, emails automatically route through your backup server.
+
 == Screenshots ==
 
-1. Dashboard with email statistics
-2. SMTP Settings page
-3. Email Logs with search and filters
+1. Dashboard with email statistics and charts
+2. SMTP Settings page with provider selection
+3. Email Logs with search, filter, and bulk actions
 4. Send Test Email page
 5. Email preview modal
 
 == Changelog ==
 
-= 1.0.0 =
+= 1.0.0 (2025-12-06) =
 * Initial release
-* Tested up to WordPress 6.9
-* Modern typography update (Geist font integration)
-* Enhanced UI/UX with improved accessibility (WCAG AA)
-* Mobile-optimized responsive tables
-* Memory optimization for large log exports
-* Added Hostinger SMTP provider preset
-* Upgraded Admin UX (Hostinger support, Port selection Datalist, Placeholders)
-* SMTP configuration with 15+ provider presets (including Hostinger)
-* Support for TLS, SSL, and no encryption
-* Email logging with search, filter, and export (View, Resend, Delete actions)
-* Email resend functionality
+* SMTP configuration with 15+ provider presets
+* Email logging with View, Resend, Delete actions
+* Bulk delete support for email logs
 * Email queue with background processing
 * Priority-based queue processing
-* Backup SMTP failover with separate provider selection
+* Backup SMTP failover
 * GDPR-compliant privacy features (exporter & eraser)
 * Modern admin dashboard with statistics
-* Rate limiting and security logging
-* Debug mode for troubleshooting
+* AES-256-CBC password encryption
+* Rate limiting and security features
+* Hostinger SMTP sender fix
+* Self-healing database
+* Clean uninstall option
 * Full internationalization support
-* Clean uninstall option - optionally delete all data on removal
-* Hostinger SMTP sender fix - explicit Sender header
-* Self-healing database - automatic table creation/repair
-* Test connection UX - clear password re-entry message
-* WP_List_Table fix - proper column headers for reliable table rendering
-* Bulk actions support - delete multiple email logs at once
+* WCAG AA accessibility compliance
 
 == Upgrade Notice ==
 
 = 1.0.0 =
-Initial release of Simple SMTP Mail with robust Security, Accessibility, and Queue Management features.
+Initial release with robust security, accessibility, and queue management features.
