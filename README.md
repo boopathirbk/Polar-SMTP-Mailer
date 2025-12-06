@@ -93,16 +93,16 @@ A powerful, open-source WordPress SMTP plugin with comprehensive email logging, 
 ## 📸 Screenshots
 
 ### Dashboard
-![Dashboard](screenshots/dashboard.png)
+![Dashboard](screenshots/dashboard-page.png)
 
 ### Settings
-![Settings](screenshots/settings.png)
+![Settings](screenshots/settings-page.png)
 
 ### Email Logs
-![Email Logs](screenshots/email-logs.png)
+![Email Logs](screenshots/email-logs-page.png)
 
 ### Send Test Email
-![Send Test Email](screenshots/send-test-email.png)
+![Send Test Email](screenshots/send-test-email-page.png)
 
 ## 🔧 Requirements
 
