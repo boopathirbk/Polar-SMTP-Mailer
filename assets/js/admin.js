@@ -20,7 +20,6 @@
             $('#ssm_smtp_auth').on('change', this.toggleAuthFields);
             $('[name="ssm_enable_queue"]').on('change', this.toggleQueueFields);
             $('#ssm_enable_backup_smtp').on('change', this.toggleBackupFields);
-            $('#ssm_enable_backup_smtp').on('change', this.toggleBackupFields);
             $('#ssm_smtp_provider').on('change', function () { SSMSettings.onProviderChange(this, 'primary'); });
             $('#ssm_backup_smtp_provider').on('change', function () { SSMSettings.onProviderChange(this, 'backup'); });
             $('#ssm-test-connection').on('click', this.testConnection);
