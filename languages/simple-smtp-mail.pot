@@ -1,0 +1,362 @@
+# Copyright (C) 2024 Boopathi R.
+# This file is distributed under the GPLv2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Simple SMTP Mail 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-12-05 10:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: simple-smtp-mail.php
+msgid "Simple SMTP Mail"
+msgstr ""
+
+#: simple-smtp-mail.php
+msgid "Settings"
+msgstr ""
+
+#: admin/class-ssm-admin.php
+msgid "Dashboard"
+msgstr ""
+
+#: admin/class-ssm-admin.php
+msgid "SMTP Mail"
+msgstr ""
+
+#: admin/class-ssm-admin.php
+msgid "Email Logs"
+msgstr ""
+
+#: admin/class-ssm-admin.php
+msgid "Test Email"
+msgstr ""
+
+#: admin/views/dashboard-page.php
+msgid "SMTP Configured"
+msgstr ""
+
+#: admin/views/dashboard-page.php
+msgid "SMTP Not Configured"
+msgstr ""
+
+#: admin/views/dashboard-page.php
+msgid "Today"
+msgstr ""
+
+#: admin/views/dashboard-page.php
+msgid "This Week"
+msgstr ""
+
+#: admin/views/dashboard-page.php
+msgid "This Month"
+msgstr ""
+
+#: admin/views/dashboard-page.php
+msgid "Total Emails"
+msgstr ""
+
+#: admin/views/dashboard-page.php
+msgid "sent"
+msgstr ""
+
+#: admin/views/dashboard-page.php
+msgid "failed"
+msgstr ""
+
+#: admin/views/dashboard-page.php
+msgid "Recent Emails"
+msgstr ""
+
+#: admin/views/dashboard-page.php
+msgid "Quick Actions"
+msgstr ""
+
+#: admin/views/dashboard-page.php
+msgid "Send Test Email"
+msgstr ""
+
+#: admin/views/dashboard-page.php
+msgid "SMTP Settings"
+msgstr ""
+
+#: admin/views/dashboard-page.php
+msgid "View All Logs"
+msgstr ""
+
+#: admin/views/dashboard-page.php
+msgid "System Status"
+msgstr ""
+
+#: admin/views/dashboard-page.php
+msgid "Logging"
+msgstr ""
+
+#: admin/views/dashboard-page.php
+msgid "Email Queue"
+msgstr ""
+
+#: admin/views/dashboard-page.php
+msgid "Enabled"
+msgstr ""
+
+#: admin/views/dashboard-page.php
+msgid "Disabled"
+msgstr ""
+
+#: admin/views/settings-page.php
+msgid "SMTP Configuration"
+msgstr ""
+
+#: admin/views/settings-page.php
+msgid "SMTP Provider"
+msgstr ""
+
+#: admin/views/settings-page.php
+msgid "SMTP Host"
+msgstr ""
+
+#: admin/views/settings-page.php
+msgid "SMTP Port"
+msgstr ""
+
+#: admin/views/settings-page.php
+msgid "Encryption"
+msgstr ""
+
+#: admin/views/settings-page.php
+msgid "Authentication"
+msgstr ""
+
+#: admin/views/settings-page.php
+msgid "Use SMTP authentication"
+msgstr ""
+
+#: admin/views/settings-page.php
+msgid "Username"
+msgstr ""
+
+#: admin/views/settings-page.php
+msgid "Password"
+msgstr ""
+
+#: admin/views/settings-page.php
+msgid "Password is encrypted before storage."
+msgstr ""
+
+#: admin/views/settings-page.php
+msgid "Test Connection"
+msgstr ""
+
+#: admin/views/settings-page.php
+msgid "From Settings"
+msgstr ""
+
+#: admin/views/settings-page.php
+msgid "From Email"
+msgstr ""
+
+#: admin/views/settings-page.php
+msgid "From Name"
+msgstr ""
+
+#: admin/views/settings-page.php
+msgid "Email Logging"
+msgstr ""
+
+#: admin/views/settings-page.php
+msgid "Enable Logging"
+msgstr ""
+
+#: admin/views/settings-page.php
+msgid "Log all outgoing emails"
+msgstr ""
+
+#: admin/views/settings-page.php
+msgid "Log Retention"
+msgstr ""
+
+#: admin/views/settings-page.php
+msgid "days"
+msgstr ""
+
+#: admin/views/settings-page.php
+msgid "Enable Queue"
+msgstr ""
+
+#: admin/views/settings-page.php
+msgid "Backup SMTP (Fallback)"
+msgstr ""
+
+#: admin/views/settings-page.php
+msgid "Debug Settings"
+msgstr ""
+
+#: admin/views/settings-page.php
+msgid "Debug Mode"
+msgstr ""
+
+#: admin/views/settings-page.php
+msgid "Save Settings"
+msgstr ""
+
+#: admin/views/logs-page.php
+msgid "Export CSV"
+msgstr ""
+
+#: admin/views/logs-page.php
+msgid "Export JSON"
+msgstr ""
+
+#: admin/views/logs-page.php
+msgid "Email Details"
+msgstr ""
+
+#: admin/views/logs-page.php
+msgid "To"
+msgstr ""
+
+#: admin/views/logs-page.php
+msgid "Subject"
+msgstr ""
+
+#: admin/views/logs-page.php
+msgid "Status"
+msgstr ""
+
+#: admin/views/logs-page.php
+msgid "Provider"
+msgstr ""
+
+#: admin/views/logs-page.php
+msgid "Date"
+msgstr ""
+
+#: admin/views/logs-page.php
+msgid "Error"
+msgstr ""
+
+#: admin/views/logs-page.php
+msgid "Message Content"
+msgstr ""
+
+#: admin/class-ssm-logs.php
+msgid "View"
+msgstr ""
+
+#: admin/class-ssm-logs.php
+msgid "Resend"
+msgstr ""
+
+#: admin/class-ssm-logs.php
+msgid "Delete"
+msgstr ""
+
+#: admin/class-ssm-logs.php
+msgid "All Statuses"
+msgstr ""
+
+#: admin/class-ssm-logs.php
+msgid "Sent"
+msgstr ""
+
+#: admin/class-ssm-logs.php
+msgid "Failed"
+msgstr ""
+
+#: admin/class-ssm-logs.php
+msgid "Queued"
+msgstr ""
+
+#: admin/class-ssm-logs.php
+msgid "Filter"
+msgstr ""
+
+#: admin/class-ssm-logs.php
+msgid "No email logs found."
+msgstr ""
+
+#: includes/class-ssm-ajax.php
+msgid "Security check failed."
+msgstr ""
+
+#: includes/class-ssm-ajax.php
+msgid "Permission denied."
+msgstr ""
+
+#: includes/class-ssm-ajax.php
+msgid "Invalid email address."
+msgstr ""
+
+#: includes/class-ssm-ajax.php
+msgid "Invalid log ID."
+msgstr ""
+
+#: includes/class-ssm-ajax.php
+msgid "Log not found."
+msgstr ""
+
+#: includes/class-ssm-ajax.php
+msgid "Log deleted successfully."
+msgstr ""
+
+#: includes/class-ssm-ajax.php
+msgid "Failed to delete log."
+msgstr ""
+
+#: includes/class-ssm-mailer.php
+msgid "SMTP host is required."
+msgstr ""
+
+#: includes/class-ssm-mailer.php
+msgid "SMTP connection successful! Your settings are configured correctly."
+msgstr ""
+
+#: includes/class-ssm-mailer.php
+msgid "SMTP authentication failed. Please check your username and password."
+msgstr ""
+
+#: includes/class-ssm-providers.php
+msgid "Other SMTP"
+msgstr ""
+
+#: includes/class-ssm-providers.php
+msgid "Gmail / Google Workspace"
+msgstr ""
+
+#: includes/class-ssm-providers.php
+msgid "Outlook / Microsoft 365"
+msgstr ""
+
+#: includes/class-ssm-providers.php
+msgid "SendGrid"
+msgstr ""
+
+#: includes/class-ssm-providers.php
+msgid "Mailgun"
+msgstr ""
+
+#: includes/class-ssm-providers.php
+msgid "Amazon SES"
+msgstr ""
+
+#: includes/class-ssm-providers.php
+msgid "Brevo (Sendinblue)"
+msgstr ""
+
+#: includes/class-ssm-providers.php
+msgid "None"
+msgstr ""
+
+#: includes/class-ssm-providers.php
+msgid "SSL"
+msgstr ""
+
+#: includes/class-ssm-providers.php
+msgid "TLS"
+msgstr ""
