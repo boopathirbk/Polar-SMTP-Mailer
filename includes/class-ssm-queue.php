@@ -118,7 +118,10 @@ class SSM_Queue {
         $processed = 0;
 
         foreach ( $queued as $item ) {
-            SSM_DB::lock_queue_item( $item->id );
+            // Try to lock the item. If failed, skip it (another process might have taken it).
+            if ( ! SSM_DB::lock_queue_item( $item->id ) ) {
+                continue;
+            }
 
             $headers = $item->headers;
             if ( is_string( $headers ) ) {

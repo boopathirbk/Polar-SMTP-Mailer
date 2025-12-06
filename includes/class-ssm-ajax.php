@@ -112,6 +112,7 @@ class SSM_Ajax {
 
         if ( ! is_email( $to ) ) {
             wp_send_json_error( array( 'message' => __( 'Invalid email address.', 'simple-smtp-mail' ) ) );
+            exit;
         }
 
         // Update rate limit counters.

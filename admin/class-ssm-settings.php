@@ -33,7 +33,7 @@ class SSM_Settings {
         register_setting( 'ssm_settings', 'ssm_smtp_encryption', array( 'sanitize_callback' => 'sanitize_text_field' ) );
         register_setting( 'ssm_settings', 'ssm_smtp_auth', array( 'sanitize_callback' => 'rest_sanitize_boolean' ) );
         register_setting( 'ssm_settings', 'ssm_smtp_username', array( 'sanitize_callback' => 'sanitize_text_field' ) );
-        register_setting( 'ssm_settings', 'ssm_smtp_password', array( 'sanitize_callback' => array( $this, 'sanitize_password' ) ) );
+        register_setting( 'ssm_settings', 'ssm_smtp_password', array( 'sanitize_callback' => array( $this, 'sanitize_smtp_password' ) ) );
 
         // From Settings.
         register_setting( 'ssm_settings', 'ssm_from_email', array( 'sanitize_callback' => 'sanitize_email' ) );
@@ -56,7 +56,7 @@ class SSM_Settings {
         register_setting( 'ssm_settings', 'ssm_backup_smtp_port', array( 'sanitize_callback' => 'absint' ) );
         register_setting( 'ssm_settings', 'ssm_backup_smtp_encryption', array( 'sanitize_callback' => 'sanitize_text_field' ) );
         register_setting( 'ssm_settings', 'ssm_backup_smtp_username', array( 'sanitize_callback' => 'sanitize_text_field' ) );
-        register_setting( 'ssm_settings', 'ssm_backup_smtp_password', array( 'sanitize_callback' => array( $this, 'sanitize_password' ) ) );
+        register_setting( 'ssm_settings', 'ssm_backup_smtp_password', array( 'sanitize_callback' => array( $this, 'sanitize_backup_password' ) ) );
 
         // Debug Settings.
         register_setting( 'ssm_settings', 'ssm_debug_mode', array( 'sanitize_callback' => 'rest_sanitize_boolean' ) );
@@ -67,9 +67,31 @@ class SSM_Settings {
     }
 
     /**
-     * Sanitize and encrypt password.
+     * Sanitize and encrypt SMTP password.
      */
-    public function sanitize_password( $value ) {
+    public function sanitize_smtp_password( $value ) {
+        // If value is the placeholder, return existing option to keep it unchanged.
+        if ( '••••••••••••' === $value ) {
+            return get_option( 'ssm_smtp_password' );
+        }
+        return $this->sanitize_password_common( $value );
+    }
+
+    /**
+     * Sanitize and encrypt Backup SMTP password.
+     */
+    public function sanitize_backup_password( $value ) {
+        // If value is the placeholder, return existing option to keep it unchanged.
+        if ( '••••••••••••' === $value ) {
+            return get_option( 'ssm_backup_smtp_password' );
+        }
+        return $this->sanitize_password_common( $value );
+    }
+
+    /**
+     * Common password sanitization.
+     */
+    private function sanitize_password_common( $value ) {
         if ( empty( $value ) ) {
             return '';
         }
@@ -83,6 +105,14 @@ class SSM_Settings {
      * Get all current settings.
      */
     public static function get_settings() {
+        // Get raw password values.
+        $smtp_password = get_option( 'ssm_smtp_password', '' );
+        $backup_smtp_password = get_option( 'ssm_backup_smtp_password', '' );
+
+        // For display purposes, show placeholder if password exists (don't show encrypted value).
+        $smtp_password_display = ! empty( $smtp_password ) ? '••••••••••••' : '';
+        $backup_password_display = ! empty( $backup_smtp_password ) ? '••••••••••••' : '';
+
         return array(
             'smtp_provider'          => get_option( 'ssm_smtp_provider', 'custom' ),
             'smtp_host'              => get_option( 'ssm_smtp_host', '' ),
@@ -90,7 +120,7 @@ class SSM_Settings {
             'smtp_encryption'        => get_option( 'ssm_smtp_encryption', 'tls' ),
             'smtp_auth'              => get_option( 'ssm_smtp_auth', true ),
             'smtp_username'          => get_option( 'ssm_smtp_username', '' ),
-            'smtp_password'          => get_option( 'ssm_smtp_password', '' ),
+            'smtp_password'          => $smtp_password_display,
             'from_email'             => get_option( 'ssm_from_email', get_option( 'admin_email' ) ),
             'from_name'              => get_option( 'ssm_from_name', get_bloginfo( 'name' ) ),
             'force_from_email'       => get_option( 'ssm_force_from_email', false ),
@@ -105,7 +135,7 @@ class SSM_Settings {
             'backup_smtp_port'       => get_option( 'ssm_backup_smtp_port', 587 ),
             'backup_smtp_encryption' => get_option( 'ssm_backup_smtp_encryption', 'tls' ),
             'backup_smtp_username'   => get_option( 'ssm_backup_smtp_username', '' ),
-            'backup_smtp_password'   => get_option( 'ssm_backup_smtp_password', '' ),
+            'backup_smtp_password'   => $backup_password_display,
             'debug_mode'             => get_option( 'ssm_debug_mode', false ),
         );
     }

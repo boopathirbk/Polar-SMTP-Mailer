@@ -641,13 +641,12 @@ class SSM_DB {
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $results = $wpdb->get_results(
             $wpdb->prepare(
-                "SELECT * FROM %i 
+                "SELECT * FROM " . self::$queue_table . " 
                 WHERE scheduled_at <= %s 
                 AND (locked_at IS NULL OR locked_at < DATE_SUB(NOW(), INTERVAL 5 MINUTE))
                 AND attempts < max_attempts
                 ORDER BY priority ASC, scheduled_at ASC 
                 LIMIT %d",
-                self::$queue_table,
                 $now,
                 $limit
             )
@@ -669,15 +668,15 @@ class SSM_DB {
         self::init_table_names();
 
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-        $result = $wpdb->update(
-            self::$queue_table,
-            array( 'locked_at' => current_time( 'mysql' ) ),
-            array( 'id' => $id ),
-            array( '%s' ),
-            array( '%d' )
+        $result = $wpdb->query(
+            $wpdb->prepare(
+                "UPDATE " . self::$queue_table . " SET locked_at = %s WHERE id = %d AND (locked_at IS NULL OR locked_at < DATE_SUB(NOW(), INTERVAL 5 MINUTE))",
+                current_time( 'mysql' ),
+                $id
+            )
         );
 
-        return false !== $result;
+        return $result > 0;
     }
 
     /**
@@ -717,8 +716,7 @@ class SSM_DB {
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $result = $wpdb->query(
             $wpdb->prepare(
-                "UPDATE %i SET attempts = attempts + 1, locked_at = NULL WHERE id = %d",
-                self::$queue_table,
+                "UPDATE " . self::$queue_table . " SET attempts = attempts + 1, locked_at = NULL WHERE id = %d",
                 $id
             )
         );
@@ -740,8 +738,7 @@ class SSM_DB {
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $count = $wpdb->get_var(
             $wpdb->prepare(
-                "SELECT COUNT(*) FROM %i",
-                self::$queue_table
+                "SELECT COUNT(*) FROM " . self::$queue_table
             )
         );
 

@@ -20,6 +20,8 @@ $encryption_options = SSM_Providers::get_encryption_options();
         <?php esc_html_e( 'SMTP Settings', 'simple-smtp-mail' ); ?>
     </h1>
 
+    <?php settings_errors(); ?>
+
     <form method="post" action="options.php" id="ssm-settings-form">
         <?php settings_fields( 'ssm_settings' ); ?>
 
@@ -72,7 +74,7 @@ $encryption_options = SSM_Providers::get_encryption_options();
                         <th scope="row"><label for="ssm_smtp_password"><?php esc_html_e( 'Password', 'simple-smtp-mail' ); ?></label></th>
                         <td>
                             <input type="password" name="ssm_smtp_password" id="ssm_smtp_password" value="<?php echo esc_attr( $settings['smtp_password'] ); ?>" class="regular-text" autocomplete="new-password">
-                            <button type="button" class="button ssm-toggle-password"><span class="dashicons dashicons-visibility"></span></button>
+                            <button type="button" class="button ssm-toggle-password" aria-label="<?php esc_attr_e( 'Show password', 'simple-smtp-mail' ); ?>"><span class="dashicons dashicons-visibility"></span></button>
                             <p class="description"><?php esc_html_e( 'Password is encrypted before storage.', 'simple-smtp-mail' ); ?></p>
                         </td>
                     </tr>
@@ -92,15 +94,16 @@ $encryption_options = SSM_Providers::get_encryption_options();
                     <tr>
                         <th scope="row"><label for="ssm_from_email"><?php esc_html_e( 'From Email', 'simple-smtp-mail' ); ?></label></th>
                         <td>
-                            <input type="email" name="ssm_from_email" id="ssm_from_email" value="<?php echo esc_attr( $settings['from_email'] ); ?>" class="regular-text">
-                            <label class="ssm-force-option"><input type="checkbox" name="ssm_force_from_email" value="1" <?php checked( $settings['force_from_email'] ); ?>> <?php esc_html_e( 'Force this email for all outgoing emails', 'simple-smtp-mail' ); ?></label>
+                            <input type="email" name="ssm_from_email" id="ssm_from_email" value="<?php echo esc_attr( $settings['from_email'] ); ?>" class="regular-text" placeholder="you@example.com">
+                            <label class="ssm-force-option"><input type="checkbox" name="ssm_force_from_email" value="1" <?php checked( $settings['force_from_email'] ); ?>> <?php esc_html_e( 'Force this email', 'simple-smtp-mail' ); ?></label>
+                            <p class="description"><?php esc_html_e( 'The email address emails will appear to come from.', 'simple-smtp-mail' ); ?></p>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="ssm_from_name"><?php esc_html_e( 'From Name', 'simple-smtp-mail' ); ?></label></th>
                         <td>
-                            <input type="text" name="ssm_from_name" id="ssm_from_name" value="<?php echo esc_attr( $settings['from_name'] ); ?>" class="regular-text">
-                            <label class="ssm-force-option"><input type="checkbox" name="ssm_force_from_name" value="1" <?php checked( $settings['force_from_name'] ); ?>> <?php esc_html_e( 'Force this name for all outgoing emails', 'simple-smtp-mail' ); ?></label>
+                            <input type="text" name="ssm_from_name" id="ssm_from_name" value="<?php echo esc_attr( $settings['from_name'] ); ?>" class="regular-text" placeholder="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
+                            <label class="ssm-force-option"><input type="checkbox" name="ssm_force_from_name" value="1" <?php checked( $settings['force_from_name'] ); ?>> <?php esc_html_e( 'Force this name', 'simple-smtp-mail' ); ?></label>
                         </td>
                     </tr>
                 </table>
@@ -161,11 +164,11 @@ $encryption_options = SSM_Providers::get_encryption_options();
                     </tr>
                     <tr class="ssm-backup-field">
                         <th scope="row"><label for="ssm_backup_smtp_host"><?php esc_html_e( 'Backup Host', 'simple-smtp-mail' ); ?></label></th>
-                        <td><input type="text" name="ssm_backup_smtp_host" id="ssm_backup_smtp_host" value="<?php echo esc_attr( $settings['backup_smtp_host'] ); ?>" class="regular-text"></td>
+                        <td><input type="text" name="ssm_backup_smtp_host" id="ssm_backup_smtp_host" value="<?php echo esc_attr( $settings['backup_smtp_host'] ); ?>" class="regular-text" placeholder="smtp.backup-provider.com"></td>
                     </tr>
                     <tr class="ssm-backup-field">
                         <th scope="row"><label for="ssm_backup_smtp_port"><?php esc_html_e( 'Backup Port', 'simple-smtp-mail' ); ?></label></th>
-                        <td><input type="number" name="ssm_backup_smtp_port" id="ssm_backup_smtp_port" value="<?php echo esc_attr( $settings['backup_smtp_port'] ); ?>" class="small-text"></td>
+                        <td><input type="number" name="ssm_backup_smtp_port" id="ssm_backup_smtp_port" value="<?php echo esc_attr( $settings['backup_smtp_port'] ); ?>" class="small-text" placeholder="587"></td>
                     </tr>
                     <tr class="ssm-backup-field">
                         <th scope="row"><label for="ssm_backup_smtp_encryption"><?php esc_html_e( 'Encryption', 'simple-smtp-mail' ); ?></label></th>
@@ -179,11 +182,11 @@ $encryption_options = SSM_Providers::get_encryption_options();
                     </tr>
                     <tr class="ssm-backup-field">
                         <th scope="row"><label for="ssm_backup_smtp_username"><?php esc_html_e( 'Username', 'simple-smtp-mail' ); ?></label></th>
-                        <td><input type="text" name="ssm_backup_smtp_username" id="ssm_backup_smtp_username" value="<?php echo esc_attr( $settings['backup_smtp_username'] ); ?>" class="regular-text"></td>
+                        <td><input type="text" name="ssm_backup_smtp_username" id="ssm_backup_smtp_username" value="<?php echo esc_attr( $settings['backup_smtp_username'] ); ?>" class="regular-text" placeholder="your_username"></td>
                     </tr>
                     <tr class="ssm-backup-field">
                         <th scope="row"><label for="ssm_backup_smtp_password"><?php esc_html_e( 'Password', 'simple-smtp-mail' ); ?></label></th>
-                        <td><input type="password" name="ssm_backup_smtp_password" id="ssm_backup_smtp_password" value="<?php echo esc_attr( $settings['backup_smtp_password'] ); ?>" class="regular-text"></td>
+                        <td><input type="password" name="ssm_backup_smtp_password" id="ssm_backup_smtp_password" value="<?php echo esc_attr( $settings['backup_smtp_password'] ); ?>" class="regular-text" placeholder="••••••••"></td>
                     </tr>
                 </table>
             </div>

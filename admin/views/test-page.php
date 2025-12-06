@@ -43,7 +43,7 @@ $smtp_configured = ! empty( get_option( 'ssm_smtp_host', '' ) );
                     <tr>
                         <th scope="row"><label for="ssm_test_email"><?php esc_html_e( 'Send To', 'simple-smtp-mail' ); ?></label></th>
                         <td>
-                            <input type="email" name="ssm_test_email" id="ssm_test_email" value="<?php echo esc_attr( $admin_email ); ?>" class="regular-text" required>
+                            <input type="email" name="ssm_test_email" id="ssm_test_email" value="<?php echo esc_attr( $admin_email ); ?>" class="regular-text" placeholder="you@example.com" required>
                             <p class="description"><?php esc_html_e( 'Enter the email address to send the test email to.', 'simple-smtp-mail' ); ?></p>
                         </td>
                     </tr>

@@ -24,8 +24,8 @@ class SSM_Logs_Table extends WP_List_Table {
      */
     public function __construct() {
         parent::__construct( array(
-            'singular' => __( 'Email Log', 'simple-smtp-mail' ),
-            'plural'   => __( 'Email Logs', 'simple-smtp-mail' ),
+            'singular' => 'email-log',
+            'plural'   => 'email-logs',
             'ajax'     => false,
         ) );
     }

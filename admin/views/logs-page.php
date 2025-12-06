@@ -19,6 +19,7 @@ $logs_table->prepare_items();
         <span class="dashicons dashicons-list-view"></span>
         <?php esc_html_e( 'Email Logs', 'simple-smtp-mail' ); ?>
     </h1>
+    <p class="description"><?php esc_html_e( 'View and manage your email sending history. You can search, filter, export, and resend emails from here.', 'simple-smtp-mail' ); ?></p>
 
     <div class="ssm-logs-actions">
         <button type="button" class="button ssm-export-logs" data-format="csv">
@@ -33,19 +34,20 @@ $logs_table->prepare_items();
 
     <form method="get" class="ssm-logs-form">
         <input type="hidden" name="page" value="simple-smtp-mail-logs">
-        <?php
-        $logs_table->search_box( __( 'Search', 'simple-smtp-mail' ), 'ssm-search' );
-        $logs_table->display();
-        ?>
+        <?php $logs_table->search_box( __( 'Search', 'simple-smtp-mail' ), 'ssm-search' ); ?>
+        
+        <div class="ssm-table-responsive">
+            <?php $logs_table->display(); ?>
+        </div>
     </form>
 </div>
 
 <!-- Email Preview Modal -->
-<div id="ssm-log-modal" class="ssm-modal" style="display:none;">
+<div id="ssm-log-modal" class="ssm-modal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="ssm-modal-title">
     <div class="ssm-modal-overlay"></div>
     <div class="ssm-modal-content">
-        <button type="button" class="ssm-modal-close">&times;</button>
-        <h2><?php esc_html_e( 'Email Details', 'simple-smtp-mail' ); ?></h2>
+        <button type="button" class="ssm-modal-close" aria-label="<?php esc_attr_e( 'Close', 'simple-smtp-mail' ); ?>">&times;</button>
+        <h2 id="ssm-modal-title"><?php esc_html_e( 'Email Details', 'simple-smtp-mail' ); ?></h2>
         <div class="ssm-modal-body">
             <table class="ssm-email-details">
                 <tr>

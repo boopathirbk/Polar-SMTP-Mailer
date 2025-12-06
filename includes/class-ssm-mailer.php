@@ -281,6 +281,18 @@ class SSM_Mailer {
             return false;
         }
 
+        // Log attempt.
+        if ( get_option( 'ssm_enable_logging', true ) ) {
+            SSM_DB::insert_log( array(
+                'to_email'      => is_array( $this->current_email['to'] ) ? implode( ', ', $this->current_email['to'] ) : $this->current_email['to'],
+                'subject'       => $this->current_email['subject'],
+                'message'       => 'Backup SMTP Attempted. Primary failed.', // Internal note.
+                'status'        => 'backup_attempt',
+                'provider'      => 'backup_smtp', // Distinguish provider.
+                'created_at'    => current_time( 'mysql' ),
+            ) );
+        }
+
         // Store original settings.
         $original_settings = $this->settings;
 
@@ -294,7 +306,7 @@ class SSM_Mailer {
             'password'   => SSM_Encryption::decrypt( get_option( 'ssm_backup_smtp_password', '' ) ),
         );
 
-        // Temporarily disable to prevent infinite loop.
+        // Temporarily disable failure hook to prevent recursion loop if backup fails too.
         remove_action( 'wp_mail_failed', array( $this, 'handle_mail_failed' ) );
 
         // Try sending again.
@@ -305,6 +317,20 @@ class SSM_Mailer {
             $this->current_email['headers'],
             $this->current_email['attachments']
         );
+
+        // Log result of backup attempt.
+        if ( ! $result && get_option( 'ssm_enable_logging', true ) ) {
+            // Note: detailed PHPMailer error unavailable here as wp_mail returns false, 
+            // but we can log that backup failed.
+             SSM_DB::insert_log( array(
+                'to_email'      => is_array( $this->current_email['to'] ) ? implode( ', ', $this->current_email['to'] ) : $this->current_email['to'],
+                'subject'       => $this->current_email['subject'],
+                'status'        => 'failed',
+                'error_message' => 'Backup SMTP also failed.',
+                'provider'      => 'backup_smtp',
+                'created_at'    => current_time( 'mysql' ),
+            ) );
+        }
 
         // Restore hooks.
         add_action( 'wp_mail_failed', array( $this, 'handle_mail_failed' ), 10, 1 );

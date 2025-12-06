@@ -271,14 +271,11 @@ class SSM_Logger {
      * @return string CSV content.
      */
     public function export_csv( $args = array() ) {
-        $args['per_page'] = 10000; // Get all matching logs.
-        $args['page'] = 1;
-        $logs = $this->get_logs( $args );
-
-        $csv = array();
-
+        // Prepare file handle.
+        $output = fopen( 'php://temp', 'r+' );
+        
         // Header row.
-        $csv[] = array(
+        fputcsv( $output, array(
             __( 'ID', 'simple-smtp-mail' ),
             __( 'To', 'simple-smtp-mail' ),
             __( 'CC', 'simple-smtp-mail' ),
@@ -289,29 +286,47 @@ class SSM_Logger {
             __( 'Error', 'simple-smtp-mail' ),
             __( 'Sent At', 'simple-smtp-mail' ),
             __( 'Created At', 'simple-smtp-mail' ),
-        );
+        ) );
 
-        // Data rows.
-        foreach ( $logs as $log ) {
-            $csv[] = array(
-                $log->id,
-                $log->to_email,
-                $log->cc_email,
-                $log->bcc_email,
-                $log->subject,
-                $log->status,
-                $log->provider,
-                $log->error_message,
-                $log->sent_at,
-                $log->created_at,
-            );
-        }
+        // Process in chunks to save memory.
+        $chunk_size = 500;
+        $page = 1;
+        $args['per_page'] = $chunk_size;
 
-        // Generate CSV string.
-        $output = fopen( 'php://temp', 'r+' );
-        foreach ( $csv as $row ) {
-            fputcsv( $output, $row );
-        }
+        do {
+            $args['page'] = $page;
+            $logs = $this->get_logs( $args );
+            
+            if ( empty( $logs ) ) {
+                break;
+            }
+
+            foreach ( $logs as $log ) {
+                fputcsv( $output, array(
+                    $log->id,
+                    $log->to_email,
+                    $log->cc_email,
+                    $log->bcc_email,
+                    $log->subject,
+                    $log->status,
+                    $log->provider,
+                    $log->error_message,
+                    $log->sent_at,
+                    $log->created_at,
+                ) );
+            }
+
+            // Clean up memory.
+            unset( $logs );
+            $page++;
+            
+            // Safety limit (e.g. 20,000 records max for now).
+            if ( $page > 40 ) {
+                break;
+            }
+
+        } while ( true );
+
         rewind( $output );
         $csv_content = stream_get_contents( $output );
         fclose( $output );
@@ -327,7 +342,7 @@ class SSM_Logger {
      * @return string JSON content.
      */
     public function export_json( $args = array() ) {
-        $args['per_page'] = 10000; // Get all matching logs.
+        $args['per_page'] = 1000; // Limit to 1000 to prevent memory issues.
         $args['page'] = 1;
         $logs = $this->get_logs( $args );
 

@@ -24,6 +24,7 @@ function ssm_uninstall() {
 
     // Delete plugin options.
     $options = array(
+        'ssm_smtp_provider',
         'ssm_smtp_host',
         'ssm_smtp_port',
         'ssm_smtp_encryption',

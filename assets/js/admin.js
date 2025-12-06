@@ -46,9 +46,11 @@
             if (input.attr('type') === 'password') {
                 input.attr('type', 'text');
                 icon.removeClass('dashicons-visibility').addClass('dashicons-hidden');
+                $(this).attr('aria-label', ssm_ajax.strings.hide_password || 'Hide password');
             } else {
                 input.attr('type', 'password');
                 icon.removeClass('dashicons-hidden').addClass('dashicons-visibility');
+                $(this).attr('aria-label', ssm_ajax.strings.show_password || 'Show password');
             }
         },
 
@@ -175,6 +177,13 @@
             $(document).on('click', '.ssm-resend-email', this.resendEmail);
             $(document).on('click', '.ssm-export-logs', this.exportLogs);
             $(document).on('click', '.ssm-modal-close, .ssm-modal-overlay', this.closeModal);
+            $(document).on('keydown', this.handleKeydown);
+        },
+
+        handleKeydown: function (e) {
+            if (e.key === 'Escape' && $('#ssm-log-modal').is(':visible')) {
+                SSMLogs.closeModal();
+            }
         },
 
         viewLog: function () {
@@ -204,8 +213,17 @@
                             $('#ssm-log-error-row').hide();
                         }
 
-                        $('#ssm-log-message').html(log.message);
+                        // Safely display message content - use text() for plain text or create iframe sandbox for HTML
+                        const messageContainer = $('#ssm-log-message');
+                        if (log.message.indexOf('<') !== -1 && log.message.indexOf('>') !== -1) {
+                            // HTML content - use srcdoc iframe for sandboxed display
+                            messageContainer.html('<iframe sandbox="" srcdoc="' + $('<div>').text(log.message).html().replace(/"/g, '&quot;') + '" style="width:100%;min-height:200px;border:none;"></iframe>');
+                        } else {
+                            // Plain text - safe to use text()
+                            messageContainer.text(log.message);
+                        }
                         $('#ssm-log-modal').show();
+                        $('.ssm-modal-close').focus();
                     }
                 }
             });
