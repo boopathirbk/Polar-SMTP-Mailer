@@ -4,11 +4,14 @@
  * @package SimpleSmtpMail
  */
 
+// Define globally
+var SSMSettings, SSMTestEmail, SSMLogs;
+
 (function ($) {
     'use strict';
 
     // Settings page
-    const SSMSettings = {
+    SSMSettings = {
         init: function () {
             this.bindEvents();
             this.toggleAuthFields();
@@ -20,8 +23,17 @@
             $('#ssm_smtp_auth').on('change', this.toggleAuthFields);
             $('[name="ssm_enable_queue"]').on('change', this.toggleQueueFields);
             $('#ssm_enable_backup_smtp').on('change', this.toggleBackupFields);
-            $('#ssm_smtp_provider').on('change', function () { SSMSettings.onProviderChange(this, 'primary'); });
-            $('#ssm_backup_smtp_provider').on('change', function () { SSMSettings.onProviderChange(this, 'backup'); });
+
+            // Primary provider change - direct binding
+            $('#ssm_smtp_provider').on('change', function () {
+                SSMSettings.onProviderChange(this, 'primary');
+            });
+
+            // Backup provider change - use event delegation for hidden elements
+            $(document).on('change', '#ssm_backup_smtp_provider', function () {
+                SSMSettings.onProviderChange(this, 'backup');
+            });
+
             $('#ssm-test-connection').on('click', this.testConnection);
             $('.ssm-toggle-password').on('click', this.togglePassword);
         },
@@ -79,7 +91,8 @@
                 success: function (response) {
                     if (response.success && response.data.provider) {
                         const p = response.data.provider;
-                        $(prefix + 'smtp_host').val(p.host).prop('readonly', true);
+                        // Set value AND force editable
+                        $(prefix + 'smtp_host').val(p.host).prop('readonly', false);
                         $(prefix + 'smtp_port').val(p.port);
                         $(prefix + 'smtp_encryption').val(p.encryption);
 
@@ -89,12 +102,10 @@
                             $(descId).text('');
                         }
                     } else {
-                        console.error('SSM: Provider not found', response);
                         alert('Error: Could not load provider settings. ' + (response.data ? response.data.message : ''));
                     }
                 },
                 error: function (xhr, status, error) {
-                    console.error('SSM: AJAX error', error);
                     alert('Error loading provider: ' + error);
                 }
             });
@@ -146,7 +157,7 @@
     };
 
     // Test Email page
-    const SSMTestEmail = {
+    SSMTestEmail = {
         init: function () {
             // Use .off().on() to prevent double binding
             $('#ssm-test-email-form').off('submit').on('submit', this.sendTestEmail);
@@ -190,7 +201,7 @@
     };
 
     // Logs page
-    const SSMLogs = {
+    SSMLogs = {
         init: function () {
             this.bindEvents();
         },
