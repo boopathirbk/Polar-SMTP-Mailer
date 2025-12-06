@@ -1,6 +1,7 @@
 # Simple SMTP Mail
 
 [![WordPress](https://img.shields.io/badge/WordPress-6.0%2B-blue.svg)](https://wordpress.org/)
+[![Tested up to](https://img.shields.io/badge/Tested%20up%20to-6.9-brightgreen.svg)](https://wordpress.org/)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-purple.svg)](https://php.net/)
 [![License](https://img.shields.io/badge/License-GPLv2-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://paypal.me/boopathirbk)
@@ -220,6 +221,7 @@ Your support helps keep this project alive and free for everyone! 🙏
 
 ### 1.0.0 (2025-12-06)
 - Initial release
+- Tested up to WordPress 6.9
 - Enhanced UI/UX with improved accessibility (WCAG AA)
 - Mobile-optimized responsive tables
 - Memory optimization for large log exports
