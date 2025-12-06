@@ -23,6 +23,7 @@ Simple SMTP Mail helps you configure any SMTP provider to send WordPress emails 
 * **Secure Password Storage** - Passwords are encrypted using AES-256 encryption
 * **Email Logging** - Track all sent, failed, and queued emails with detailed logs
 * **Modern Dashboard** - Beautiful stats, charts, and quick actions
+* **Modern Typography** - Sleek, legible interface using the Geist font family
 * **User Experience & Accessibility** - WCAG AA Compliant, screen reader friendly, and mobile-optimized responsive tables
 * **Email Queue** - Schedule bulk emails with rate limiting and background processing
 * **Backup SMTP** - Automatic fallback when primary SMTP fails (Failover)
@@ -100,6 +101,8 @@ Go to SMTP Mail → Email Logs and click the "Export CSV" or "Export JSON" butto
 
 = 1.0.0 =
 * Initial release
+* Tested up to WordPress 6.9
+* Modern typography update (Geist font integration)
 * Enhanced UI/UX with improved accessibility (WCAG AA)
 * Mobile-optimized responsive tables
 * Memory optimization for large log exports

@@ -70,6 +70,7 @@ A powerful, open-source WordPress SMTP plugin with comprehensive email logging, 
 - **System Status** - SMTP connection health check and configuration overview
 - **Provider Display** - Shows current SMTP provider in use
 - **Queue Counter** - Real-time pending queue count
+- **Modern Typography** - Sleek, legible interface using the Geist font family
 - **Responsive Design** - Works seamlessly on all screen sizes
 
 ### 📱 User Experience & Accessibility
@@ -222,6 +223,7 @@ Your support helps keep this project alive and free for everyone! 🙏
 ### 1.0.0 (2025-12-06)
 - Initial release
 - Tested up to WordPress 6.9
+- Modern typography update (Geist font integration)
 - Enhanced UI/UX with improved accessibility (WCAG AA)
 - Mobile-optimized responsive tables
 - Memory optimization for large log exports
