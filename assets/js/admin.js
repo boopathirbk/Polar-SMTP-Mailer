@@ -79,7 +79,7 @@
                 success: function (response) {
                     if (response.success && response.data.provider) {
                         const p = response.data.provider;
-                        $(prefix + 'smtp_host').val(p.host);
+                        $(prefix + 'smtp_host').val(p.host).prop('readonly', true);
                         $(prefix + 'smtp_port').val(p.port);
                         $(prefix + 'smtp_encryption').val(p.encryption);
 
@@ -88,7 +88,14 @@
                         } else {
                             $(descId).text('');
                         }
+                    } else {
+                        console.error('SSM: Provider not found', response);
+                        alert('Error: Could not load provider settings. ' + (response.data ? response.data.message : ''));
                     }
+                },
+                error: function (xhr, status, error) {
+                    console.error('SSM: AJAX error', error);
+                    alert('Error loading provider: ' + error);
                 }
             });
         },

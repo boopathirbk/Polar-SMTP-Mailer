@@ -113,7 +113,7 @@ Go to SMTP Mail → Email Logs and click the "Export CSV" or "Export JSON" butto
 * Upgraded Admin UX (Hostinger support, Port selection Datalist, Placeholders)
 * SMTP configuration with 15+ provider presets (including Hostinger)
 * Support for TLS, SSL, and no encryption
-* Email logging with search, filter, and export
+* Email logging with search, filter, and export (View, Resend, Delete actions)
 * Email resend functionality
 * Email queue with background processing
 * Priority-based queue processing
@@ -127,6 +127,8 @@ Go to SMTP Mail → Email Logs and click the "Export CSV" or "Export JSON" butto
 * Hostinger SMTP sender fix - explicit Sender header
 * Self-healing database - automatic table creation/repair
 * Test connection UX - clear password re-entry message
+* WP_List_Table fix - proper column headers for reliable table rendering
+* Bulk actions support - delete multiple email logs at once
 
 == Upgrade Notice ==
 

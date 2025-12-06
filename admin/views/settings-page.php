@@ -49,14 +49,13 @@ $encryption_options = SSM_Providers::get_encryption_options();
                     <tr>
                         <th scope="row"><label for="ssm_smtp_port"><?php esc_html_e( 'SMTP Port', 'simple-smtp-mail' ); ?></label></th>
                         <td>
-                            <input type="text" name="ssm_smtp_port" id="ssm_smtp_port" value="<?php echo esc_attr( $settings['smtp_port'] ); ?>" class="regular-text" list="ssm_port_options" placeholder="587" pattern="[0-9]*" inputmode="numeric">
-                            <datalist id="ssm_port_options">
-                                <option value="25" label="None">
-                                <option value="465" label="SSL">
-                                <option value="587" label="TLS">
-                                <option value="2525" label="Alt">
-                            </datalist>
-                            <p class="description"><?php esc_html_e( 'Select a common port or enter a custom one.', 'simple-smtp-mail' ); ?></p>
+                            <select name="ssm_smtp_port" id="ssm_smtp_port">
+                                <option value="25" <?php selected( $settings['smtp_port'], 25 ); ?>>25 (None/Unencrypted)</option>
+                                <option value="465" <?php selected( $settings['smtp_port'], 465 ); ?>>465 (SSL)</option>
+                                <option value="587" <?php selected( $settings['smtp_port'], 587 ); ?>>587 (TLS - Recommended)</option>
+                                <option value="2525" <?php selected( $settings['smtp_port'], 2525 ); ?>>2525 (Alternative)</option>
+                            </select>
+                            <p class="description"><?php esc_html_e( 'Select the SMTP port. 587 (TLS) is recommended for most providers.', 'simple-smtp-mail' ); ?></p>
                         </td>
                     </tr>
                     <tr>
@@ -193,8 +192,13 @@ $encryption_options = SSM_Providers::get_encryption_options();
                     <tr class="ssm-backup-field">
                         <th scope="row"><label for="ssm_backup_smtp_port"><?php esc_html_e( 'Backup Port', 'simple-smtp-mail' ); ?></label></th>
                         <td>
-                            <input type="text" name="ssm_backup_smtp_port" id="ssm_backup_smtp_port" value="<?php echo esc_attr( $settings['backup_smtp_port'] ); ?>" class="regular-text" list="ssm_port_options" placeholder="587" pattern="[0-9]*" inputmode="numeric">
-                            <p class="description"><?php esc_html_e( 'Select a common port or enter a custom one.', 'simple-smtp-mail' ); ?></p>
+                            <select name="ssm_backup_smtp_port" id="ssm_backup_smtp_port">
+                                <option value="25" <?php selected( $settings['backup_smtp_port'], 25 ); ?>>25 (None/Unencrypted)</option>
+                                <option value="465" <?php selected( $settings['backup_smtp_port'], 465 ); ?>>465 (SSL)</option>
+                                <option value="587" <?php selected( $settings['backup_smtp_port'], 587 ); ?>>587 (TLS - Recommended)</option>
+                                <option value="2525" <?php selected( $settings['backup_smtp_port'], 2525 ); ?>>2525 (Alternative)</option>
+                            </select>
+                            <p class="description"><?php esc_html_e( 'Select the SMTP port for backup server.', 'simple-smtp-mail' ); ?></p>
                         </td>
                     </tr>
                     <tr class="ssm-backup-field">

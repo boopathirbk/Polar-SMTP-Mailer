@@ -233,7 +233,7 @@ Your support helps keep this project alive and free for everyone! 🙏
 - Upgraded Admin UX (Hostinger support, Port selection Datalist, Placeholders)
 - SMTP configuration with 15+ provider presets (including Hostinger)
 - Support for TLS, SSL, and no encryption
-- Email logging with search, filter, and export
+- Email logging with search, filter, and export (View, Resend, Delete actions)
 - Email resend functionality
 - Email queue with background processing
 - Priority-based queue processing
@@ -247,6 +247,8 @@ Your support helps keep this project alive and free for everyone! 🙏
 - **Hostinger SMTP fix** - Explicit Sender header to prevent "address rejected" errors
 - **Self-healing database** - Automatic table creation/repair on admin load
 - **Test connection UX** - Clear message when password re-entry is required after save
+- **WP_List_Table fix** - Proper column headers for reliable table rendering
+- **Bulk actions support** - Delete multiple email logs at once
 
 ---
 
