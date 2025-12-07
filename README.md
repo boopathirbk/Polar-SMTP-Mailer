@@ -1,4 +1,4 @@
-# Polar SMTP Mailer
+# <img src="assets/images/OpenmojiPolarBear.png" width="40" alt="Polar Bear Icon"> Polar SMTP Mailer
 
 [![WordPress](https://img.shields.io/badge/WordPress-6.0%2B-blue.svg)](https://wordpress.org/)
 [![Tested up to](https://img.shields.io/badge/Tested%20up%20to-6.9-brightgreen.svg)](https://wordpress.org/)
@@ -153,13 +153,13 @@ git clone https://github.com/boopathirbk/polar-smtp-mailer.git
 ### From WordPress
 1. **Plugins → Add New → Upload Plugin**
 2. Upload the ZIP file
-3. Activate and configure at **SMTP Mail → Settings**
+3. Activate and configure at **Polar SMTP → Settings**
 
 ---
 
 ## ⚙️ Quick Setup
 
-1. Navigate to **SMTP Mail → Settings**
+1. Navigate to **Polar SMTP → Settings**
 2. Select your SMTP provider from dropdown
 3. Enter your credentials (username/password)
 4. Click **Test Connection** to verify
@@ -183,7 +183,7 @@ git clone https://github.com/boopathirbk/polar-smtp-mailer.git
 
 ### Add Custom Provider
 ```php
-add_filter( 'ssm_smtp_providers', function( $providers ) {
+add_filter( 'PSM_smtp_providers', function( $providers ) {
     $providers['my_provider'] = array(
         'name'       => 'My Custom Provider',
         'host'       => 'smtp.example.com',
@@ -197,7 +197,7 @@ add_filter( 'ssm_smtp_providers', function( $providers ) {
 
 ### Bypass Queue for Urgent Emails
 ```php
-add_filter( 'ssm_bypass_queue', function( $bypass, $atts ) {
+add_filter( 'PSM_bypass_queue', function( $bypass, $atts ) {
     if ( strpos( $atts['subject'], 'Urgent' ) !== false ) {
         return true; // Send immediately
     }
