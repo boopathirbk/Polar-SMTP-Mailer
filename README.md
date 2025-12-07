@@ -106,7 +106,7 @@
 
 ---
 
-## �️ Security
+## 🛡️ Security
 
 | Feature | Implementation |
 |---------|----------------|
