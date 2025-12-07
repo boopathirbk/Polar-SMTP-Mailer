@@ -2,7 +2,7 @@
 /**
  * Admin class.
  *
- * @package SimpleSmtpMail
+ * @package PolarSmtpMailer
  * @since 1.0.0
  */
 
@@ -11,9 +11,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * SSM_Admin class.
+ * PSM_Admin class.
  */
-class SSM_Admin {
+class PSM_Admin {
 
     /**
      * Constructor.
@@ -29,57 +29,57 @@ class SSM_Admin {
      */
     public function add_admin_menu() {
         add_menu_page(
-            __( 'Simple SMTP Mail', 'simple-smtp-mail' ),
-            __( 'SMTP Mail', 'simple-smtp-mail' ),
+            __( 'Polar SMTP Mailer', 'polar-smtp-mailer' ),
+            __( 'SMTP Mail', 'polar-smtp-mailer' ),
             'manage_options',
-            'simple-smtp-mail',
+            'polar-smtp-mailer',
             array( $this, 'render_dashboard' ),
             'dashicons-email-alt',
             80
         );
 
         add_submenu_page(
-            'simple-smtp-mail',
-            __( 'Dashboard', 'simple-smtp-mail' ),
-            __( 'Dashboard', 'simple-smtp-mail' ),
+            'polar-smtp-mailer',
+            __( 'Dashboard', 'polar-smtp-mailer' ),
+            __( 'Dashboard', 'polar-smtp-mailer' ),
             'manage_options',
-            'simple-smtp-mail',
+            'polar-smtp-mailer',
             array( $this, 'render_dashboard' )
         );
 
         add_submenu_page(
-            'simple-smtp-mail',
-            __( 'Settings', 'simple-smtp-mail' ),
-            __( 'Settings', 'simple-smtp-mail' ),
+            'polar-smtp-mailer',
+            __( 'Settings', 'polar-smtp-mailer' ),
+            __( 'Settings', 'polar-smtp-mailer' ),
             'manage_options',
-            'simple-smtp-mail-settings',
+            'polar-smtp-mailer-settings',
             array( $this, 'render_settings' )
         );
 
         add_submenu_page(
-            'simple-smtp-mail',
-            __( 'Email Logs', 'simple-smtp-mail' ),
-            __( 'Email Logs', 'simple-smtp-mail' ),
+            'polar-smtp-mailer',
+            __( 'Email Logs', 'polar-smtp-mailer' ),
+            __( 'Email Logs', 'polar-smtp-mailer' ),
             'manage_options',
-            'simple-smtp-mail-logs',
+            'polar-smtp-mailer-logs',
             array( $this, 'render_logs' )
         );
 
         add_submenu_page(
-            'simple-smtp-mail',
-            __( 'Test Email', 'simple-smtp-mail' ),
-            __( 'Test Email', 'simple-smtp-mail' ),
+            'polar-smtp-mailer',
+            __( 'Test Email', 'polar-smtp-mailer' ),
+            __( 'Test Email', 'polar-smtp-mailer' ),
             'manage_options',
-            'simple-smtp-mail-test',
+            'polar-smtp-mailer-test',
             array( $this, 'render_test' )
         );
 
         add_submenu_page(
-            'simple-smtp-mail',
-            __( 'About', 'simple-smtp-mail' ),
-            __( 'About', 'simple-smtp-mail' ),
+            'polar-smtp-mailer',
+            __( 'About', 'polar-smtp-mailer' ),
+            __( 'About', 'polar-smtp-mailer' ),
             'manage_options',
-            'simple-smtp-mail-about',
+            'polar-smtp-mailer-about',
             array( $this, 'render_about' )
         );
     }
@@ -88,34 +88,34 @@ class SSM_Admin {
      * Enqueue admin assets.
      */
     public function enqueue_assets( $hook ) {
-        if ( strpos( $hook, 'simple-smtp-mail' ) === false ) {
+        if ( strpos( $hook, 'polar-smtp-mailer' ) === false ) {
             return;
         }
 
         wp_enqueue_style(
             'ssm-admin',
-            SSM_PLUGIN_URL . 'assets/css/admin.css',
+            PSM_PLUGIN_URL . 'assets/css/admin.css',
             array(),
-            SSM_VERSION
+            PSM_VERSION
         );
 
         wp_enqueue_script(
             'ssm-admin',
-            SSM_PLUGIN_URL . 'assets/js/admin.js',
+            PSM_PLUGIN_URL . 'assets/js/admin.js',
             array( 'jquery' ),
-            SSM_VERSION,
+            PSM_VERSION,
             true
         );
 
-        wp_localize_script( 'ssm-admin', 'ssm_ajax', array(
+        wp_localize_script( 'ssm-admin', 'PSM_ajax', array(
             'ajax_url' => admin_url( 'admin-ajax.php' ),
-            'nonce'    => wp_create_nonce( 'ssm_nonce' ),
+            'nonce'    => wp_create_nonce( 'PSM_nonce' ),
             'strings'  => array(
-                'confirm_delete'  => __( 'Are you sure you want to delete this?', 'simple-smtp-mail' ),
-                'testing'         => __( 'Testing...', 'simple-smtp-mail' ),
-                'sending'         => __( 'Sending...', 'simple-smtp-mail' ),
-                'success'         => __( 'Success!', 'simple-smtp-mail' ),
-                'error'           => __( 'Error', 'simple-smtp-mail' ),
+                'confirm_delete'  => __( 'Are you sure you want to delete this?', 'polar-smtp-mailer' ),
+                'testing'         => __( 'Testing...', 'polar-smtp-mailer' ),
+                'sending'         => __( 'Sending...', 'polar-smtp-mailer' ),
+                'success'         => __( 'Success!', 'polar-smtp-mailer' ),
+                'error'           => __( 'Error', 'polar-smtp-mailer' ),
             ),
         ) );
     }
@@ -124,11 +124,11 @@ class SSM_Admin {
      * Redirect after activation.
      */
     public function maybe_redirect() {
-        if ( get_transient( 'ssm_activation_redirect' ) ) {
-            delete_transient( 'ssm_activation_redirect' );
+        if ( get_transient( 'PSM_activation_redirect' ) ) {
+            delete_transient( 'PSM_activation_redirect' );
             // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Safe read-only check for multi-activation.
             if ( ! isset( $_GET['activate-multi'] ) ) {
-                wp_safe_redirect( admin_url( 'admin.php?page=simple-smtp-mail' ) );
+                wp_safe_redirect( admin_url( 'admin.php?page=polar-smtp-mailer' ) );
                 exit;
             }
         }
@@ -138,34 +138,34 @@ class SSM_Admin {
      * Render dashboard page.
      */
     public function render_dashboard() {
-        require_once SSM_PLUGIN_DIR . 'admin/views/dashboard-page.php';
+        require_once PSM_PLUGIN_DIR . 'admin/views/dashboard-page.php';
     }
 
     /**
      * Render settings page.
      */
     public function render_settings() {
-        require_once SSM_PLUGIN_DIR . 'admin/views/settings-page.php';
+        require_once PSM_PLUGIN_DIR . 'admin/views/settings-page.php';
     }
 
     /**
      * Render logs page.
      */
     public function render_logs() {
-        require_once SSM_PLUGIN_DIR . 'admin/views/logs-page.php';
+        require_once PSM_PLUGIN_DIR . 'admin/views/logs-page.php';
     }
 
     /**
      * Render test email page.
      */
     public function render_test() {
-        require_once SSM_PLUGIN_DIR . 'admin/views/test-page.php';
+        require_once PSM_PLUGIN_DIR . 'admin/views/test-page.php';
     }
 
     /**
      * Render about page.
      */
     public function render_about() {
-        require_once SSM_PLUGIN_DIR . 'admin/views/about-page.php';
+        require_once PSM_PLUGIN_DIR . 'admin/views/about-page.php';
     }
 }

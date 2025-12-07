@@ -4,7 +4,7 @@
  *
  * Handles email logging and log management.
  *
- * @package SimpleSmtpMail
+ * @package PolarSmtpMailer
  * @since 1.0.0
  */
 
@@ -14,11 +14,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * SSM_Logger class.
+ * PSM_Logger class.
  *
  * @since 1.0.0
  */
-class SSM_Logger {
+class PSM_Logger {
 
     /**
      * Constructor.
@@ -40,10 +40,10 @@ class SSM_Logger {
         add_action( 'wp_mail_succeeded', array( $this, 'log_mail_success' ), 10, 1 );
 
         // Schedule log cleanup.
-        if ( ! wp_next_scheduled( 'ssm_cleanup_logs' ) ) {
-            wp_schedule_event( time(), 'daily', 'ssm_cleanup_logs' );
+        if ( ! wp_next_scheduled( 'PSM_cleanup_logs' ) ) {
+            wp_schedule_event( time(), 'daily', 'PSM_cleanup_logs' );
         }
-        add_action( 'ssm_cleanup_logs', array( $this, 'cleanup_old_logs' ) );
+        add_action( 'PSM_cleanup_logs', array( $this, 'cleanup_old_logs' ) );
     }
 
     /**
@@ -54,7 +54,7 @@ class SSM_Logger {
      * @return void
      */
     public function log_mail_success( $mail_data ) {
-        if ( ! get_option( 'ssm_enable_logging', true ) ) {
+        if ( ! get_option( 'PSM_enable_logging', true ) ) {
             return;
         }
 
@@ -70,12 +70,12 @@ class SSM_Logger {
 
         // Check privacy setting - exclude message content if enabled.
         $message = isset( $mail_data['message'] ) ? $mail_data['message'] : '';
-        if ( get_option( 'ssm_privacy_exclude_content', false ) ) {
-            $message = __( '[Content not logged for privacy]', 'simple-smtp-mail' );
+        if ( get_option( 'PSM_privacy_exclude_content', false ) ) {
+            $message = __( '[Content not logged for privacy]', 'polar-smtp-mailer' );
         }
 
         // Insert log.
-        SSM_DB::insert_log( array(
+        PSM_DB::insert_log( array(
             'to_email'    => $to,
             'cc_email'    => isset( $parsed['cc'] ) ? $parsed['cc'] : '',
             'bcc_email'   => isset( $parsed['bcc'] ) ? $parsed['bcc'] : '',
@@ -126,7 +126,7 @@ class SSM_Logger {
      * @return string Provider name.
      */
     private function get_current_provider() {
-        return SSM_Providers::get_provider_name_from_host();
+        return PSM_Providers::get_provider_name_from_host();
     }
 
     /**
@@ -136,13 +136,13 @@ class SSM_Logger {
      * @return int Number of logs deleted.
      */
     public function cleanup_old_logs() {
-        $retention_days = (int) get_option( 'ssm_log_retention_days', 30 );
+        $retention_days = (int) get_option( 'PSM_log_retention_days', 30 );
 
         if ( $retention_days <= 0 ) {
             return 0; // Keep logs forever.
         }
 
-        return SSM_DB::cleanup_old_logs( $retention_days );
+        return PSM_DB::cleanup_old_logs( $retention_days );
     }
 
     /**
@@ -153,7 +153,7 @@ class SSM_Logger {
      * @return object|null Log object or null.
      */
     public function get_log( $id ) {
-        return SSM_DB::get_log( $id );
+        return PSM_DB::get_log( $id );
     }
 
     /**
@@ -164,7 +164,7 @@ class SSM_Logger {
      * @return array Array of logs.
      */
     public function get_logs( $args = array() ) {
-        return SSM_DB::get_logs( $args );
+        return PSM_DB::get_logs( $args );
     }
 
     /**
@@ -175,7 +175,7 @@ class SSM_Logger {
      * @return int Total count.
      */
     public function get_logs_count( $args = array() ) {
-        return SSM_DB::get_logs_count( $args );
+        return PSM_DB::get_logs_count( $args );
     }
 
     /**
@@ -186,7 +186,7 @@ class SSM_Logger {
      * @return bool True on success.
      */
     public function delete_log( $id ) {
-        return SSM_DB::delete_log( $id );
+        return PSM_DB::delete_log( $id );
     }
 
     /**
@@ -197,7 +197,7 @@ class SSM_Logger {
      * @return int Number of deleted logs.
      */
     public function bulk_delete_logs( $ids ) {
-        return SSM_DB::bulk_delete_logs( $ids );
+        return PSM_DB::bulk_delete_logs( $ids );
     }
 
     /**
@@ -213,7 +213,7 @@ class SSM_Logger {
         if ( ! $log ) {
             return array(
                 'success' => false,
-                'message' => __( 'Email log not found.', 'simple-smtp-mail' ),
+                'message' => __( 'Email log not found.', 'polar-smtp-mailer' ),
             );
         }
 
@@ -251,7 +251,7 @@ class SSM_Logger {
                 'success' => true,
                 'message' => sprintf(
                     /* translators: %s: Recipient email */
-                    __( 'Email resent successfully to %s!', 'simple-smtp-mail' ),
+                    __( 'Email resent successfully to %s!', 'polar-smtp-mailer' ),
                     $log->to_email
                 ),
             );
@@ -259,7 +259,7 @@ class SSM_Logger {
 
         return array(
             'success' => false,
-            'message' => __( 'Failed to resend email. Please check your SMTP settings.', 'simple-smtp-mail' ),
+            'message' => __( 'Failed to resend email. Please check your SMTP settings.', 'polar-smtp-mailer' ),
         );
     }
 
@@ -275,16 +275,16 @@ class SSM_Logger {
         
         // Header row.
         $csv_content .= $this->array_to_csv_line( array(
-            __( 'ID', 'simple-smtp-mail' ),
-            __( 'To', 'simple-smtp-mail' ),
-            __( 'CC', 'simple-smtp-mail' ),
-            __( 'BCC', 'simple-smtp-mail' ),
-            __( 'Subject', 'simple-smtp-mail' ),
-            __( 'Status', 'simple-smtp-mail' ),
-            __( 'Provider', 'simple-smtp-mail' ),
-            __( 'Error', 'simple-smtp-mail' ),
-            __( 'Sent At', 'simple-smtp-mail' ),
-            __( 'Created At', 'simple-smtp-mail' ),
+            __( 'ID', 'polar-smtp-mailer' ),
+            __( 'To', 'polar-smtp-mailer' ),
+            __( 'CC', 'polar-smtp-mailer' ),
+            __( 'BCC', 'polar-smtp-mailer' ),
+            __( 'Subject', 'polar-smtp-mailer' ),
+            __( 'Status', 'polar-smtp-mailer' ),
+            __( 'Provider', 'polar-smtp-mailer' ),
+            __( 'Error', 'polar-smtp-mailer' ),
+            __( 'Sent At', 'polar-smtp-mailer' ),
+            __( 'Created At', 'polar-smtp-mailer' ),
         ) );
 
         // Process in chunks to save memory.
@@ -387,7 +387,7 @@ class SSM_Logger {
      * @return array Statistics.
      */
     public function get_stats( $period = 'all' ) {
-        return SSM_DB::get_stats( $period );
+        return PSM_DB::get_stats( $period );
     }
 
     /**
@@ -398,6 +398,6 @@ class SSM_Logger {
      * @return array Daily statistics.
      */
     public function get_daily_stats( $days = 30 ) {
-        return SSM_DB::get_daily_stats( $days );
+        return PSM_DB::get_daily_stats( $days );
     }
 }

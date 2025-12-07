@@ -1,7 +1,7 @@
 /**
- * Simple SMTP Mail Admin JavaScript
+ * Polar SMTP Mailer Admin JavaScript
  *
- * @package SimpleSmtpMail
+ * @package PolarSmtpMailer
  */
 
 // Define globally
@@ -20,17 +20,17 @@ var SSMSettings, SSMTestEmail, SSMLogs;
         },
 
         bindEvents: function () {
-            $('#ssm_smtp_auth').on('change', this.toggleAuthFields);
-            $('[name="ssm_enable_queue"]').on('change', this.toggleQueueFields);
-            $('#ssm_enable_backup_smtp').on('change', this.toggleBackupFields);
+            $('#PSM_smtp_auth').on('change', this.toggleAuthFields);
+            $('[name="PSM_enable_queue"]').on('change', this.toggleQueueFields);
+            $('#PSM_enable_backup_smtp').on('change', this.toggleBackupFields);
 
             // Primary provider change - direct binding
-            $('#ssm_smtp_provider').on('change', function () {
+            $('#PSM_smtp_provider').on('change', function () {
                 SSMSettings.onProviderChange(this, 'primary');
             });
 
             // Backup provider change - use event delegation for hidden elements
-            $(document).on('change', '#ssm_backup_smtp_provider', function () {
+            $(document).on('change', '#PSM_backup_smtp_provider', function () {
                 SSMSettings.onProviderChange(this, 'backup');
             });
 
@@ -39,17 +39,17 @@ var SSMSettings, SSMTestEmail, SSMLogs;
         },
 
         toggleAuthFields: function () {
-            const checked = $('#ssm_smtp_auth').is(':checked');
+            const checked = $('#PSM_smtp_auth').is(':checked');
             $('.ssm-auth-field').toggle(checked);
         },
 
         toggleQueueFields: function () {
-            const checked = $('[name="ssm_enable_queue"]').is(':checked');
+            const checked = $('[name="PSM_enable_queue"]').is(':checked');
             $('.ssm-queue-field').toggle(checked);
         },
 
         toggleBackupFields: function () {
-            const checked = $('#ssm_enable_backup_smtp').is(':checked');
+            const checked = $('#PSM_enable_backup_smtp').is(':checked');
             $('.ssm-backup-field').toggle(checked);
         },
 
@@ -59,17 +59,17 @@ var SSMSettings, SSMTestEmail, SSMLogs;
             if (input.attr('type') === 'password') {
                 input.attr('type', 'text');
                 icon.removeClass('dashicons-visibility').addClass('dashicons-hidden');
-                $(this).attr('aria-label', ssm_ajax.strings.hide_password || 'Hide password');
+                $(this).attr('aria-label', PSM_ajax.strings.hide_password || 'Hide password');
             } else {
                 input.attr('type', 'password');
                 icon.removeClass('dashicons-hidden').addClass('dashicons-visibility');
-                $(this).attr('aria-label', ssm_ajax.strings.show_password || 'Show password');
+                $(this).attr('aria-label', PSM_ajax.strings.show_password || 'Show password');
             }
         },
 
         onProviderChange: function (element, context) {
             const provider = $(element).val();
-            const prefix = context === 'backup' ? '#ssm_backup_' : '#ssm_';
+            const prefix = context === 'backup' ? '#PSM_backup_' : '#PSM_';
             const descId = context === 'backup' ? '#ssm-backup-provider-description' : '#ssm-provider-description';
 
             if (provider === 'custom') {
@@ -81,11 +81,11 @@ var SSMSettings, SSMTestEmail, SSMLogs;
             }
 
             $.ajax({
-                url: ssm_ajax.ajax_url,
+                url: PSM_ajax.ajax_url,
                 type: 'POST',
                 data: {
-                    action: 'ssm_get_provider',
-                    nonce: ssm_ajax.nonce,
+                    action: 'PSM_get_provider',
+                    nonce: PSM_ajax.nonce,
                     provider: provider
                 },
                 success: function (response) {
@@ -114,8 +114,8 @@ var SSMSettings, SSMTestEmail, SSMLogs;
         testConnection: function () {
             const $btn = $(this);
             const $result = $('.ssm-test-result');
-            const password = $('#ssm_smtp_password').val();
-            const isAuthEnabled = $('#ssm_smtp_auth').is(':checked');
+            const password = $('#PSM_smtp_password').val();
+            const isAuthEnabled = $('#PSM_smtp_auth').is(':checked');
 
             // Check if password is the masked placeholder (bullets)
             if (isAuthEnabled && password && /^[•]+$/.test(password)) {
@@ -123,20 +123,20 @@ var SSMSettings, SSMTestEmail, SSMLogs;
                 return;
             }
 
-            $btn.prop('disabled', true).text(ssm_ajax.strings.testing);
+            $btn.prop('disabled', true).text(PSM_ajax.strings.testing);
             $result.removeClass('success error').text('');
 
             $.ajax({
-                url: ssm_ajax.ajax_url,
+                url: PSM_ajax.ajax_url,
                 type: 'POST',
                 data: {
-                    action: 'ssm_test_connection',
-                    nonce: ssm_ajax.nonce,
-                    host: $('#ssm_smtp_host').val(),
-                    port: $('#ssm_smtp_port').val(),
-                    encryption: $('#ssm_smtp_encryption').val(),
+                    action: 'PSM_test_connection',
+                    nonce: PSM_ajax.nonce,
+                    host: $('#PSM_smtp_host').val(),
+                    port: $('#PSM_smtp_port').val(),
+                    encryption: $('#PSM_smtp_encryption').val(),
                     auth: isAuthEnabled ? 'true' : 'false',
-                    username: $('#ssm_smtp_username').val(),
+                    username: $('#PSM_smtp_username').val(),
                     password: password
                 },
                 success: function (response) {
@@ -168,18 +168,18 @@ var SSMSettings, SSMTestEmail, SSMLogs;
 
             const $btn = $('#ssm-send-test');
             const $result = $('#ssm-test-result');
-            const email = $('#ssm_test_email').val();
+            const email = $('#PSM_test_email').val();
 
             $btn.prop('disabled', true);
             $btn.find('.dashicons').removeClass('dashicons-email-alt').addClass('dashicons-update spin');
             $result.hide().removeClass('success error');
 
             $.ajax({
-                url: ssm_ajax.ajax_url,
+                url: PSM_ajax.ajax_url,
                 type: 'POST',
                 data: {
-                    action: 'ssm_send_test_email',
-                    nonce: ssm_ajax.nonce,
+                    action: 'PSM_send_test_email',
+                    nonce: PSM_ajax.nonce,
                     to: email
                 },
                 success: function (response) {
@@ -231,11 +231,11 @@ var SSMSettings, SSMTestEmail, SSMLogs;
             }
 
             $.ajax({
-                url: ssm_ajax.ajax_url,
+                url: PSM_ajax.ajax_url,
                 type: 'POST',
                 data: {
-                    action: 'ssm_view_log',
-                    nonce: ssm_ajax.nonce,
+                    action: 'PSM_view_log',
+                    nonce: PSM_ajax.nonce,
                     id: id
                 },
                 success: function (response) {
@@ -276,7 +276,7 @@ var SSMSettings, SSMTestEmail, SSMLogs;
         },
 
         deleteLog: function () {
-            if (!confirm(ssm_ajax.strings.confirm_delete)) {
+            if (!confirm(PSM_ajax.strings.confirm_delete)) {
                 return;
             }
 
@@ -285,11 +285,11 @@ var SSMSettings, SSMTestEmail, SSMLogs;
             const $row = $btn.closest('tr');
 
             $.ajax({
-                url: ssm_ajax.ajax_url,
+                url: PSM_ajax.ajax_url,
                 type: 'POST',
                 data: {
-                    action: 'ssm_delete_log',
-                    nonce: ssm_ajax.nonce,
+                    action: 'PSM_delete_log',
+                    nonce: PSM_ajax.nonce,
                     id: id
                 },
                 success: function (response) {
@@ -309,11 +309,11 @@ var SSMSettings, SSMTestEmail, SSMLogs;
             $btn.prop('disabled', true).text('Sending...');
 
             $.ajax({
-                url: ssm_ajax.ajax_url,
+                url: PSM_ajax.ajax_url,
                 type: 'POST',
                 data: {
-                    action: 'ssm_resend_email',
-                    nonce: ssm_ajax.nonce,
+                    action: 'PSM_resend_email',
+                    nonce: PSM_ajax.nonce,
                     id: id
                 },
                 success: function (response) {
@@ -334,11 +334,11 @@ var SSMSettings, SSMTestEmail, SSMLogs;
             const status = $('select[name="status"]').val() || '';
 
             $.ajax({
-                url: ssm_ajax.ajax_url,
+                url: PSM_ajax.ajax_url,
                 type: 'POST',
                 data: {
-                    action: 'ssm_export_logs',
-                    nonce: ssm_ajax.nonce,
+                    action: 'PSM_export_logs',
+                    nonce: PSM_ajax.nonce,
                     format: format,
                     status: status
                 },

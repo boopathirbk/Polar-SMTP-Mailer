@@ -4,7 +4,7 @@
  *
  * Handles SMTP configuration and email sending via PHPMailer.
  *
- * @package SimpleSmtpMail
+ * @package PolarSmtpMailer
  * @since 1.0.0
  */
 
@@ -14,11 +14,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * SSM_Mailer class.
+ * PSM_Mailer class.
  *
  * @since 1.0.0
  */
-class SSM_Mailer {
+class PSM_Mailer {
 
     /**
      * Whether SMTP is enabled.
@@ -59,22 +59,22 @@ class SSM_Mailer {
      */
     private function load_settings() {
         $this->settings = array(
-            'host'           => get_option( 'ssm_smtp_host', '' ),
-            'port'           => (int) get_option( 'ssm_smtp_port', 587 ),
-            'encryption'     => get_option( 'ssm_smtp_encryption', 'tls' ),
-            'auth'           => (bool) get_option( 'ssm_smtp_auth', true ),
-            'username'       => get_option( 'ssm_smtp_username', '' ),
-            'password'       => get_option( 'ssm_smtp_password', '' ),
-            'from_email'     => get_option( 'ssm_from_email', get_option( 'admin_email' ) ),
-            'from_name'      => get_option( 'ssm_from_name', get_bloginfo( 'name' ) ),
-            'force_from_email' => (bool) get_option( 'ssm_force_from_email', false ),
-            'force_from_name'  => (bool) get_option( 'ssm_force_from_name', false ),
-            'debug_mode'     => (bool) get_option( 'ssm_debug_mode', false ),
+            'host'           => get_option( 'PSM_smtp_host', '' ),
+            'port'           => (int) get_option( 'PSM_smtp_port', 587 ),
+            'encryption'     => get_option( 'PSM_smtp_encryption', 'tls' ),
+            'auth'           => (bool) get_option( 'PSM_smtp_auth', true ),
+            'username'       => get_option( 'PSM_smtp_username', '' ),
+            'password'       => get_option( 'PSM_smtp_password', '' ),
+            'from_email'     => get_option( 'PSM_from_email', get_option( 'admin_email' ) ),
+            'from_name'      => get_option( 'PSM_from_name', get_bloginfo( 'name' ) ),
+            'force_from_email' => (bool) get_option( 'PSM_force_from_email', false ),
+            'force_from_name'  => (bool) get_option( 'PSM_force_from_name', false ),
+            'debug_mode'     => (bool) get_option( 'PSM_debug_mode', false ),
         );
 
         // Decrypt password if encrypted.
-        if ( ! empty( $this->settings['password'] ) && SSM_Encryption::is_encrypted( $this->settings['password'] ) ) {
-            $this->settings['password'] = SSM_Encryption::decrypt( $this->settings['password'] );
+        if ( ! empty( $this->settings['password'] ) && PSM_Encryption::is_encrypted( $this->settings['password'] ) ) {
+            $this->settings['password'] = PSM_Encryption::decrypt( $this->settings['password'] );
         }
 
         // Check if SMTP is configured.
@@ -161,7 +161,7 @@ class SSM_Mailer {
             $phpmailer->SMTPDebug = 2;
             $phpmailer->Debugoutput = function( $str, $level ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( "Simple SMTP Mail Debug [$level]: $str" );
+                error_log( "Polar SMTP Mailer Debug [$level]: $str" );
             };
         }
 
@@ -178,7 +178,7 @@ class SSM_Mailer {
          * @param PHPMailer\PHPMailer\PHPMailer $phpmailer PHPMailer instance.
          * @param array $settings SMTP settings.
          */
-        do_action( 'ssm_phpmailer_configured', $phpmailer, $this->settings );
+        do_action( 'PSM_phpmailer_configured', $phpmailer, $this->settings );
     }
 
     /**
@@ -244,7 +244,7 @@ class SSM_Mailer {
      * @return void
      */
     public function handle_mail_failed( $error ) {
-        if ( ! get_option( 'ssm_enable_logging', true ) ) {
+        if ( ! get_option( 'PSM_enable_logging', true ) ) {
             return;
         }
 
@@ -252,7 +252,7 @@ class SSM_Mailer {
         $error_data = $error->get_error_data();
 
         // Log the failed email.
-        SSM_DB::insert_log( array(
+        PSM_DB::insert_log( array(
             'to_email'      => is_array( $this->current_email['to'] ) ? implode( ', ', $this->current_email['to'] ) : $this->current_email['to'],
             'cc_email'      => $this->current_email['cc'],
             'bcc_email'     => $this->current_email['bcc'],
@@ -268,7 +268,7 @@ class SSM_Mailer {
         ) );
 
         // Try backup SMTP if enabled.
-        if ( get_option( 'ssm_enable_backup_smtp', false ) ) {
+        if ( get_option( 'PSM_enable_backup_smtp', false ) ) {
             $this->try_backup_smtp();
         }
     }
@@ -280,15 +280,15 @@ class SSM_Mailer {
      * @return bool True if sent successfully.
      */
     private function try_backup_smtp() {
-        $backup_host = get_option( 'ssm_backup_smtp_host', '' );
+        $backup_host = get_option( 'PSM_backup_smtp_host', '' );
 
         if ( empty( $backup_host ) ) {
             return false;
         }
 
         // Log attempt.
-        if ( get_option( 'ssm_enable_logging', true ) ) {
-            SSM_DB::insert_log( array(
+        if ( get_option( 'PSM_enable_logging', true ) ) {
+            PSM_DB::insert_log( array(
                 'to_email'      => is_array( $this->current_email['to'] ) ? implode( ', ', $this->current_email['to'] ) : $this->current_email['to'],
                 'subject'       => $this->current_email['subject'],
                 'message'       => 'Backup SMTP Attempted. Primary failed.', // Internal note.
@@ -304,11 +304,11 @@ class SSM_Mailer {
         // Load backup settings.
         $this->settings = array(
             'host'       => $backup_host,
-            'port'       => (int) get_option( 'ssm_backup_smtp_port', 587 ),
-            'encryption' => get_option( 'ssm_backup_smtp_encryption', 'tls' ),
+            'port'       => (int) get_option( 'PSM_backup_smtp_port', 587 ),
+            'encryption' => get_option( 'PSM_backup_smtp_encryption', 'tls' ),
             'auth'       => true,
-            'username'   => get_option( 'ssm_backup_smtp_username', '' ),
-            'password'   => SSM_Encryption::decrypt( get_option( 'ssm_backup_smtp_password', '' ) ),
+            'username'   => get_option( 'PSM_backup_smtp_username', '' ),
+            'password'   => PSM_Encryption::decrypt( get_option( 'PSM_backup_smtp_password', '' ) ),
         );
 
         // Temporarily disable failure hook to prevent recursion loop if backup fails too.
@@ -324,10 +324,10 @@ class SSM_Mailer {
         );
 
         // Log result of backup attempt.
-        if ( ! $result && get_option( 'ssm_enable_logging', true ) ) {
+        if ( ! $result && get_option( 'PSM_enable_logging', true ) ) {
             // Note: detailed PHPMailer error unavailable here as wp_mail returns false, 
             // but we can log that backup failed.
-             SSM_DB::insert_log( array(
+             PSM_DB::insert_log( array(
                 'to_email'      => is_array( $this->current_email['to'] ) ? implode( ', ', $this->current_email['to'] ) : $this->current_email['to'],
                 'subject'       => $this->current_email['subject'],
                 'status'        => 'failed',
@@ -354,11 +354,11 @@ class SSM_Mailer {
      * @return int|false Log ID or false.
      */
     public function log_success( $email_data ) {
-        if ( ! get_option( 'ssm_enable_logging', true ) ) {
+        if ( ! get_option( 'PSM_enable_logging', true ) ) {
             return false;
         }
 
-        return SSM_DB::insert_log( array(
+        return PSM_DB::insert_log( array(
             'to_email'    => is_array( $email_data['to'] ) ? implode( ', ', $email_data['to'] ) : $email_data['to'],
             'cc_email'    => isset( $email_data['cc'] ) ? $email_data['cc'] : '',
             'bcc_email'   => isset( $email_data['bcc'] ) ? $email_data['bcc'] : '',
@@ -381,7 +381,7 @@ class SSM_Mailer {
      * @return string Provider name.
      */
     private function get_provider_name() {
-        return SSM_Providers::get_provider_name_from_host( $this->settings['host'] );
+        return PSM_Providers::get_provider_name_from_host( $this->settings['host'] );
     }
 
     /**
@@ -401,7 +401,7 @@ class SSM_Mailer {
         if ( empty( $settings['host'] ) ) {
             return array(
                 'success' => false,
-                'message' => __( 'SMTP host is required.', 'simple-smtp-mail' ),
+                'message' => __( 'SMTP host is required.', 'polar-smtp-mailer' ),
             );
         }
 
@@ -436,7 +436,7 @@ class SSM_Mailer {
                 'success' => false,
                 'message' => sprintf(
                     /* translators: 1: Error code, 2: Error message */
-                    __( 'Could not connect to SMTP server. Error %1$s: %2$s', 'simple-smtp-mail' ),
+                    __( 'Could not connect to SMTP server. Error %1$s: %2$s', 'polar-smtp-mailer' ),
                     $errno,
                     $errstr
                 ),
@@ -454,7 +454,7 @@ class SSM_Mailer {
                 'success' => false,
                 'message' => sprintf(
                     /* translators: %s: Server response */
-                    __( 'Unexpected server response: %s', 'simple-smtp-mail' ),
+                    __( 'Unexpected server response: %s', 'polar-smtp-mailer' ),
                     trim( $response )
                 ),
             );
@@ -482,7 +482,7 @@ class SSM_Mailer {
                 fclose( $connection );
                 return array(
                     'success' => false,
-                    'message' => __( 'Server does not support STARTTLS.', 'simple-smtp-mail' ),
+                    'message' => __( 'Server does not support STARTTLS.', 'polar-smtp-mailer' ),
                 );
             }
 
@@ -492,7 +492,7 @@ class SSM_Mailer {
                 fclose( $connection );
                 return array(
                     'success' => false,
-                    'message' => __( 'Could not enable TLS encryption.', 'simple-smtp-mail' ),
+                    'message' => __( 'Could not enable TLS encryption.', 'polar-smtp-mailer' ),
                 );
             }
 
@@ -520,8 +520,8 @@ class SSM_Mailer {
 
                 // Send password.
                 $password = $settings['password'];
-                if ( SSM_Encryption::is_encrypted( $password ) ) {
-                    $password = SSM_Encryption::decrypt( $password );
+                if ( PSM_Encryption::is_encrypted( $password ) ) {
+                    $password = PSM_Encryption::decrypt( $password );
                 }
                 // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode, WordPress.WP.AlternativeFunctions.file_system_operations_fwrite
                 fwrite( $connection, base64_encode( $password ) . "\r\n" );
@@ -536,7 +536,7 @@ class SSM_Mailer {
 
                     return array(
                         'success' => false,
-                        'message' => __( 'SMTP authentication failed. Please check your username and password.', 'simple-smtp-mail' ),
+                        'message' => __( 'SMTP authentication failed. Please check your username and password.', 'polar-smtp-mailer' ),
                     );
                 }
             }
@@ -550,7 +550,7 @@ class SSM_Mailer {
 
         return array(
             'success' => true,
-            'message' => __( 'SMTP connection successful! Your settings are configured correctly.', 'simple-smtp-mail' ),
+            'message' => __( 'SMTP connection successful! Your settings are configured correctly.', 'polar-smtp-mailer' ),
         );
     }
 
@@ -565,21 +565,21 @@ class SSM_Mailer {
         if ( ! is_email( $to ) ) {
             return array(
                 'success' => false,
-                'message' => __( 'Invalid email address.', 'simple-smtp-mail' ),
+                'message' => __( 'Invalid email address.', 'polar-smtp-mailer' ),
             );
         }
 
         $subject = sprintf(
             /* translators: %s: Site name */
-            __( 'Test Email from %s', 'simple-smtp-mail' ),
+            __( 'Test Email from %s', 'polar-smtp-mailer' ),
             get_bloginfo( 'name' )
         );
 
         $message = sprintf(
             /* translators: 1: Site name, 2: Current date and time */
             __(
-                "This is a test email from Simple SMTP Mail.\n\nIf you received this email, your SMTP settings are configured correctly.\n\nSite: %1\$s\nDate: %2\$s\n\nThank you for using Simple SMTP Mail!",
-                'simple-smtp-mail'
+                "This is a test email from Polar SMTP Mailer.\n\nIf you received this email, your SMTP settings are configured correctly.\n\nSite: %1\$s\nDate: %2\$s\n\nThank you for using Polar SMTP Mailer!",
+                'polar-smtp-mailer'
             ),
             get_bloginfo( 'name' ),
             wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ) )
@@ -610,7 +610,7 @@ class SSM_Mailer {
                 'success' => true,
                 'message' => sprintf(
                     /* translators: %s: Recipient email */
-                    __( 'Test email sent successfully to %s!', 'simple-smtp-mail' ),
+                    __( 'Test email sent successfully to %s!', 'polar-smtp-mailer' ),
                     $to
                 ),
             );
@@ -618,7 +618,7 @@ class SSM_Mailer {
 
         return array(
             'success' => false,
-            'message' => __( 'Failed to send test email. Please check your SMTP settings and error logs.', 'simple-smtp-mail' ),
+            'message' => __( 'Failed to send test email. Please check your SMTP settings and error logs.', 'polar-smtp-mailer' ),
         );
     }
 
@@ -661,16 +661,16 @@ class SSM_Mailer {
         );
 
         // Store in transient for admin review (last 50 failures).
-        $failures = get_option( 'ssm_auth_failures', array() );
+        $failures = get_option( 'PSM_auth_failures', array() );
         array_unshift( $failures, $log_data );
         $failures = array_slice( $failures, 0, 50 ); // Keep only last 50.
-        update_option( 'ssm_auth_failures', $failures, false );
+        update_option( 'PSM_auth_failures', $failures, false );
 
         // Also log to error log if debug mode is enabled.
         if ( $this->settings['debug_mode'] ) {
             // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
             error_log( sprintf(
-                'Simple SMTP Mail: Authentication failure - Host: %s, Username: %s, IP: %s, User ID: %d',
+                'Polar SMTP Mailer: Authentication failure - Host: %s, Username: %s, IP: %s, User ID: %d',
                 $host,
                 $username,
                 $log_data['ip'],
@@ -684,7 +684,7 @@ class SSM_Mailer {
          * @since 1.0.0
          * @param array $log_data Failed authentication data.
          */
-        do_action( 'ssm_auth_failure', $log_data );
+        do_action( 'PSM_auth_failure', $log_data );
     }
 
     /**

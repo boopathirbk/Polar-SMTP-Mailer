@@ -1,7 +1,7 @@
 /**
- * Simple SMTP Mail Admin Styles
+ * Polar SMTP Mailer Admin Styles
  *
- * @package SimpleSmtpMail
+ * @package PolarSmtpMailer
  */
 
 /* ==========================================================================
@@ -503,8 +503,8 @@
     line-height: 28px !important;
 }
 
-#ssm_smtp_password,
-#ssm_backup_smtp_password {
+#PSM_smtp_password,
+#PSM_backup_smtp_password {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     border-right: 0;

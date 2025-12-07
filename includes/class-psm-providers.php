@@ -4,7 +4,7 @@
  *
  * Pre-configured settings for popular SMTP providers.
  *
- * @package SimpleSmtpMail
+ * @package PolarSmtpMailer
  * @since 1.0.0
  */
 
@@ -14,11 +14,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * SSM_Providers class.
+ * PSM_Providers class.
  *
  * @since 1.0.0
  */
-class SSM_Providers {
+class PSM_Providers {
 
     /**
      * Get all available providers.
@@ -29,8 +29,8 @@ class SSM_Providers {
     public static function get_providers() {
         $providers = array(
             'custom'      => array(
-                'name'        => __( 'Other SMTP', 'simple-smtp-mail' ),
-                'description' => __( 'Configure your own SMTP server settings.', 'simple-smtp-mail' ),
+                'name'        => __( 'Other SMTP', 'polar-smtp-mailer' ),
+                'description' => __( 'Configure your own SMTP server settings.', 'polar-smtp-mailer' ),
                 'host'        => '',
                 'port'        => 587,
                 'encryption'  => 'tls',
@@ -38,19 +38,19 @@ class SSM_Providers {
                 'icon'        => 'dashicons-email-alt',
             ),
             'gmail'       => array(
-                'name'        => __( 'Gmail / Google Workspace', 'simple-smtp-mail' ),
-                'description' => __( 'Use Gmail or Google Workspace SMTP. Requires App Password.', 'simple-smtp-mail' ),
+                'name'        => __( 'Gmail / Google Workspace', 'polar-smtp-mailer' ),
+                'description' => __( 'Use Gmail or Google Workspace SMTP. Requires App Password.', 'polar-smtp-mailer' ),
                 'host'        => 'smtp.gmail.com',
                 'port'        => 587,
                 'encryption'  => 'tls',
                 'auth'        => true,
                 'icon'        => 'dashicons-google',
                 'help_url'    => 'https://support.google.com/mail/answer/185833',
-                'help_text'   => __( 'You need to generate an App Password in your Google Account settings.', 'simple-smtp-mail' ),
+                'help_text'   => __( 'You need to generate an App Password in your Google Account settings.', 'polar-smtp-mailer' ),
             ),
             'outlook'     => array(
-                'name'        => __( 'Outlook / Microsoft 365', 'simple-smtp-mail' ),
-                'description' => __( 'Use Outlook.com or Microsoft 365 SMTP.', 'simple-smtp-mail' ),
+                'name'        => __( 'Outlook / Microsoft 365', 'polar-smtp-mailer' ),
+                'description' => __( 'Use Outlook.com or Microsoft 365 SMTP.', 'polar-smtp-mailer' ),
                 'host'        => 'smtp-mail.outlook.com',
                 'port'        => 587,
                 'encryption'  => 'tls',
@@ -59,8 +59,8 @@ class SSM_Providers {
                 'help_url'    => 'https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings',
             ),
             'office365'   => array(
-                'name'        => __( 'Office 365', 'simple-smtp-mail' ),
-                'description' => __( 'Use Office 365 SMTP relay.', 'simple-smtp-mail' ),
+                'name'        => __( 'Office 365', 'polar-smtp-mailer' ),
+                'description' => __( 'Use Office 365 SMTP relay.', 'polar-smtp-mailer' ),
                 'host'        => 'smtp.office365.com',
                 'port'        => 587,
                 'encryption'  => 'tls',
@@ -68,8 +68,8 @@ class SSM_Providers {
                 'icon'        => 'dashicons-email',
             ),
             'yahoo'       => array(
-                'name'        => __( 'Yahoo Mail', 'simple-smtp-mail' ),
-                'description' => __( 'Use Yahoo Mail SMTP. Requires App Password.', 'simple-smtp-mail' ),
+                'name'        => __( 'Yahoo Mail', 'polar-smtp-mailer' ),
+                'description' => __( 'Use Yahoo Mail SMTP. Requires App Password.', 'polar-smtp-mailer' ),
                 'host'        => 'smtp.mail.yahoo.com',
                 'port'        => 587,
                 'encryption'  => 'tls',
@@ -77,8 +77,8 @@ class SSM_Providers {
                 'icon'        => 'dashicons-email-alt2',
             ),
             'zoho'        => array(
-                'name'        => __( 'Zoho Mail', 'simple-smtp-mail' ),
-                'description' => __( 'Use Zoho Mail SMTP.', 'simple-smtp-mail' ),
+                'name'        => __( 'Zoho Mail', 'polar-smtp-mailer' ),
+                'description' => __( 'Use Zoho Mail SMTP.', 'polar-smtp-mailer' ),
                 'host'        => 'smtp.zoho.com',
                 'port'        => 587,
                 'encryption'  => 'tls',
@@ -86,42 +86,42 @@ class SSM_Providers {
                 'icon'        => 'dashicons-email',
             ),
             'sendgrid'    => array(
-                'name'        => __( 'SendGrid', 'simple-smtp-mail' ),
-                'description' => __( 'Use SendGrid SMTP relay service.', 'simple-smtp-mail' ),
+                'name'        => __( 'SendGrid', 'polar-smtp-mailer' ),
+                'description' => __( 'Use SendGrid SMTP relay service.', 'polar-smtp-mailer' ),
                 'host'        => 'smtp.sendgrid.net',
                 'port'        => 587,
                 'encryption'  => 'tls',
                 'auth'        => true,
                 'icon'        => 'dashicons-cloud',
                 'username_placeholder' => 'apikey',
-                'help_text'   => __( 'Use "apikey" as username and your SendGrid API key as password.', 'simple-smtp-mail' ),
+                'help_text'   => __( 'Use "apikey" as username and your SendGrid API key as password.', 'polar-smtp-mailer' ),
                 'help_url'    => 'https://docs.sendgrid.com/for-developers/sending-email/integrating-with-the-smtp-api',
             ),
             'mailgun'     => array(
-                'name'        => __( 'Mailgun', 'simple-smtp-mail' ),
-                'description' => __( 'Use Mailgun SMTP relay service.', 'simple-smtp-mail' ),
+                'name'        => __( 'Mailgun', 'polar-smtp-mailer' ),
+                'description' => __( 'Use Mailgun SMTP relay service.', 'polar-smtp-mailer' ),
                 'host'        => 'smtp.mailgun.org',
                 'port'        => 587,
                 'encryption'  => 'tls',
                 'auth'        => true,
                 'icon'        => 'dashicons-cloud',
-                'help_text'   => __( 'Use your Mailgun SMTP credentials from the Mailgun dashboard.', 'simple-smtp-mail' ),
+                'help_text'   => __( 'Use your Mailgun SMTP credentials from the Mailgun dashboard.', 'polar-smtp-mailer' ),
                 'help_url'    => 'https://documentation.mailgun.com/en/latest/quickstart-sending.html#send-via-smtp',
             ),
             'amazon_ses'  => array(
-                'name'        => __( 'Amazon SES', 'simple-smtp-mail' ),
-                'description' => __( 'Use Amazon Simple Email Service SMTP.', 'simple-smtp-mail' ),
+                'name'        => __( 'Amazon SES', 'polar-smtp-mailer' ),
+                'description' => __( 'Use Amazon Simple Email Service SMTP.', 'polar-smtp-mailer' ),
                 'host'        => 'email-smtp.us-east-1.amazonaws.com',
                 'port'        => 587,
                 'encryption'  => 'tls',
                 'auth'        => true,
                 'icon'        => 'dashicons-cloud',
-                'help_text'   => __( 'Update the host to match your AWS region. Use SMTP credentials from the SES console.', 'simple-smtp-mail' ),
+                'help_text'   => __( 'Update the host to match your AWS region. Use SMTP credentials from the SES console.', 'polar-smtp-mailer' ),
                 'help_url'    => 'https://docs.aws.amazon.com/ses/latest/dg/smtp-credentials.html',
             ),
             'brevo'       => array(
-                'name'        => __( 'Brevo (Sendinblue)', 'simple-smtp-mail' ),
-                'description' => __( 'Use Brevo (formerly Sendinblue) SMTP relay.', 'simple-smtp-mail' ),
+                'name'        => __( 'Brevo (Sendinblue)', 'polar-smtp-mailer' ),
+                'description' => __( 'Use Brevo (formerly Sendinblue) SMTP relay.', 'polar-smtp-mailer' ),
                 'host'        => 'smtp-relay.brevo.com',
                 'port'        => 587,
                 'encryption'  => 'tls',
@@ -130,31 +130,31 @@ class SSM_Providers {
                 'help_url'    => 'https://help.brevo.com/hc/en-us/articles/360007666839-Configure-your-SMTP-relay-settings',
             ),
             'postmark'    => array(
-                'name'        => __( 'Postmark', 'simple-smtp-mail' ),
-                'description' => __( 'Use Postmark SMTP delivery.', 'simple-smtp-mail' ),
+                'name'        => __( 'Postmark', 'polar-smtp-mailer' ),
+                'description' => __( 'Use Postmark SMTP delivery.', 'polar-smtp-mailer' ),
                 'host'        => 'smtp.postmarkapp.com',
                 'port'        => 587,
                 'encryption'  => 'tls',
                 'auth'        => true,
                 'icon'        => 'dashicons-cloud',
-                'help_text'   => __( 'Use your Postmark Server API Token as both username and password.', 'simple-smtp-mail' ),
+                'help_text'   => __( 'Use your Postmark Server API Token as both username and password.', 'polar-smtp-mailer' ),
                 'help_url'    => 'https://postmarkapp.com/developer/user-guide/smtp-headers-and-api',
             ),
             'sparkpost'   => array(
-                'name'        => __( 'SparkPost', 'simple-smtp-mail' ),
-                'description' => __( 'Use SparkPost SMTP relay.', 'simple-smtp-mail' ),
+                'name'        => __( 'SparkPost', 'polar-smtp-mailer' ),
+                'description' => __( 'Use SparkPost SMTP relay.', 'polar-smtp-mailer' ),
                 'host'        => 'smtp.sparkpostmail.com',
                 'port'        => 587,
                 'encryption'  => 'tls',
                 'auth'        => true,
                 'icon'        => 'dashicons-cloud',
                 'username_placeholder' => 'SMTP_Injection',
-                'help_text'   => __( 'Use "SMTP_Injection" as username and your SparkPost API key as password.', 'simple-smtp-mail' ),
+                'help_text'   => __( 'Use "SMTP_Injection" as username and your SparkPost API key as password.', 'polar-smtp-mailer' ),
                 'help_url'    => 'https://developers.sparkpost.com/api/smtp/',
             ),
             'smtp_com'    => array(
-                'name'        => __( 'SMTP.com', 'simple-smtp-mail' ),
-                'description' => __( 'Use SMTP.com relay service.', 'simple-smtp-mail' ),
+                'name'        => __( 'SMTP.com', 'polar-smtp-mailer' ),
+                'description' => __( 'Use SMTP.com relay service.', 'polar-smtp-mailer' ),
                 'host'        => 'send.smtp.com',
                 'port'        => 587,
                 'encryption'  => 'tls',
@@ -163,8 +163,8 @@ class SSM_Providers {
                 'help_url'    => 'https://www.smtp.com/resources/getting-started/smtp-relay/',
             ),
             'elasticemail' => array(
-                'name'        => __( 'Elastic Email', 'simple-smtp-mail' ),
-                'description' => __( 'Use Elastic Email SMTP.', 'simple-smtp-mail' ),
+                'name'        => __( 'Elastic Email', 'polar-smtp-mailer' ),
+                'description' => __( 'Use Elastic Email SMTP.', 'polar-smtp-mailer' ),
                 'host'        => 'smtp.elasticemail.com',
                 'port'        => 2525,
                 'encryption'  => 'tls',
@@ -173,19 +173,19 @@ class SSM_Providers {
                 'help_url'    => 'https://elasticemail.com/developers/guides/send-email-via-smtp',
             ),
             'mailjet'     => array(
-                'name'        => __( 'Mailjet', 'simple-smtp-mail' ),
-                'description' => __( 'Use Mailjet SMTP relay.', 'simple-smtp-mail' ),
+                'name'        => __( 'Mailjet', 'polar-smtp-mailer' ),
+                'description' => __( 'Use Mailjet SMTP relay.', 'polar-smtp-mailer' ),
                 'host'        => 'in-v3.mailjet.com',
                 'port'        => 587,
                 'encryption'  => 'tls',
                 'auth'        => true,
                 'icon'        => 'dashicons-cloud',
-                'help_text'   => __( 'Use your API Key as username and Secret Key as password.', 'simple-smtp-mail' ),
+                'help_text'   => __( 'Use your API Key as username and Secret Key as password.', 'polar-smtp-mailer' ),
                 'help_url'    => 'https://dev.mailjet.com/email/guides/getting-started/',
             ),
             'pepipost'    => array(
-                'name'        => __( 'Pepipost (Netcore)', 'simple-smtp-mail' ),
-                'description' => __( 'Use Pepipost SMTP relay.', 'simple-smtp-mail' ),
+                'name'        => __( 'Pepipost (Netcore)', 'polar-smtp-mailer' ),
+                'description' => __( 'Use Pepipost SMTP relay.', 'polar-smtp-mailer' ),
                 'host'        => 'smtp.pepipost.com',
                 'port'        => 587,
                 'encryption'  => 'tls',
@@ -193,8 +193,8 @@ class SSM_Providers {
                 'icon'        => 'dashicons-cloud',
             ),
             'hostinger'   => array(
-                'name'        => __( 'Hostinger', 'simple-smtp-mail' ),
-                'description' => __( 'Use Hostinger SMTP mail service.', 'simple-smtp-mail' ),
+                'name'        => __( 'Hostinger', 'polar-smtp-mailer' ),
+                'description' => __( 'Use Hostinger SMTP mail service.', 'polar-smtp-mailer' ),
                 'host'        => 'smtp.hostinger.com',
                 'port'        => 465,
                 'encryption'  => 'ssl',
@@ -210,7 +210,7 @@ class SSM_Providers {
          * @since 1.0.0
          * @param array $providers Array of provider configurations.
          */
-        return apply_filters( 'ssm_smtp_providers', $providers );
+        return apply_filters( 'PSM_smtp_providers', $providers );
     }
 
     /**
@@ -250,9 +250,9 @@ class SSM_Providers {
      */
     public static function get_encryption_options() {
         return array(
-            'none' => __( 'None', 'simple-smtp-mail' ),
-            'ssl'  => __( 'SSL', 'simple-smtp-mail' ),
-            'tls'  => __( 'TLS', 'simple-smtp-mail' ),
+            'none' => __( 'None', 'polar-smtp-mailer' ),
+            'ssl'  => __( 'SSL', 'polar-smtp-mailer' ),
+            'tls'  => __( 'TLS', 'polar-smtp-mailer' ),
         );
     }
 
@@ -279,7 +279,7 @@ class SSM_Providers {
      */
     public static function get_provider_name_from_host( $host = '' ) {
         if ( empty( $host ) ) {
-            $host = get_option( 'ssm_smtp_host', '' );
+            $host = get_option( 'PSM_smtp_host', '' );
         }
 
         if ( empty( $host ) ) {

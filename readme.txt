@@ -1,4 +1,4 @@
-=== Simple SMTP Mail ===
+=== Polar SMTP Mailer ===
 Contributors: boopathir
 Tags: smtp, email, wp mail, email log, gmail
 Requires at least: 6.0
@@ -12,11 +12,11 @@ Stop losing emails. Start delivering with confidence. The lightweight, feature-p
 
 == Description ==
 
-**Simple SMTP Mail** is a powerful, 100% open-source SMTP mailer with everything you need to ensure reliable email delivery — no premium upsells, no feature restrictions.
+**Polar SMTP Mailer** is a powerful, 100% open-source SMTP mailer with everything you need to ensure reliable email delivery — no premium upsells, no feature restrictions.
 
-= 🚀 Why Choose Simple SMTP Mail? =
+= 🚀 Why Choose Polar SMTP Mailer? =
 
-Unlike other SMTP plugins that lock essential features behind paywalls, Simple SMTP Mail gives you **everything for free**:
+Unlike other SMTP plugins that lock essential features behind paywalls, Polar SMTP Mailer gives you **everything for free**:
 
 * ✅ **Email Logging** - Track all sent, failed, and queued emails
 * ✅ **Backup SMTP Failover** - Automatic switch when primary fails
@@ -88,7 +88,7 @@ Unlike other SMTP plugins that lock essential features behind paywalls, Simple S
 
 == Installation ==
 
-1. Upload the plugin files to `/wp-content/plugins/simple-smtp-mail/`
+1. Upload the plugin files to `/wp-content/plugins/polar-smtp-mailer/`
 2. Activate the plugin through the 'Plugins' screen in WordPress
 3. Go to **SMTP Mail → Settings** to configure your SMTP server
 4. Click **Test Connection** to verify settings
@@ -114,7 +114,7 @@ Email logging is enabled by default. Go to SMTP Mail → Email Logs to view all 
 
 = Can I use this with WooCommerce? =
 
-Yes! Simple SMTP Mail works with all WordPress emails including WooCommerce order notifications.
+Yes! Polar SMTP Mailer works with all WordPress emails including WooCommerce order notifications.
 
 = How do I export my email logs? =
 

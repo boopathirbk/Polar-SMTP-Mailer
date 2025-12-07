@@ -5,7 +5,7 @@
  * Handles all database operations including table creation,
  * migrations, and CRUD operations for email logs and queue.
  *
- * @package SimpleSmtpMail
+ * @package PolarSmtpMailer
  * @since 1.0.0
  */
 
@@ -15,11 +15,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * SSM_DB class.
+ * PSM_DB class.
  *
  * @since 1.0.0
  */
-class SSM_DB {
+class PSM_DB {
 
     /**
      * Current database version.
@@ -50,8 +50,8 @@ class SSM_DB {
      */
     private static function init_table_names() {
         global $wpdb;
-        self::$logs_table  = $wpdb->prefix . 'ssm_email_logs';
-        self::$queue_table = $wpdb->prefix . 'ssm_email_queue';
+        self::$logs_table  = $wpdb->prefix . 'PSM_email_logs';
+        self::$queue_table = $wpdb->prefix . 'PSM_email_queue';
     }
 
     /**
@@ -118,7 +118,7 @@ class SSM_DB {
         dbDelta( $logs_sql );
         dbDelta( $queue_sql );
 
-        update_option( 'ssm_db_version', self::DB_VERSION );
+        update_option( 'PSM_db_version', self::DB_VERSION );
     }
 
     /**

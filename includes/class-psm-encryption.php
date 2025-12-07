@@ -5,7 +5,7 @@
  * Provides secure encryption and decryption for sensitive data
  * like SMTP passwords using WordPress secret keys.
  *
- * @package SimpleSmtpMail
+ * @package PolarSmtpMailer
  * @since 1.0.0
  */
 
@@ -15,11 +15,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * SSM_Encryption class.
+ * PSM_Encryption class.
  *
  * @since 1.0.0
  */
-class SSM_Encryption {
+class PSM_Encryption {
 
     /**
      * Encryption method.
@@ -38,11 +38,11 @@ class SSM_Encryption {
      */
     private static function get_key() {
         if ( defined( 'AUTH_KEY' ) && '' !== AUTH_KEY ) {
-            return hash( 'sha256', AUTH_KEY . 'ssm_encryption' );
+            return hash( 'sha256', AUTH_KEY . 'PSM_encryption' );
         }
 
         // Fallback key (less secure, but works).
-        return hash( 'sha256', ABSPATH . 'ssm_fallback_key' );
+        return hash( 'sha256', ABSPATH . 'PSM_fallback_key' );
     }
 
     /**
@@ -55,11 +55,11 @@ class SSM_Encryption {
      */
     private static function get_iv() {
         if ( defined( 'SECURE_AUTH_KEY' ) && '' !== SECURE_AUTH_KEY ) {
-            return substr( hash( 'sha256', SECURE_AUTH_KEY . 'ssm_iv' ), 0, 16 );
+            return substr( hash( 'sha256', SECURE_AUTH_KEY . 'PSM_iv' ), 0, 16 );
         }
 
         // Fallback IV.
-        return substr( hash( 'sha256', ABSPATH . 'ssm_fallback_iv' ), 0, 16 );
+        return substr( hash( 'sha256', ABSPATH . 'PSM_fallback_iv' ), 0, 16 );
     }
 
     /**

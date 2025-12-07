@@ -2,7 +2,7 @@
 /**
  * Logs list table class.
  *
- * @package SimpleSmtpMail
+ * @package PolarSmtpMailer
  * @since 1.0.0
  */
 
@@ -15,9 +15,9 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 }
 
 /**
- * SSM_Logs_Table class.
+ * PSM_Logs_Table class.
  */
-class SSM_Logs_Table extends WP_List_Table {
+class PSM_Logs_Table extends WP_List_Table {
 
     /**
      * Constructor.
@@ -36,12 +36,12 @@ class SSM_Logs_Table extends WP_List_Table {
     public function get_columns() {
         return array(
             'cb'         => '<input type="checkbox" />',
-            'to_email'   => __( 'To', 'simple-smtp-mail' ),
-            'subject'    => __( 'Subject', 'simple-smtp-mail' ),
-            'status'     => __( 'Status', 'simple-smtp-mail' ),
-            'provider'   => __( 'Provider', 'simple-smtp-mail' ),
-            'created_at' => __( 'Date', 'simple-smtp-mail' ),
-            'actions'    => __( 'Actions', 'simple-smtp-mail' ),
+            'to_email'   => __( 'To', 'polar-smtp-mailer' ),
+            'subject'    => __( 'Subject', 'polar-smtp-mailer' ),
+            'status'     => __( 'Status', 'polar-smtp-mailer' ),
+            'provider'   => __( 'Provider', 'polar-smtp-mailer' ),
+            'created_at' => __( 'Date', 'polar-smtp-mailer' ),
+            'actions'    => __( 'Actions', 'polar-smtp-mailer' ),
         );
     }
 
@@ -81,8 +81,8 @@ class SSM_Logs_Table extends WP_List_Table {
         );
         // phpcs:enable
 
-        $this->items = SSM_DB::get_logs( $args );
-        $total_items = SSM_DB::get_logs_count( $args );
+        $this->items = PSM_DB::get_logs( $args );
+        $total_items = PSM_DB::get_logs_count( $args );
 
         $this->set_pagination_args( array(
             'total_items' => $total_items,
@@ -109,7 +109,7 @@ class SSM_Logs_Table extends WP_List_Table {
      * Subject column.
      */
     public function column_subject( $item ) {
-        return esc_html( $item->subject ? $item->subject : __( '(no subject)', 'simple-smtp-mail' ) );
+        return esc_html( $item->subject ? $item->subject : __( '(no subject)', 'polar-smtp-mailer' ) );
     }
 
     /**
@@ -146,17 +146,17 @@ class SSM_Logs_Table extends WP_List_Table {
         $actions = sprintf(
             '<button type="button" class="button button-small ssm-view-log" data-id="%d">%s</button> ',
             $item->id,
-            __( 'View', 'simple-smtp-mail' )
+            __( 'View', 'polar-smtp-mailer' )
         );
         $actions .= sprintf(
             '<button type="button" class="button button-small ssm-resend-email" data-id="%d">%s</button> ',
             $item->id,
-            __( 'Resend', 'simple-smtp-mail' )
+            __( 'Resend', 'polar-smtp-mailer' )
         );
         $actions .= sprintf(
             '<button type="button" class="button button-small button-link-delete ssm-delete-log" data-id="%d">%s</button>',
             $item->id,
-            __( 'Delete', 'simple-smtp-mail' )
+            __( 'Delete', 'polar-smtp-mailer' )
         );
         return $actions;
     }
@@ -166,7 +166,7 @@ class SSM_Logs_Table extends WP_List_Table {
      */
     public function get_bulk_actions() {
         return array(
-            'delete' => __( 'Delete', 'simple-smtp-mail' ),
+            'delete' => __( 'Delete', 'polar-smtp-mailer' ),
         );
     }
 
@@ -181,7 +181,7 @@ class SSM_Logs_Table extends WP_List_Table {
             check_admin_referer( 'bulk-' . $this->_args['plural'] );
             // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
             $ids = array_map( 'absint', wp_unslash( $_POST['log_ids'] ) );
-            SSM_DB::bulk_delete_logs( $ids );
+            PSM_DB::bulk_delete_logs( $ids );
         }
     }
 
@@ -189,7 +189,7 @@ class SSM_Logs_Table extends WP_List_Table {
      * No items message.
      */
     public function no_items() {
-        esc_html_e( 'No email logs found.', 'simple-smtp-mail' );
+        esc_html_e( 'No email logs found.', 'polar-smtp-mailer' );
     }
 
     /**
@@ -202,30 +202,30 @@ class SSM_Logs_Table extends WP_List_Table {
         ?>
         <div class="alignleft actions">
             <select name="status">
-                <option value=""><?php esc_html_e( 'All Statuses', 'simple-smtp-mail' ); ?></option>
+                <option value=""><?php esc_html_e( 'All Statuses', 'polar-smtp-mailer' ); ?></option>
                 <?php
                 // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- WP_List_Table filtering uses GET params.
                 $current_status = isset( $_GET['status'] ) ? sanitize_text_field( wp_unslash( $_GET['status'] ) ) : '';
                 ?>
-                <option value="sent" <?php selected( $current_status, 'sent' ); ?>><?php esc_html_e( 'Sent', 'simple-smtp-mail' ); ?></option>
-                <option value="failed" <?php selected( $current_status, 'failed' ); ?>><?php esc_html_e( 'Failed', 'simple-smtp-mail' ); ?></option>
-                <option value="queued" <?php selected( $current_status, 'queued' ); ?>><?php esc_html_e( 'Queued', 'simple-smtp-mail' ); ?></option>
+                <option value="sent" <?php selected( $current_status, 'sent' ); ?>><?php esc_html_e( 'Sent', 'polar-smtp-mailer' ); ?></option>
+                <option value="failed" <?php selected( $current_status, 'failed' ); ?>><?php esc_html_e( 'Failed', 'polar-smtp-mailer' ); ?></option>
+                <option value="queued" <?php selected( $current_status, 'queued' ); ?>><?php esc_html_e( 'Queued', 'polar-smtp-mailer' ); ?></option>
             </select>
-            <?php submit_button( __( 'Filter', 'simple-smtp-mail' ), '', 'filter_action', false ); ?>
+            <?php submit_button( __( 'Filter', 'polar-smtp-mailer' ), '', 'filter_action', false ); ?>
         </div>
         <?php
     }
 }
 
 /**
- * SSM_Logs class.
+ * PSM_Logs class.
  */
-class SSM_Logs {
+class PSM_Logs {
 
     /**
      * Get logs table instance.
      */
     public static function get_table() {
-        return new SSM_Logs_Table();
+        return new PSM_Logs_Table();
     }
 }

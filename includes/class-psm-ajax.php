@@ -2,7 +2,7 @@
 /**
  * AJAX handler class.
  *
- * @package SimpleSmtpMail
+ * @package PolarSmtpMailer
  * @since 1.0.0
  */
 
@@ -11,23 +11,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * SSM_Ajax class.
+ * PSM_Ajax class.
  */
-class SSM_Ajax {
+class PSM_Ajax {
 
     /**
      * Constructor.
      */
     public function __construct() {
-        add_action( 'wp_ajax_ssm_test_connection', array( $this, 'test_connection' ) );
-        add_action( 'wp_ajax_ssm_send_test_email', array( $this, 'send_test_email' ) );
-        add_action( 'wp_ajax_ssm_view_log', array( $this, 'view_log' ) );
-        add_action( 'wp_ajax_ssm_delete_log', array( $this, 'delete_log' ) );
-        add_action( 'wp_ajax_ssm_resend_email', array( $this, 'resend_email' ) );
-        add_action( 'wp_ajax_ssm_export_logs', array( $this, 'export_logs' ) );
-        add_action( 'wp_ajax_ssm_get_stats', array( $this, 'get_stats' ) );
-        add_action( 'wp_ajax_ssm_process_queue', array( $this, 'process_queue' ) );
-        add_action( 'wp_ajax_ssm_get_provider', array( $this, 'get_provider' ) );
+        add_action( 'wp_ajax_PSM_test_connection', array( $this, 'test_connection' ) );
+        add_action( 'wp_ajax_PSM_send_test_email', array( $this, 'send_test_email' ) );
+        add_action( 'wp_ajax_PSM_view_log', array( $this, 'view_log' ) );
+        add_action( 'wp_ajax_PSM_delete_log', array( $this, 'delete_log' ) );
+        add_action( 'wp_ajax_PSM_resend_email', array( $this, 'resend_email' ) );
+        add_action( 'wp_ajax_PSM_export_logs', array( $this, 'export_logs' ) );
+        add_action( 'wp_ajax_PSM_get_stats', array( $this, 'get_stats' ) );
+        add_action( 'wp_ajax_PSM_process_queue', array( $this, 'process_queue' ) );
+        add_action( 'wp_ajax_PSM_get_provider', array( $this, 'get_provider' ) );
     }
 
     /**
@@ -37,12 +37,12 @@ class SSM_Ajax {
      * @return void
      */
     private function verify_request() {
-        if ( ! check_ajax_referer( 'ssm_nonce', 'nonce', false ) ) {
-            wp_send_json_error( array( 'message' => __( 'Security check failed.', 'simple-smtp-mail' ) ) );
+        if ( ! check_ajax_referer( 'PSM_nonce', 'nonce', false ) ) {
+            wp_send_json_error( array( 'message' => __( 'Security check failed.', 'polar-smtp-mailer' ) ) );
             exit; // Ensure execution stops.
         }
         if ( ! current_user_can( 'manage_options' ) ) {
-            wp_send_json_error( array( 'message' => __( 'Permission denied.', 'simple-smtp-mail' ) ) );
+            wp_send_json_error( array( 'message' => __( 'Permission denied.', 'polar-smtp-mailer' ) ) );
             exit; // Ensure execution stops.
         }
     }
@@ -65,7 +65,7 @@ class SSM_Ajax {
         );
         // phpcs:enable
 
-        $mailer = new SSM_Mailer();
+        $mailer = new PSM_Mailer();
         $result = $mailer->test_connection( $settings );
 
         if ( $result['success'] ) {
@@ -85,8 +85,8 @@ class SSM_Ajax {
 
         // Rate limiting: max 5 test emails per 10 minutes.
         $user_id = get_current_user_id();
-        $rate_limit_key = 'ssm_test_email_count_' . $user_id;
-        $rate_limit_time_key = 'ssm_test_email_time_' . $user_id;
+        $rate_limit_key = 'PSM_test_email_count_' . $user_id;
+        $rate_limit_time_key = 'PSM_test_email_time_' . $user_id;
         $max_attempts = 5;
         $time_window = 600; // 10 minutes in seconds.
 
@@ -99,7 +99,7 @@ class SSM_Ajax {
                 wp_send_json_error( array(
                     'message' => sprintf(
                         /* translators: %d: Minutes remaining */
-                        __( 'Rate limit exceeded. Please wait %d minutes before sending another test email.', 'simple-smtp-mail' ),
+                        __( 'Rate limit exceeded. Please wait %d minutes before sending another test email.', 'polar-smtp-mailer' ),
                         ceil( $time_remaining / 60 )
                     ),
                 ) );
@@ -115,7 +115,7 @@ class SSM_Ajax {
         $to = isset( $_POST['to'] ) ? sanitize_email( wp_unslash( $_POST['to'] ) ) : '';
 
         if ( ! is_email( $to ) ) {
-            wp_send_json_error( array( 'message' => __( 'Invalid email address.', 'simple-smtp-mail' ) ) );
+            wp_send_json_error( array( 'message' => __( 'Invalid email address.', 'polar-smtp-mailer' ) ) );
             exit;
         }
 
@@ -125,7 +125,7 @@ class SSM_Ajax {
         }
         set_transient( $rate_limit_key, $attempt_count + 1, $time_window );
 
-        $mailer = new SSM_Mailer();
+        $mailer = new PSM_Mailer();
         $result = $mailer->send_test_email( $to );
 
         if ( $result['success'] ) {
@@ -145,13 +145,13 @@ class SSM_Ajax {
         $id = isset( $_POST['id'] ) ? absint( $_POST['id'] ) : 0;
 
         if ( ! $id ) {
-            wp_send_json_error( array( 'message' => __( 'Invalid log ID.', 'simple-smtp-mail' ) ) );
+            wp_send_json_error( array( 'message' => __( 'Invalid log ID.', 'polar-smtp-mailer' ) ) );
         }
 
-        $log = SSM_DB::get_log( $id );
+        $log = PSM_DB::get_log( $id );
 
         if ( ! $log ) {
-            wp_send_json_error( array( 'message' => __( 'Log not found.', 'simple-smtp-mail' ) ) );
+            wp_send_json_error( array( 'message' => __( 'Log not found.', 'polar-smtp-mailer' ) ) );
         }
 
         wp_send_json_success( array(
@@ -180,15 +180,15 @@ class SSM_Ajax {
         $id = isset( $_POST['id'] ) ? absint( $_POST['id'] ) : 0;
 
         if ( ! $id ) {
-            wp_send_json_error( array( 'message' => __( 'Invalid log ID.', 'simple-smtp-mail' ) ) );
+            wp_send_json_error( array( 'message' => __( 'Invalid log ID.', 'polar-smtp-mailer' ) ) );
         }
 
-        $result = SSM_DB::delete_log( $id );
+        $result = PSM_DB::delete_log( $id );
 
         if ( $result ) {
-            wp_send_json_success( array( 'message' => __( 'Log deleted successfully.', 'simple-smtp-mail' ) ) );
+            wp_send_json_success( array( 'message' => __( 'Log deleted successfully.', 'polar-smtp-mailer' ) ) );
         } else {
-            wp_send_json_error( array( 'message' => __( 'Failed to delete log.', 'simple-smtp-mail' ) ) );
+            wp_send_json_error( array( 'message' => __( 'Failed to delete log.', 'polar-smtp-mailer' ) ) );
         }
     }
 
@@ -202,10 +202,10 @@ class SSM_Ajax {
         $id = isset( $_POST['id'] ) ? absint( $_POST['id'] ) : 0;
 
         if ( ! $id ) {
-            wp_send_json_error( array( 'message' => __( 'Invalid log ID.', 'simple-smtp-mail' ) ) );
+            wp_send_json_error( array( 'message' => __( 'Invalid log ID.', 'polar-smtp-mailer' ) ) );
         }
 
-        $logger = new SSM_Logger();
+        $logger = new PSM_Logger();
         $result = $logger->resend_email( $id );
 
         if ( $result['success'] ) {
@@ -226,7 +226,7 @@ class SSM_Ajax {
         $status = isset( $_POST['status'] ) ? sanitize_text_field( wp_unslash( $_POST['status'] ) ) : '';
         // phpcs:enable
 
-        $logger = new SSM_Logger();
+        $logger = new PSM_Logger();
         $args = array( 'status' => $status );
 
         if ( 'json' === $format ) {
@@ -255,8 +255,8 @@ class SSM_Ajax {
         // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in verify_request().
         $period = isset( $_POST['period'] ) ? sanitize_text_field( wp_unslash( $_POST['period'] ) ) : 'all';
 
-        $stats = SSM_DB::get_stats( $period );
-        $daily = SSM_DB::get_daily_stats( 30 );
+        $stats = PSM_DB::get_stats( $period );
+        $daily = PSM_DB::get_daily_stats( 30 );
 
         wp_send_json_success( array(
             'stats' => $stats,
@@ -270,7 +270,7 @@ class SSM_Ajax {
     public function process_queue() {
         $this->verify_request();
 
-        $queue = new SSM_Queue();
+        $queue = new PSM_Queue();
         $result = $queue->trigger_processing();
 
         wp_send_json_success( $result );
@@ -284,12 +284,12 @@ class SSM_Ajax {
 
         // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in verify_request().
         $provider_key = isset( $_POST['provider'] ) ? sanitize_text_field( wp_unslash( $_POST['provider'] ) ) : '';
-        $provider = SSM_Providers::get_provider( $provider_key );
+        $provider = PSM_Providers::get_provider( $provider_key );
 
         if ( $provider ) {
             wp_send_json_success( array( 'provider' => $provider ) );
         } else {
-            wp_send_json_error( array( 'message' => __( 'Provider not found.', 'simple-smtp-mail' ) ) );
+            wp_send_json_error( array( 'message' => __( 'Provider not found.', 'polar-smtp-mailer' ) ) );
         }
     }
 }

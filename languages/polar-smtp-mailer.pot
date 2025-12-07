@@ -2,7 +2,7 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Simple SMTP Mail 1.0.0\n"
+"Project-Id-Version: Polar SMTP Mailer 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-05 10:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -13,27 +13,27 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: simple-smtp-mail.php
-msgid "Simple SMTP Mail"
+#: polar-smtp-mailer.php
+msgid "Polar SMTP Mailer"
 msgstr ""
 
-#: simple-smtp-mail.php
+#: polar-smtp-mailer.php
 msgid "Settings"
 msgstr ""
 
-#: admin/class-ssm-admin.php
+#: admin/class-psm-admin.php
 msgid "Dashboard"
 msgstr ""
 
-#: admin/class-ssm-admin.php
+#: admin/class-psm-admin.php
 msgid "SMTP Mail"
 msgstr ""
 
-#: admin/class-ssm-admin.php
+#: admin/class-psm-admin.php
 msgid "Email Logs"
 msgstr ""
 
-#: admin/class-ssm-admin.php
+#: admin/class-psm-admin.php
 msgid "Test Email"
 msgstr ""
 
@@ -245,118 +245,118 @@ msgstr ""
 msgid "Message Content"
 msgstr ""
 
-#: admin/class-ssm-logs.php
+#: admin/class-psm-logs.php
 msgid "View"
 msgstr ""
 
-#: admin/class-ssm-logs.php
+#: admin/class-psm-logs.php
 msgid "Resend"
 msgstr ""
 
-#: admin/class-ssm-logs.php
+#: admin/class-psm-logs.php
 msgid "Delete"
 msgstr ""
 
-#: admin/class-ssm-logs.php
+#: admin/class-psm-logs.php
 msgid "All Statuses"
 msgstr ""
 
-#: admin/class-ssm-logs.php
+#: admin/class-psm-logs.php
 msgid "Sent"
 msgstr ""
 
-#: admin/class-ssm-logs.php
+#: admin/class-psm-logs.php
 msgid "Failed"
 msgstr ""
 
-#: admin/class-ssm-logs.php
+#: admin/class-psm-logs.php
 msgid "Queued"
 msgstr ""
 
-#: admin/class-ssm-logs.php
+#: admin/class-psm-logs.php
 msgid "Filter"
 msgstr ""
 
-#: admin/class-ssm-logs.php
+#: admin/class-psm-logs.php
 msgid "No email logs found."
 msgstr ""
 
-#: includes/class-ssm-ajax.php
+#: includes/class-psm-ajax.php
 msgid "Security check failed."
 msgstr ""
 
-#: includes/class-ssm-ajax.php
+#: includes/class-psm-ajax.php
 msgid "Permission denied."
 msgstr ""
 
-#: includes/class-ssm-ajax.php
+#: includes/class-psm-ajax.php
 msgid "Invalid email address."
 msgstr ""
 
-#: includes/class-ssm-ajax.php
+#: includes/class-psm-ajax.php
 msgid "Invalid log ID."
 msgstr ""
 
-#: includes/class-ssm-ajax.php
+#: includes/class-psm-ajax.php
 msgid "Log not found."
 msgstr ""
 
-#: includes/class-ssm-ajax.php
+#: includes/class-psm-ajax.php
 msgid "Log deleted successfully."
 msgstr ""
 
-#: includes/class-ssm-ajax.php
+#: includes/class-psm-ajax.php
 msgid "Failed to delete log."
 msgstr ""
 
-#: includes/class-ssm-mailer.php
+#: includes/class-psm-mailer.php
 msgid "SMTP host is required."
 msgstr ""
 
-#: includes/class-ssm-mailer.php
+#: includes/class-psm-mailer.php
 msgid "SMTP connection successful! Your settings are configured correctly."
 msgstr ""
 
-#: includes/class-ssm-mailer.php
+#: includes/class-psm-mailer.php
 msgid "SMTP authentication failed. Please check your username and password."
 msgstr ""
 
-#: includes/class-ssm-providers.php
+#: includes/class-psm-providers.php
 msgid "Other SMTP"
 msgstr ""
 
-#: includes/class-ssm-providers.php
+#: includes/class-psm-providers.php
 msgid "Gmail / Google Workspace"
 msgstr ""
 
-#: includes/class-ssm-providers.php
+#: includes/class-psm-providers.php
 msgid "Outlook / Microsoft 365"
 msgstr ""
 
-#: includes/class-ssm-providers.php
+#: includes/class-psm-providers.php
 msgid "SendGrid"
 msgstr ""
 
-#: includes/class-ssm-providers.php
+#: includes/class-psm-providers.php
 msgid "Mailgun"
 msgstr ""
 
-#: includes/class-ssm-providers.php
+#: includes/class-psm-providers.php
 msgid "Amazon SES"
 msgstr ""
 
-#: includes/class-ssm-providers.php
+#: includes/class-psm-providers.php
 msgid "Brevo (Sendinblue)"
 msgstr ""
 
-#: includes/class-ssm-providers.php
+#: includes/class-psm-providers.php
 msgid "None"
 msgstr ""
 
-#: includes/class-ssm-providers.php
+#: includes/class-psm-providers.php
 msgid "SSL"
 msgstr ""
 
-#: includes/class-ssm-providers.php
+#: includes/class-psm-providers.php
 msgid "TLS"
 msgstr ""

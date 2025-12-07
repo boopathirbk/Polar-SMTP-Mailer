@@ -1,7 +1,7 @@
 <?php
 /**
- * Plugin Name:       Simple SMTP Mail
- * Plugin URI:        https://github.com/boopathirbk/Simple-SMTP-Mail
+ * Plugin Name:       Polar SMTP Mailer
+ * Plugin URI:        https://github.com/boopathirbk/polar-smtp-mailer
  * Description:       A powerful, open-source SMTP mailer plugin with comprehensive email logging, queue management, and modern dashboard. Configure any SMTP provider easily and track all your WordPress emails.
  * Version:           1.0.0
  * Requires at least: 6.0
@@ -10,10 +10,10 @@
  * Author URI:        https://linkedin.com/in/boopathirb
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       simple-smtp-mail
+ * Text Domain:       polar-smtp-mailer
  * Domain Path:       /languages
  *
- * @package SimpleSmtpMail
+ * @package PolarSmtpMailer
  */
 
 // Prevent direct access.
@@ -24,72 +24,72 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Plugin version.
  */
-define( 'SSM_VERSION', '1.0.0' );
+define( 'PSM_VERSION', '1.0.0' );
 
 /**
  * Plugin directory path.
  */
-define( 'SSM_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+define( 'PSM_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 
 /**
  * Plugin directory URL.
  */
-define( 'SSM_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+define( 'PSM_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
 /**
  * Plugin basename.
  */
-define( 'SSM_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
+define( 'PSM_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 
 /**
  * Minimum PHP version.
  */
-define( 'SSM_MIN_PHP_VERSION', '7.4' );
+define( 'PSM_MIN_PHP_VERSION', '7.4' );
 
 /**
  * Minimum WordPress version.
  */
-define( 'SSM_MIN_WP_VERSION', '6.0' );
+define( 'PSM_MIN_WP_VERSION', '6.0' );
 
 /**
  * Main plugin class.
  *
  * @since 1.0.0
  */
-final class Simple_SMTP_Mail {
+final class Polar_SMTP_Mailer {
 
     /**
      * Single instance of the class.
      *
-     * @var Simple_SMTP_Mail|null
+     * @var Polar_SMTP_Mailer|null
      */
     private static $instance = null;
 
     /**
      * Admin instance.
      *
-     * @var SSM_Admin|null
+     * @var PSM_Admin|null
      */
     public $admin = null;
 
     /**
      * Mailer instance.
      *
-     * @var SSM_Mailer|null
+     * @var PSM_Mailer|null
      */
     public $mailer = null;
 
     /**
      * Logger instance.
      *
-     * @var SSM_Logger|null
+     * @var PSM_Logger|null
      */
     public $logger = null;
 
     /**
      * Queue instance.
      *
-     * @var SSM_Queue|null
+     * @var PSM_Queue|null
      */
     public $queue = null;
 
@@ -97,7 +97,7 @@ final class Simple_SMTP_Mail {
      * Get the single instance of the class.
      *
      * @since 1.0.0
-     * @return Simple_SMTP_Mail
+     * @return Polar_SMTP_Mailer
      */
     public static function get_instance() {
         if ( null === self::$instance ) {
@@ -125,14 +125,14 @@ final class Simple_SMTP_Mail {
      */
     private function check_requirements() {
         // Check PHP version.
-        if ( version_compare( PHP_VERSION, SSM_MIN_PHP_VERSION, '<' ) ) {
+        if ( version_compare( PHP_VERSION, PSM_MIN_PHP_VERSION, '<' ) ) {
             add_action( 'admin_notices', array( $this, 'php_version_notice' ) );
             return;
         }
 
         // Check WordPress version.
         global $wp_version;
-        if ( version_compare( $wp_version, SSM_MIN_WP_VERSION, '<' ) ) {
+        if ( version_compare( $wp_version, PSM_MIN_WP_VERSION, '<' ) ) {
             add_action( 'admin_notices', array( $this, 'wp_version_notice' ) );
             return;
         }
@@ -146,21 +146,21 @@ final class Simple_SMTP_Mail {
      */
     private function load_dependencies() {
         // Core includes.
-        require_once SSM_PLUGIN_DIR . 'includes/class-ssm-db.php';
-        require_once SSM_PLUGIN_DIR . 'includes/class-ssm-encryption.php';
-        require_once SSM_PLUGIN_DIR . 'includes/class-ssm-providers.php';
-        require_once SSM_PLUGIN_DIR . 'includes/class-ssm-mailer.php';
-        require_once SSM_PLUGIN_DIR . 'includes/class-ssm-logger.php';
-        require_once SSM_PLUGIN_DIR . 'includes/class-ssm-queue.php';
-        require_once SSM_PLUGIN_DIR . 'includes/class-ssm-ajax.php';
-        require_once SSM_PLUGIN_DIR . 'includes/class-ssm-privacy.php';
+        require_once PSM_PLUGIN_DIR . 'includes/class-psm-db.php';
+        require_once PSM_PLUGIN_DIR . 'includes/class-psm-encryption.php';
+        require_once PSM_PLUGIN_DIR . 'includes/class-psm-providers.php';
+        require_once PSM_PLUGIN_DIR . 'includes/class-psm-mailer.php';
+        require_once PSM_PLUGIN_DIR . 'includes/class-psm-logger.php';
+        require_once PSM_PLUGIN_DIR . 'includes/class-psm-queue.php';
+        require_once PSM_PLUGIN_DIR . 'includes/class-psm-ajax.php';
+        require_once PSM_PLUGIN_DIR . 'includes/class-psm-privacy.php';
 
         // Admin includes.
         if ( is_admin() ) {
-            require_once SSM_PLUGIN_DIR . 'admin/class-ssm-admin.php';
-            require_once SSM_PLUGIN_DIR . 'admin/class-ssm-settings.php';
-            require_once SSM_PLUGIN_DIR . 'admin/class-ssm-logs.php';
-            require_once SSM_PLUGIN_DIR . 'admin/class-ssm-dashboard.php';
+            require_once PSM_PLUGIN_DIR . 'admin/class-psm-admin.php';
+            require_once PSM_PLUGIN_DIR . 'admin/class-psm-settings.php';
+            require_once PSM_PLUGIN_DIR . 'admin/class-psm-logs.php';
+            require_once PSM_PLUGIN_DIR . 'admin/class-psm-dashboard.php';
         }
     }
 
@@ -180,7 +180,7 @@ final class Simple_SMTP_Mail {
 
 
         // Add settings link to plugins page.
-        add_filter( 'plugin_action_links_' . SSM_PLUGIN_BASENAME, array( $this, 'add_settings_link' ) );
+        add_filter( 'plugin_action_links_' . PSM_PLUGIN_BASENAME, array( $this, 'add_settings_link' ) );
 
         // DB Migration check.
         add_action( 'admin_init', array( $this, 'check_db_version' ) );
@@ -194,20 +194,20 @@ final class Simple_SMTP_Mail {
      */
     public function init() {
         // Initialize core components.
-        $this->mailer = new SSM_Mailer();
-        $this->logger = new SSM_Logger();
-        $this->queue  = new SSM_Queue();
+        $this->mailer = new PSM_Mailer();
+        $this->logger = new PSM_Logger();
+        $this->queue  = new PSM_Queue();
 
         // Initialize admin.
         if ( is_admin() ) {
-            $this->admin = new SSM_Admin();
+            $this->admin = new PSM_Admin();
         }
 
         // Initialize AJAX handlers.
-        new SSM_Ajax();
+        new PSM_Ajax();
 
         // Initialize privacy features.
-        new SSM_Privacy();
+        new PSM_Privacy();
     }
 
     /**
@@ -218,7 +218,7 @@ final class Simple_SMTP_Mail {
      */
     public function activate() {
         // Create database tables.
-        SSM_DB::create_tables();
+        PSM_DB::create_tables();
 
         // Set default options.
         $this->set_default_options();
@@ -227,7 +227,7 @@ final class Simple_SMTP_Mail {
         wp_cache_flush();
 
         // Set activation flag for redirect.
-        set_transient( 'ssm_activation_redirect', true, 30 );
+        set_transient( 'PSM_activation_redirect', true, 30 );
     }
 
     /**
@@ -238,8 +238,8 @@ final class Simple_SMTP_Mail {
      */
     public function deactivate() {
         // Clear scheduled events.
-        wp_clear_scheduled_hook( 'ssm_process_email_queue' );
-        wp_clear_scheduled_hook( 'ssm_cleanup_logs' );
+        wp_clear_scheduled_hook( 'PSM_process_email_queue' );
+        wp_clear_scheduled_hook( 'PSM_cleanup_logs' );
 
         // Clear any cached data.
         wp_cache_flush();
@@ -280,8 +280,8 @@ final class Simple_SMTP_Mail {
         );
 
         foreach ( $defaults as $key => $value ) {
-            if ( false === get_option( 'ssm_' . $key ) ) {
-                update_option( 'ssm_' . $key, $value );
+            if ( false === get_option( 'PSM_' . $key ) ) {
+                update_option( 'PSM_' . $key, $value );
             }
         }
     }
@@ -298,8 +298,8 @@ final class Simple_SMTP_Mail {
     public function add_settings_link( $links ) {
         $settings_link = sprintf(
             '<a href="%s">%s</a>',
-            esc_url( admin_url( 'admin.php?page=simple-smtp-mail' ) ),
-            esc_html__( 'Settings', 'simple-smtp-mail' )
+            esc_url( admin_url( 'admin.php?page=polar-smtp-mailer' ) ),
+            esc_html__( 'Settings', 'polar-smtp-mailer' )
         );
         array_unshift( $links, $settings_link );
         return $links;
@@ -318,8 +318,8 @@ final class Simple_SMTP_Mail {
                 <?php
                 printf(
                     /* translators: 1: Required PHP version, 2: Current PHP version */
-                    esc_html__( 'Simple SMTP Mail requires PHP %1$s or higher. You are running PHP %2$s. Please upgrade your PHP version.', 'simple-smtp-mail' ),
-                    esc_html( SSM_MIN_PHP_VERSION ),
+                    esc_html__( 'Polar SMTP Mailer requires PHP %1$s or higher. You are running PHP %2$s. Please upgrade your PHP version.', 'polar-smtp-mailer' ),
+                    esc_html( PSM_MIN_PHP_VERSION ),
                     esc_html( PHP_VERSION )
                 );
                 ?>
@@ -342,8 +342,8 @@ final class Simple_SMTP_Mail {
                 <?php
                 printf(
                     /* translators: 1: Required WordPress version, 2: Current WordPress version */
-                    esc_html__( 'Simple SMTP Mail requires WordPress %1$s or higher. You are running WordPress %2$s. Please upgrade your WordPress installation.', 'simple-smtp-mail' ),
-                    esc_html( SSM_MIN_WP_VERSION ),
+                    esc_html__( 'Polar SMTP Mailer requires WordPress %1$s or higher. You are running WordPress %2$s. Please upgrade your WordPress installation.', 'polar-smtp-mailer' ),
+                    esc_html( PSM_MIN_WP_VERSION ),
                     esc_html( $wp_version )
                 );
                 ?>
@@ -377,21 +377,21 @@ final class Simple_SMTP_Mail {
      * @return void
      */
     public function check_db_version() {
-        if ( get_option( 'ssm_db_version' ) !== SSM_DB::DB_VERSION || ! SSM_DB::check_tables_exist() ) {
-            SSM_DB::create_tables();
+        if ( get_option( 'PSM_db_version' ) !== PSM_DB::DB_VERSION || ! PSM_DB::check_tables_exist() ) {
+            PSM_DB::create_tables();
         }
     }
 }
 
 /**
- * Returns the main instance of Simple_SMTP_Mail.
+ * Returns the main instance of Polar_SMTP_Mailer.
  *
  * @since 1.0.0
- * @return Simple_SMTP_Mail
+ * @return Polar_SMTP_Mailer
  */
-function simple_smtp_mail() {
-    return Simple_SMTP_Mail::get_instance();
+function polar_smtp_mailer() {
+    return Polar_SMTP_Mailer::get_instance();
 }
 
 // Initialize the plugin.
-simple_smtp_mail();
+polar_smtp_mailer();

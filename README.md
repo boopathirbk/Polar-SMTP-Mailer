@@ -1,4 +1,4 @@
-# Simple SMTP Mail
+# Polar SMTP Mailer
 
 [![WordPress](https://img.shields.io/badge/WordPress-6.0%2B-blue.svg)](https://wordpress.org/)
 [![Tested up to](https://img.shields.io/badge/Tested%20up%20to-6.9-brightgreen.svg)](https://wordpress.org/)
@@ -15,9 +15,9 @@
 
 ---
 
-## 🏆 Why Choose Simple SMTP Mail?
+## 🏆 Why Choose Polar SMTP Mailer?
 
-| Feature | Simple SMTP Mail | WP Mail SMTP | Post SMTP | FluentSMTP | Easy WP SMTP |
+| Feature | Polar SMTP Mailer | WP Mail SMTP | Post SMTP | FluentSMTP | Easy WP SMTP |
 |---------|:----------------:|:------------:|:---------:|:----------:|:------------:|
 | **100% Free & Open Source** | ✅ | ❌ Pro | ❌ Pro | ✅ | ❌ Pro |
 | **Email Logging** | ✅ | ❌ Pro | ✅ | ✅ | ✅ |
@@ -147,7 +147,7 @@
 ### From GitHub
 ```bash
 # Download and extract to wp-content/plugins/
-git clone https://github.com/boopathirbk/Simple-SMTP-Mail.git
+git clone https://github.com/boopathirbk/polar-smtp-mailer.git
 ```
 
 ### From WordPress

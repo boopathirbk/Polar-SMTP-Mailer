@@ -1,10 +1,10 @@
 <?php
 /**
- * Uninstall Simple SMTP Mail plugin.
+ * Uninstall Polar SMTP Mailer plugin.
  *
  * Removes all plugin data including database tables and options.
  *
- * @package SimpleSmtpMail
+ * @package PolarSmtpMailer
  * @since 1.0.0
  */
 
@@ -19,9 +19,9 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
  * @since 1.0.0
  * @return void
  */
-function ssm_uninstall() {
+function PSM_uninstall() {
     // Check if user has opted to delete data.
-    if ( ! get_option( 'ssm_delete_data_on_uninstall', false ) ) {
+    if ( ! get_option( 'PSM_delete_data_on_uninstall', false ) ) {
         return;
     }
 
@@ -29,35 +29,35 @@ function ssm_uninstall() {
 
     // Delete plugin options.
     $options = array(
-        'ssm_smtp_provider',
-        'ssm_smtp_host',
-        'ssm_smtp_port',
-        'ssm_smtp_encryption',
-        'ssm_smtp_auth',
-        'ssm_smtp_username',
-        'ssm_smtp_password',
-        'ssm_from_email',
-        'ssm_from_name',
-        'ssm_force_from_email',
-        'ssm_force_from_name',
-        'ssm_enable_logging',
-        'ssm_log_retention_days',
-        'ssm_enable_queue',
-        'ssm_queue_batch_size',
-        'ssm_queue_interval',
-        'ssm_enable_backup_smtp',
-        'ssm_backup_smtp_provider',
-        'ssm_backup_smtp_host',
-        'ssm_backup_smtp_port',
-        'ssm_backup_smtp_encryption',
-        'ssm_backup_smtp_username',
-        'ssm_backup_smtp_password',
-        'ssm_debug_mode',
-        'ssm_db_version',
-        'ssm_privacy_exclude_content',
-        'ssm_privacy_anonymize',
-        'ssm_auth_failures',
-        'ssm_delete_data_on_uninstall',
+        'PSM_smtp_provider',
+        'PSM_smtp_host',
+        'PSM_smtp_port',
+        'PSM_smtp_encryption',
+        'PSM_smtp_auth',
+        'PSM_smtp_username',
+        'PSM_smtp_password',
+        'PSM_from_email',
+        'PSM_from_name',
+        'PSM_force_from_email',
+        'PSM_force_from_name',
+        'PSM_enable_logging',
+        'PSM_log_retention_days',
+        'PSM_enable_queue',
+        'PSM_queue_batch_size',
+        'PSM_queue_interval',
+        'PSM_enable_backup_smtp',
+        'PSM_backup_smtp_provider',
+        'PSM_backup_smtp_host',
+        'PSM_backup_smtp_port',
+        'PSM_backup_smtp_encryption',
+        'PSM_backup_smtp_username',
+        'PSM_backup_smtp_password',
+        'PSM_debug_mode',
+        'PSM_db_version',
+        'PSM_privacy_exclude_content',
+        'PSM_privacy_anonymize',
+        'PSM_auth_failures',
+        'PSM_delete_data_on_uninstall',
     );
 
     foreach ( $options as $option ) {
@@ -66,8 +66,8 @@ function ssm_uninstall() {
 
     // Drop custom database tables.
     $tables = array(
-        $wpdb->prefix . 'ssm_email_logs',
-        $wpdb->prefix . 'ssm_email_queue',
+        $wpdb->prefix . 'PSM_email_logs',
+        $wpdb->prefix . 'PSM_email_queue',
     );
 
     foreach ( $tables as $table ) {
@@ -76,15 +76,15 @@ function ssm_uninstall() {
     }
 
     // Clear scheduled events.
-    wp_clear_scheduled_hook( 'ssm_process_email_queue' );
-    wp_clear_scheduled_hook( 'ssm_cleanup_logs' );
+    wp_clear_scheduled_hook( 'PSM_process_email_queue' );
+    wp_clear_scheduled_hook( 'PSM_cleanup_logs' );
 
     // Clear any transients.
-    delete_transient( 'ssm_activation_redirect' );
+    delete_transient( 'PSM_activation_redirect' );
 
     // Clear cache.
     wp_cache_flush();
 }
 
 // Run uninstall.
-ssm_uninstall();
+PSM_uninstall();

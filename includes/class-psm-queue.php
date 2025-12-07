@@ -4,7 +4,7 @@
  *
  * Handles email queue management for scheduled sending.
  *
- * @package SimpleSmtpMail
+ * @package PolarSmtpMailer
  * @since 1.0.0
  */
 
@@ -13,9 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * SSM_Queue class.
+ * PSM_Queue class.
  */
-class SSM_Queue {
+class PSM_Queue {
 
     /**
      * Constructor.
@@ -28,11 +28,11 @@ class SSM_Queue {
      * Initialize hooks.
      */
     private function init_hooks() {
-        if ( get_option( 'ssm_enable_queue', false ) ) {
+        if ( get_option( 'PSM_enable_queue', false ) ) {
             $this->schedule_queue_processing();
             add_filter( 'pre_wp_mail', array( $this, 'maybe_queue_email' ), 10, 2 );
         }
-        add_action( 'ssm_process_email_queue', array( $this, 'process_queue' ) );
+        add_action( 'PSM_process_email_queue', array( $this, 'process_queue' ) );
         add_filter( 'cron_schedules', array( $this, 'add_cron_schedule' ) );
     }
 
@@ -40,8 +40,8 @@ class SSM_Queue {
      * Schedule queue processing.
      */
     private function schedule_queue_processing() {
-        if ( ! wp_next_scheduled( 'ssm_process_email_queue' ) ) {
-            wp_schedule_event( time(), 'ssm_queue_interval', 'ssm_process_email_queue' );
+        if ( ! wp_next_scheduled( 'PSM_process_email_queue' ) ) {
+            wp_schedule_event( time(), 'PSM_queue_interval', 'PSM_process_email_queue' );
         }
     }
 
@@ -49,11 +49,11 @@ class SSM_Queue {
      * Add custom cron schedule.
      */
     public function add_cron_schedule( $schedules ) {
-        $interval = (int) get_option( 'ssm_queue_interval', 5 );
-        $schedules['ssm_queue_interval'] = array(
+        $interval = (int) get_option( 'PSM_queue_interval', 5 );
+        $schedules['PSM_queue_interval'] = array(
             'interval' => $interval * MINUTE_IN_SECONDS,
             /* translators: %d: Number of minutes for queue interval */
-            'display'  => sprintf( __( 'Every %d minutes', 'simple-smtp-mail' ), $interval ),
+            'display'  => sprintf( __( 'Every %d minutes', 'polar-smtp-mailer' ), $interval ),
         );
         return $schedules;
     }
@@ -62,13 +62,13 @@ class SSM_Queue {
      * Maybe queue email instead of sending immediately.
      */
     public function maybe_queue_email( $result, $atts ) {
-        if ( ! get_option( 'ssm_enable_queue', false ) ) {
+        if ( ! get_option( 'PSM_enable_queue', false ) ) {
             return $result;
         }
         if ( ! empty( $atts['subject'] ) && false !== strpos( $atts['subject'], 'Test Email' ) ) {
             return $result;
         }
-        if ( apply_filters( 'ssm_bypass_queue', false, $atts ) ) {
+        if ( apply_filters( 'PSM_bypass_queue', false, $atts ) ) {
             return $result;
         }
         $this->add_to_queue( $atts );
@@ -96,8 +96,8 @@ class SSM_Queue {
             'scheduled_at' => $scheduled_at ? $scheduled_at : current_time( 'mysql' ),
         );
 
-        if ( get_option( 'ssm_enable_logging', true ) ) {
-            SSM_DB::insert_log( array(
+        if ( get_option( 'PSM_enable_logging', true ) ) {
+            PSM_DB::insert_log( array(
                 'to_email'   => $data['to_email'],
                 'subject'    => $data['subject'],
                 'message'    => $data['message'],
@@ -107,20 +107,20 @@ class SSM_Queue {
             ) );
         }
 
-        return SSM_DB::insert_queue( $data );
+        return PSM_DB::insert_queue( $data );
     }
 
     /**
      * Process queued emails.
      */
     public function process_queue() {
-        $batch_size = (int) get_option( 'ssm_queue_batch_size', 10 );
-        $queued = SSM_DB::get_queued_emails( $batch_size );
+        $batch_size = (int) get_option( 'PSM_queue_batch_size', 10 );
+        $queued = PSM_DB::get_queued_emails( $batch_size );
         $processed = 0;
 
         foreach ( $queued as $item ) {
             // Try to lock the item. If failed, skip it (another process might have taken it).
-            if ( ! SSM_DB::lock_queue_item( $item->id ) ) {
+            if ( ! PSM_DB::lock_queue_item( $item->id ) ) {
                 continue;
             }
 
@@ -143,10 +143,10 @@ class SSM_Queue {
             add_filter( 'pre_wp_mail', array( $this, 'maybe_queue_email' ), 10, 2 );
 
             if ( $result ) {
-                SSM_DB::delete_queue_item( $item->id );
+                PSM_DB::delete_queue_item( $item->id );
                 $processed++;
             } else {
-                SSM_DB::increment_queue_attempts( $item->id );
+                PSM_DB::increment_queue_attempts( $item->id );
             }
         }
 
@@ -157,7 +157,7 @@ class SSM_Queue {
      * Get queue count.
      */
     public function get_queue_count() {
-        return SSM_DB::get_queue_count();
+        return PSM_DB::get_queue_count();
     }
 
     /**
@@ -165,7 +165,7 @@ class SSM_Queue {
      */
     public function clear_queue() {
         global $wpdb;
-        $table = SSM_DB::get_queue_table();
+        $table = PSM_DB::get_queue_table();
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         return $wpdb->query( "TRUNCATE TABLE " . $table );
     }
@@ -179,7 +179,7 @@ class SSM_Queue {
             'success'   => true,
             'processed' => $processed,
             /* translators: %d: Number of emails processed */
-            'message'   => sprintf( _n( '%d email processed.', '%d emails processed.', $processed, 'simple-smtp-mail' ), $processed ),
+            'message'   => sprintf( _n( '%d email processed.', '%d emails processed.', $processed, 'polar-smtp-mailer' ), $processed ),
         );
     }
 }
