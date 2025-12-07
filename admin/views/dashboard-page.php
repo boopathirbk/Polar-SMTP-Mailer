@@ -16,7 +16,7 @@ $recent_logs = PSM_Dashboard::get_recent_logs( 5 );
 
 <div class="wrap ssm-wrap">
     <h1 class="ssm-page-title">
-        <span class="dashicons dashicons-email-alt"></span>
+        <img src="<?php echo esc_url( PSM_PLUGIN_URL . 'assets/images/OpenmojiPolarBear.png' ); ?>" alt="" width="32" height="32" style="vertical-align: middle;">
         <?php esc_html_e( 'Polar SMTP Mailer', 'polar-smtp-mailer' ); ?>
     </h1>
 
