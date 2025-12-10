@@ -349,32 +349,54 @@ class PSM_Logger {
     /**
      * Export logs to JSON.
      *
+     * Uses chunked processing to prevent memory issues with large datasets.
+     *
      * @since 1.0.0
      * @param array $args Query arguments.
      * @return string JSON content.
      */
     public function export_json( $args = array() ) {
-        $args['per_page'] = 1000; // Limit to 1000 to prevent memory issues.
-        $args['page'] = 1;
-        $logs = $this->get_logs( $args );
-
         $export = array();
 
-        foreach ( $logs as $log ) {
-            $export[] = array(
-                'id'            => $log->id,
-                'to_email'      => $log->to_email,
-                'cc_email'      => $log->cc_email,
-                'bcc_email'     => $log->bcc_email,
-                'subject'       => $log->subject,
-                'message'       => $log->message,
-                'status'        => $log->status,
-                'provider'      => $log->provider,
-                'error_message' => $log->error_message,
-                'sent_at'       => $log->sent_at,
-                'created_at'    => $log->created_at,
-            );
-        }
+        // Process in chunks to save memory.
+        $chunk_size = 500;
+        $page = 1;
+        $args['per_page'] = $chunk_size;
+
+        do {
+            $args['page'] = $page;
+            $logs = $this->get_logs( $args );
+
+            if ( empty( $logs ) ) {
+                break;
+            }
+
+            foreach ( $logs as $log ) {
+                $export[] = array(
+                    'id'            => $log->id,
+                    'to_email'      => $log->to_email,
+                    'cc_email'      => $log->cc_email,
+                    'bcc_email'     => $log->bcc_email,
+                    'subject'       => $log->subject,
+                    'message'       => $log->message,
+                    'status'        => $log->status,
+                    'provider'      => $log->provider,
+                    'error_message' => $log->error_message,
+                    'sent_at'       => $log->sent_at,
+                    'created_at'    => $log->created_at,
+                );
+            }
+
+            // Clean up memory.
+            unset( $logs );
+            $page++;
+
+            // Safety limit (e.g. 20,000 records max).
+            if ( $page > 40 ) {
+                break;
+            }
+
+        } while ( true );
 
         return wp_json_encode( $export, JSON_PRETTY_PRINT );
     }

@@ -146,6 +146,7 @@ class PSM_Ajax {
 
         if ( ! $id ) {
             wp_send_json_error( array( 'message' => __( 'Invalid log ID.', 'polar-smtp-mailer' ) ) );
+            exit; // Ensure execution stops.
         }
 
         $log = PSM_DB::get_log( $id );
@@ -181,6 +182,7 @@ class PSM_Ajax {
 
         if ( ! $id ) {
             wp_send_json_error( array( 'message' => __( 'Invalid log ID.', 'polar-smtp-mailer' ) ) );
+            exit; // Ensure execution stops.
         }
 
         $result = PSM_DB::delete_log( $id );
@@ -203,6 +205,7 @@ class PSM_Ajax {
 
         if ( ! $id ) {
             wp_send_json_error( array( 'message' => __( 'Invalid log ID.', 'polar-smtp-mailer' ) ) );
+            exit; // Ensure execution stops.
         }
 
         $logger = new PSM_Logger();

@@ -71,11 +71,24 @@ class PSM_Settings {
     }
 
     /**
+     * Password placeholder constant.
+     * Using a unique prefix to avoid collision with real passwords.
+     *
+     * @var string
+     */
+    const PASSWORD_PLACEHOLDER = '••••••••••••';
+    const PASSWORD_UNCHANGED_TOKEN = '__PSM_UNCHANGED__';
+
+    /**
      * Sanitize and encrypt SMTP password.
+     *
+     * @since 1.0.0
+     * @param string $value Password value.
+     * @return string Encrypted password or existing value.
      */
     public function sanitize_smtp_password( $value ) {
-        // If value is the placeholder, return existing option to keep it unchanged.
-        if ( '••••••••••••' === $value ) {
+        // If value is the placeholder or unchanged token, return existing option.
+        if ( self::PASSWORD_PLACEHOLDER === $value || self::PASSWORD_UNCHANGED_TOKEN === $value ) {
             return get_option( 'PSM_smtp_password' );
         }
         return $this->sanitize_password_common( $value );
@@ -83,10 +96,14 @@ class PSM_Settings {
 
     /**
      * Sanitize and encrypt Backup SMTP password.
+     *
+     * @since 1.0.0
+     * @param string $value Password value.
+     * @return string Encrypted password or existing value.
      */
     public function sanitize_backup_password( $value ) {
-        // If value is the placeholder, return existing option to keep it unchanged.
-        if ( '••••••••••••' === $value ) {
+        // If value is the placeholder or unchanged token, return existing option.
+        if ( self::PASSWORD_PLACEHOLDER === $value || self::PASSWORD_UNCHANGED_TOKEN === $value ) {
             return get_option( 'PSM_backup_smtp_password' );
         }
         return $this->sanitize_password_common( $value );
@@ -94,6 +111,10 @@ class PSM_Settings {
 
     /**
      * Common password sanitization.
+     *
+     * @since 1.0.0
+     * @param string $value Password value.
+     * @return string Encrypted password or empty string.
      */
     private function sanitize_password_common( $value ) {
         if ( empty( $value ) ) {

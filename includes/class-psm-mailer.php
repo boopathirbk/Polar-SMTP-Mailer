@@ -464,8 +464,11 @@ class PSM_Mailer {
         // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite -- Required for SMTP socket.
         fwrite( $connection, "EHLO " . wp_parse_url( home_url(), PHP_URL_HOST ) . "\r\n" );
         $response = '';
-        while ( $line = fgets( $connection, 512 ) ) {
+        $max_lines = 100; // Prevent infinite loop.
+        $line_count = 0;
+        while ( ( $line = fgets( $connection, 512 ) ) && $line_count < $max_lines ) {
             $response .= $line;
+            $line_count++;
             if ( ' ' === substr( $line, 3, 1 ) ) {
                 break;
             }
@@ -486,8 +489,12 @@ class PSM_Mailer {
                 );
             }
 
-            // Enable TLS.
-            if ( ! stream_socket_enable_crypto( $connection, true, STREAM_CRYPTO_METHOD_TLS_CLIENT ) ) {
+            // Enable TLS with modern protocols (TLS 1.2 and 1.3).
+            $crypto_method = STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT;
+            if ( defined( 'STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT' ) ) {
+                $crypto_method |= STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT;
+            }
+            if ( ! stream_socket_enable_crypto( $connection, true, $crypto_method ) ) {
                 // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Required for SMTP socket.
                 fclose( $connection );
                 return array(
@@ -499,7 +506,9 @@ class PSM_Mailer {
             // Send EHLO again after TLS.
             // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite -- Required for SMTP socket.
             fwrite( $connection, "EHLO " . wp_parse_url( home_url(), PHP_URL_HOST ) . "\r\n" );
-            while ( $line = fgets( $connection, 512 ) ) {
+            $line_count = 0;
+            while ( ( $line = fgets( $connection, 512 ) ) && $line_count < $max_lines ) {
+                $line_count++;
                 if ( ' ' === substr( $line, 3, 1 ) ) {
                     break;
                 }

@@ -626,7 +626,7 @@ class PSM_DB {
     }
 
     /**
-     * Get queued emails for processing.
+     * Get queued emails for processing with proper locking.
      *
      * @since 1.0.0
      * @param int $limit Number of emails to fetch.
@@ -639,6 +639,10 @@ class PSM_DB {
 
         $now = current_time( 'mysql' );
 
+        // Start transaction for proper locking.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $wpdb->query( 'START TRANSACTION' );
+
         // phpcs:disable WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL, PluginCheck.Security.DirectDB
         $results = $wpdb->get_results(
             $wpdb->prepare(
@@ -647,11 +651,28 @@ class PSM_DB {
                 AND (locked_at IS NULL OR locked_at < DATE_SUB(NOW(), INTERVAL 5 MINUTE))
                 AND attempts < max_attempts
                 ORDER BY priority ASC, scheduled_at ASC 
-                LIMIT %d",
+                LIMIT %d
+                FOR UPDATE",
                 $now,
                 $limit
             )
         );
+
+        // Lock all selected items immediately.
+        if ( ! empty( $results ) ) {
+            $ids = wp_list_pluck( $results, 'id' );
+            $placeholders = implode( ',', array_fill( 0, count( $ids ), '%d' ) );
+            $wpdb->query(
+                $wpdb->prepare(
+                    "UPDATE " . self::$queue_table . " SET locked_at = %s WHERE id IN ($placeholders)",
+                    array_merge( array( $now ), $ids )
+                )
+            );
+        }
+
+        // Commit transaction.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $wpdb->query( 'COMMIT' );
         // phpcs:enable
 
         return $results ? $results : array();
@@ -756,7 +777,12 @@ class PSM_DB {
         global $wpdb;
         self::init_table_names();
         // phpcs:disable WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL, PluginCheck.Security.DirectDB
-        $result = $wpdb->get_var( "SHOW TABLES LIKE '" . self::$logs_table . "'" );
+        $result = $wpdb->get_var(
+            $wpdb->prepare(
+                'SHOW TABLES LIKE %s',
+                self::$logs_table
+            )
+        );
         // phpcs:enable
         return $result === self::$logs_table;
     }

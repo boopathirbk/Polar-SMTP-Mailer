@@ -191,14 +191,15 @@ class PSM_Privacy {
                 $wpdb->update(
                     $table,
                     array(
-                        'to_email'  => '[deleted]@anonymized.local',
-                        'cc_email'  => '',
-                        'bcc_email' => '',
-                        'message'   => __( '[Content removed for privacy]', 'polar-smtp-mailer' ),
-                        'headers'   => '',
+                        'to_email'    => '[deleted]@anonymized.local',
+                        'cc_email'    => '',
+                        'bcc_email'   => '',
+                        'message'     => __( '[Content removed for privacy]', 'polar-smtp-mailer' ),
+                        'headers'     => '',
+                        'attachments' => '', // Clear attachments as file paths may contain PII.
                     ),
                     array( 'id' => $log->id ),
-                    array( '%s', '%s', '%s', '%s', '%s' ),
+                    array( '%s', '%s', '%s', '%s', '%s', '%s' ),
                     array( '%d' )
                 );
                 $items_removed++;

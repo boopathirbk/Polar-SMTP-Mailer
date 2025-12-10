@@ -77,6 +77,15 @@ class PSM_Queue {
 
     /**
      * Add email to queue.
+     *
+     * Note: We don't create a log entry here to avoid duplicates.
+     * The log entry is created when the email is actually sent via wp_mail_succeeded hook.
+     *
+     * @since 1.0.0
+     * @param array  $email_data   Email data.
+     * @param int    $priority     Priority (1-10, lower = higher priority).
+     * @param string $scheduled_at Scheduled time (MySQL datetime format).
+     * @return int|false Queue ID on success, false on failure.
      */
     public function add_to_queue( $email_data, $priority = 5, $scheduled_at = null ) {
         $to = isset( $email_data['to'] ) ? $email_data['to'] : '';
@@ -95,17 +104,6 @@ class PSM_Queue {
             'priority'     => $priority,
             'scheduled_at' => $scheduled_at ? $scheduled_at : current_time( 'mysql' ),
         );
-
-        if ( get_option( 'PSM_enable_logging', true ) ) {
-            PSM_DB::insert_log( array(
-                'to_email'   => $data['to_email'],
-                'subject'    => $data['subject'],
-                'message'    => $data['message'],
-                'headers'    => $data['headers'],
-                'status'     => 'queued',
-                'created_at' => current_time( 'mysql' ),
-            ) );
-        }
 
         return PSM_DB::insert_queue( $data );
     }
@@ -162,8 +160,16 @@ class PSM_Queue {
 
     /**
      * Clear all items from queue.
+     *
+     * @since 1.0.0
+     * @return int|false Number of rows affected or false on failure/permission denied.
      */
     public function clear_queue() {
+        // Capability check to prevent unauthorized clearing.
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return false;
+        }
+
         global $wpdb;
         $table = PSM_DB::get_queue_table();
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter

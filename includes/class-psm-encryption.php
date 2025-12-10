@@ -46,14 +46,26 @@ class PSM_Encryption {
     }
 
     /**
-     * Get the initialization vector.
+     * Generate a random initialization vector.
+     *
+     * @since 1.0.1
+     * @return string Random IV (16 bytes for AES-256-CBC).
+     */
+    private static function generate_iv() {
+        $iv_length = openssl_cipher_iv_length( self::$method );
+        return openssl_random_pseudo_bytes( $iv_length );
+    }
+
+    /**
+     * Get the legacy initialization vector for backward compatibility.
      *
      * Uses WordPress SECURE_AUTH_KEY or generates a fallback IV.
      *
      * @since 1.0.0
+     * @deprecated 1.0.1 Use generate_iv() for new encryptions.
      * @return string The IV (16 bytes for AES-256-CBC).
      */
-    private static function get_iv() {
+    private static function get_legacy_iv() {
         if ( defined( 'SECURE_AUTH_KEY' ) && '' !== SECURE_AUTH_KEY ) {
             return substr( hash( 'sha256', SECURE_AUTH_KEY . 'PSM_iv' ), 0, 16 );
         }
@@ -82,16 +94,17 @@ class PSM_Encryption {
         }
 
         $key = self::get_key();
-        $iv  = self::get_iv();
+        $iv  = self::generate_iv();
 
-        $encrypted = openssl_encrypt( $data, self::$method, $key, 0, $iv );
+        $encrypted = openssl_encrypt( $data, self::$method, $key, OPENSSL_RAW_DATA, $iv );
 
         if ( false === $encrypted ) {
             return false;
         }
 
+        // Prepend IV to encrypted data for secure storage (enc2: prefix for new format).
         // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
-        return 'enc:' . base64_encode( $encrypted );
+        return 'enc2:' . base64_encode( $iv . $encrypted );
     }
 
     /**
@@ -113,7 +126,7 @@ class PSM_Encryption {
         }
 
         // Handle unencrypted data (legacy or manual entry).
-        if ( 0 !== strpos( $data, 'enc:' ) ) {
+        if ( 0 !== strpos( $data, 'enc:' ) && 0 !== strpos( $data, 'enc2:' ) ) {
             return $data;
         }
 
@@ -122,14 +135,24 @@ class PSM_Encryption {
             return false;
         }
 
-        $key  = self::get_key();
-        $iv   = self::get_iv();
+        $key = self::get_key();
+
+        // Handle new format with random IV (enc2:).
+        if ( 0 === strpos( $data, 'enc2:' ) ) {
+            // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
+            $decoded = base64_decode( substr( $data, 5 ) );
+            $iv_length = openssl_cipher_iv_length( self::$method );
+            $iv = substr( $decoded, 0, $iv_length );
+            $encrypted = substr( $decoded, $iv_length );
+
+            return openssl_decrypt( $encrypted, self::$method, $key, OPENSSL_RAW_DATA, $iv );
+        }
+
+        // Handle legacy format with static IV (enc:).
         // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
-        $data = base64_decode( substr( $data, 4 ) );
+        $decoded = base64_decode( substr( $data, 4 ) );
 
-        $decrypted = openssl_decrypt( $data, self::$method, $key, 0, $iv );
-
-        return $decrypted;
+        return openssl_decrypt( $decoded, self::$method, $key, 0, self::get_legacy_iv() );
     }
 
     /**
@@ -140,7 +163,7 @@ class PSM_Encryption {
      * @return bool True if encrypted, false otherwise.
      */
     public static function is_encrypted( $data ) {
-        return ( 0 === strpos( $data, 'enc:' ) || 0 === strpos( $data, 'base64:' ) );
+        return ( 0 === strpos( $data, 'enc:' ) || 0 === strpos( $data, 'enc2:' ) || 0 === strpos( $data, 'base64:' ) );
     }
 
     /**
