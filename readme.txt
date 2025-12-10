@@ -3,7 +3,7 @@ Contributors: boopathir
 Tags: smtp, email, wp mail, email log, gmail
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -65,7 +65,7 @@ Unlike other SMTP plugins that lock essential features behind paywalls, Polar SM
 
 = 🔒 Security Features =
 
-* AES-256-CBC password encryption
+* AES-256-CBC password encryption with random IV
 * CSRF protection with nonces
 * Rate limiting (5 test emails per 10 minutes)
 * Capability checks (admin only)
@@ -134,6 +134,21 @@ Enable Backup SMTP in Settings. When primary SMTP fails, emails automatically ro
 
 == Changelog ==
 
+= 1.0.1 (2025-12-10) =
+* **Security:** Fixed encryption to use random IV per encryption (AES-256-CBC best practice)
+* **Security:** Fixed SQL preparation in table existence check
+* **Security:** Added capability check to queue clear function
+* **Fixed:** Race condition in queue processing with proper database locking
+* **Fixed:** TLS compatibility - now uses TLS 1.2/1.3 instead of deprecated TLS 1.0
+* **Fixed:** Potential infinite loops in SMTP response reading
+* **Fixed:** Missing exit statements in AJAX handlers
+* **Fixed:** Duplicate log entries when using email queue
+* **Fixed:** Privacy erase now clears attachments field
+* **Fixed:** Password placeholder edge case
+* **Fixed:** JSON export memory issue with large datasets
+* **Improved:** Backward compatible encryption (existing passwords continue to work)
+* **Improved:** Better code documentation
+
 = 1.0.0 (2025-12-06) =
 * Initial release
 * SMTP configuration with 15+ provider presets
@@ -154,5 +169,9 @@ Enable Backup SMTP in Settings. When primary SMTP fails, emails automatically ro
 
 == Upgrade Notice ==
 
+= 1.0.1 =
+Security and bug fix release. Includes improved encryption, TLS 1.2/1.3 support, and 14 bug fixes. Recommended for all users.
+
 = 1.0.0 =
 Initial release with robust security, accessibility, and queue management features.
+
