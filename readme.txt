@@ -3,7 +3,7 @@ Contributors: boopathir
 Tags: smtp, email, wp mail, email log, gmail
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -133,6 +133,9 @@ Enable Backup SMTP in Settings. When primary SMTP fails, emails automatically ro
 5. Email preview modal
 
 == Changelog ==
+
+= 1.0.3 (2025-12-10) =
+* Removed debug logging to pass Plugin Check requirements
 
 = 1.0.2 (2025-12-10) =
 * Fixed HTML email display in log viewer

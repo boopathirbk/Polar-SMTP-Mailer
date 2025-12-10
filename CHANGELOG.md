@@ -2,6 +2,14 @@
 
 All notable changes to the Polar SMTP Mailer plugin will be documented in this file.
 
+## [1.0.3] - 2025-12-10
+
+### Fixed
+
+- **Removed debug logging** - Removed all `error_log()` calls to pass WordPress.org Plugin Check requirements.
+
+---
+
 ## [1.0.2] - 2025-12-10
 
 ### Fixed

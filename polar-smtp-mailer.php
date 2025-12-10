@@ -3,7 +3,7 @@
  * Plugin Name:       Polar SMTP Mailer
  * Plugin URI:        https://github.com/boopathirbk/polar-smtp-mailer
  * Description:       A powerful, open-source SMTP mailer plugin with comprehensive email logging, queue management, and modern dashboard. Configure any SMTP provider easily and track all your WordPress emails.
- * Version:           1.0.2
+ * Version:           1.0.3
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Boopathi R.
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Plugin version.
  */
-define( 'PSM_VERSION', '1.0.2' );
+define( 'PSM_VERSION', '1.0.3' );
 
 /**
  * Plugin directory path.

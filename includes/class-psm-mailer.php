@@ -80,12 +80,6 @@ class PSM_Mailer {
             // Handle decryption failure (e.g., if AUTH_KEY changed).
             if ( false === $decrypted ) {
                 $this->settings['password'] = '';
-                // Log warning once per request to avoid log spam.
-                if ( ! defined( 'PSM_DECRYPTION_WARNING_LOGGED' ) ) {
-                    define( 'PSM_DECRYPTION_WARNING_LOGGED', true );
-                    // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                    error_log( 'Polar SMTP Mailer: Password decryption failed. This may happen if AUTH_KEY changed. Please re-enter your SMTP password in settings.' );
-                }
             } else {
                 $this->settings['password'] = $decrypted;
             }
@@ -171,13 +165,9 @@ class PSM_Mailer {
                 $phpmailer->Sender = $phpmailer->From;
             }
 
-            // Debug mode.
+            // Debug mode - enable verbose SMTP output.
             if ( $this->settings['debug_mode'] ) {
                 $phpmailer->SMTPDebug = 2;
-                $phpmailer->Debugoutput = function( $str, $level ) {
-                    // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                    error_log( "Polar SMTP Mailer Debug [$level]: $str" );
-                };
             }
 
             // Set timeout.
@@ -196,11 +186,8 @@ class PSM_Mailer {
             do_action( 'PSM_phpmailer_configured', $phpmailer, $this->settings );
 
         } catch ( \Exception $e ) {
-            // Log error if debug mode is enabled.
-            if ( $this->settings['debug_mode'] ) {
-                // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Intentional debug logging for configuration errors.
-                error_log( 'Polar SMTP Mailer: PHPMailer configuration error: ' . $e->getMessage() );
-            }
+            // Silently handle configuration errors.
+            unset( $e );
         }
     }
 
@@ -702,18 +689,6 @@ class PSM_Mailer {
             add_option( 'PSM_auth_failures', $failures, '', 'no' );
         } else {
             update_option( 'PSM_auth_failures', $failures );
-        }
-
-        // Also log to error log if debug mode is enabled.
-        if ( $this->settings['debug_mode'] ) {
-            // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-            error_log( sprintf(
-                'Polar SMTP Mailer: Authentication failure - Host: %s, Username: %s, IP: %s, User ID: %d',
-                $host,
-                $username,
-                $log_data['ip'],
-                $log_data['user_id']
-            ) );
         }
 
         /**
