@@ -3,7 +3,7 @@ Contributors: boopathir
 Tags: smtp, email, wp mail, email log, gmail
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -134,6 +134,14 @@ Enable Backup SMTP in Settings. When primary SMTP fails, emails automatically ro
 
 == Changelog ==
 
+= 1.0.2 (2025-12-10) =
+* Fixed HTML email display in log viewer
+* Fixed empty recipient validation in queue
+* Fixed decryption failure handling after AUTH_KEY changes
+* Improved PHP 8.2 compatibility
+* Improved exception handling for PHPMailer
+* Optimized auth failure logging
+
 = 1.0.1 (2025-12-10) =
 * **Security:** Fixed encryption to use random IV per encryption (AES-256-CBC best practice)
 * **Security:** Fixed SQL preparation in table existence check
@@ -168,6 +176,9 @@ Enable Backup SMTP in Settings. When primary SMTP fails, emails automatically ro
 * WCAG AA accessibility compliance
 
 == Upgrade Notice ==
+
+= 1.0.2 =
+Stability release with PHP 8.2 support, improved error handling, and bug fixes. Recommended for all users.
 
 = 1.0.1 =
 Security and bug fix release. Includes improved encryption, TLS 1.2/1.3 support, and 14 bug fixes. Recommended for all users.

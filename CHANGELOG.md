@@ -2,6 +2,32 @@
 
 All notable changes to the Polar SMTP Mailer plugin will be documented in this file.
 
+## [1.0.2] - 2025-12-10
+
+### Fixed
+
+- **Fixed HTML email display in log viewer** - HTML emails now render correctly in the log viewer modal instead of showing raw source code.
+
+- **Fixed empty recipient validation** - Added validation to prevent queueing emails with empty recipients.
+
+- **Fixed decryption failure handling** - Plugin now gracefully handles decryption failures (e.g., after AUTH_KEY changes) by clearing the password and logging a warning, instead of failing silently.
+
+- **Fixed duplicate PHPDoc block** - Removed accidentally duplicated documentation comment.
+
+### Improved
+
+- **Added PHP 8.2 compatibility** - Added `#[AllowDynamicProperties]` attribute to core classes to prevent deprecation notices.
+
+- **Added exception handling for PHPMailer** - PHPMailer configuration is now wrapped in try-catch to prevent fatal errors.
+
+- **Added attachment sanitization** - Large attachment data is now truncated in logs to prevent database bloat.
+
+- **Optimized auth failure logging** - Authentication failure logs now use `autoload=no` to prevent loading on every page request.
+
+- **Improved hook documentation** - Added PHPDoc blocks for `PSM_bypass_queue` filter.
+
+---
+
 ## [1.0.1] - 2025-12-10
 
 ### Security
