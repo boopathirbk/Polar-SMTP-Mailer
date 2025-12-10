@@ -258,7 +258,9 @@ var SSMSettings, SSMTestEmail, SSMLogs;
                         const messageContainer = $('#ssm-log-message');
                         if (log.message && log.message.indexOf('<') !== -1 && log.message.indexOf('>') !== -1) {
                             // HTML content - use srcdoc iframe for sandboxed display
-                            messageContainer.html('<iframe sandbox="" srcdoc="' + $('<div>').text(log.message).html().replace(/"/g, '&quot;') + '" style="width:100%;min-height:200px;border:none;"></iframe>');
+                            // Escape & and " for srcdoc attribute, but preserve HTML tags
+                            const srcdoc = log.message.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+                            messageContainer.html('<iframe sandbox="" srcdoc="' + srcdoc + '" style="width:100%;min-height:200px;border:none;"></iframe>');
                         } else {
                             // Plain text - safe to use text()
                             messageContainer.text(log.message || '(no content)');

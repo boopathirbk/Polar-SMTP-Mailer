@@ -18,6 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
+#[AllowDynamicProperties]
 class PSM_Mailer {
 
     /**
@@ -74,7 +75,20 @@ class PSM_Mailer {
 
         // Decrypt password if encrypted.
         if ( ! empty( $this->settings['password'] ) && PSM_Encryption::is_encrypted( $this->settings['password'] ) ) {
-            $this->settings['password'] = PSM_Encryption::decrypt( $this->settings['password'] );
+            $decrypted = PSM_Encryption::decrypt( $this->settings['password'] );
+            
+            // Handle decryption failure (e.g., if AUTH_KEY changed).
+            if ( false === $decrypted ) {
+                $this->settings['password'] = '';
+                // Log warning once per request to avoid log spam.
+                if ( ! defined( 'PSM_DECRYPTION_WARNING_LOGGED' ) ) {
+                    define( 'PSM_DECRYPTION_WARNING_LOGGED', true );
+                    // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+                    error_log( 'Polar SMTP Mailer: Password decryption failed. This may happen if AUTH_KEY changed. Please re-enter your SMTP password in settings.' );
+                }
+            } else {
+                $this->settings['password'] = $decrypted;
+            }
         }
 
         // Check if SMTP is configured.
@@ -110,75 +124,83 @@ class PSM_Mailer {
             return;
         }
 
-        // Set mailer to SMTP.
-        $phpmailer->isSMTP();
+        try {
+            // Set mailer to SMTP.
+            $phpmailer->isSMTP();
 
-        // SMTP Host.
-        $phpmailer->Host = $this->settings['host'];
+            // SMTP Host.
+            $phpmailer->Host = $this->settings['host'];
 
-        // SMTP Port.
-        $phpmailer->Port = $this->settings['port'];
+            // SMTP Port.
+            $phpmailer->Port = $this->settings['port'];
 
-        // SMTP Encryption.
-        if ( 'none' !== $this->settings['encryption'] ) {
-            $phpmailer->SMTPSecure = $this->settings['encryption'];
-        } else {
-            $phpmailer->SMTPSecure = '';
-            $phpmailer->SMTPAutoTLS = false;
+            // SMTP Encryption.
+            if ( 'none' !== $this->settings['encryption'] ) {
+                $phpmailer->SMTPSecure = $this->settings['encryption'];
+            } else {
+                $phpmailer->SMTPSecure = '';
+                $phpmailer->SMTPAutoTLS = false;
+            }
+
+            // SMTP Authentication.
+            if ( $this->settings['auth'] && ! empty( $this->settings['username'] ) ) {
+                $phpmailer->SMTPAuth = true;
+                $phpmailer->Username = $this->settings['username'];
+                $phpmailer->Password = $this->settings['password'];
+            } else {
+                $phpmailer->SMTPAuth = false;
+            }
+
+            // From Email.
+            if ( $this->settings['force_from_email'] && ! empty( $this->settings['from_email'] ) ) {
+                $phpmailer->From = $this->settings['from_email'];
+                $phpmailer->Sender = $this->settings['from_email'];
+            } elseif ( ! empty( $this->settings['from_email'] ) && empty( $phpmailer->From ) ) {
+                $phpmailer->From = $this->settings['from_email'];
+            }
+
+            // From Name.
+            if ( $this->settings['force_from_name'] && ! empty( $this->settings['from_name'] ) ) {
+                $phpmailer->FromName = $this->settings['from_name'];
+            } elseif ( ! empty( $this->settings['from_name'] ) && empty( $phpmailer->FromName ) ) {
+                $phpmailer->FromName = $this->settings['from_name'];
+            }
+
+            // Force 'Sender' (Return-Path) to match 'From' email to satisfy strict SMTP providers (Hostinger, etc).
+            if ( ! empty( $phpmailer->From ) ) {
+                $phpmailer->Sender = $phpmailer->From;
+            }
+
+            // Debug mode.
+            if ( $this->settings['debug_mode'] ) {
+                $phpmailer->SMTPDebug = 2;
+                $phpmailer->Debugoutput = function( $str, $level ) {
+                    // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+                    error_log( "Polar SMTP Mailer Debug [$level]: $str" );
+                };
+            }
+
+            // Set timeout.
+            $phpmailer->Timeout = 30;
+
+            // Set character encoding.
+            $phpmailer->CharSet = 'UTF-8';
+
+            /**
+             * Fires after PHPMailer is configured.
+             *
+             * @since 1.0.0
+             * @param PHPMailer\PHPMailer\PHPMailer $phpmailer PHPMailer instance.
+             * @param array $settings SMTP settings.
+             */
+            do_action( 'PSM_phpmailer_configured', $phpmailer, $this->settings );
+
+        } catch ( \Exception $e ) {
+            // Log error if debug mode is enabled.
+            if ( $this->settings['debug_mode'] ) {
+                error_log( 'Polar SMTP Mailer: PHPMailer configuration error: ' . $e->getMessage() );
+            }
         }
-
-        // SMTP Authentication.
-        if ( $this->settings['auth'] && ! empty( $this->settings['username'] ) ) {
-            $phpmailer->SMTPAuth = true;
-            $phpmailer->Username = $this->settings['username'];
-            $phpmailer->Password = $this->settings['password'];
-        } else {
-            $phpmailer->SMTPAuth = false;
-        }
-
-        // From Email.
-        if ( $this->settings['force_from_email'] && ! empty( $this->settings['from_email'] ) ) {
-            $phpmailer->From = $this->settings['from_email'];
-            $phpmailer->Sender = $this->settings['from_email'];
-        } elseif ( ! empty( $this->settings['from_email'] ) && empty( $phpmailer->From ) ) {
-            $phpmailer->From = $this->settings['from_email'];
-        }
-
-        // From Name.
-        if ( $this->settings['force_from_name'] && ! empty( $this->settings['from_name'] ) ) {
-            $phpmailer->FromName = $this->settings['from_name'];
-        } elseif ( ! empty( $this->settings['from_name'] ) && empty( $phpmailer->FromName ) ) {
-            $phpmailer->FromName = $this->settings['from_name'];
-        }
-
-        // Force 'Sender' (Return-Path) to match 'From' email to satisfy strict SMTP providers (Hostinger, etc).
-        if ( ! empty( $phpmailer->From ) ) {
-            $phpmailer->Sender = $phpmailer->From;
-        }
-
-        // Debug mode.
-        if ( $this->settings['debug_mode'] ) {
-            $phpmailer->SMTPDebug = 2;
-            $phpmailer->Debugoutput = function( $str, $level ) {
-                // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( "Polar SMTP Mailer Debug [$level]: $str" );
-            };
-        }
-
-        // Set timeout.
-        $phpmailer->Timeout = 30;
-
-        // Set character encoding.
-        $phpmailer->CharSet = 'UTF-8';
-
-        /**
-         * Fires after PHPMailer is configured.
-         *
-         * @since 1.0.0
-         * @param PHPMailer\PHPMailer\PHPMailer $phpmailer PHPMailer instance.
-         * @param array $settings SMTP settings.
-         */
-        do_action( 'PSM_phpmailer_configured', $phpmailer, $this->settings );
     }
 
     /**
@@ -673,7 +695,13 @@ class PSM_Mailer {
         $failures = get_option( 'PSM_auth_failures', array() );
         array_unshift( $failures, $log_data );
         $failures = array_slice( $failures, 0, 50 ); // Keep only last 50.
-        update_option( 'PSM_auth_failures', $failures, false );
+        
+        // Ensure option is not autoloaded to prevent performance issues.
+        if ( false === get_option( 'PSM_auth_failures' ) ) {
+            add_option( 'PSM_auth_failures', $failures, '', 'no' );
+        } else {
+            update_option( 'PSM_auth_failures', $failures );
+        }
 
         // Also log to error log if debug mode is enabled.
         if ( $this->settings['debug_mode'] ) {

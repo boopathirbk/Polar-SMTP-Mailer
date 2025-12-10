@@ -15,6 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * PSM_Queue class.
  */
+#[AllowDynamicProperties]
 class PSM_Queue {
 
     /**
@@ -68,6 +69,13 @@ class PSM_Queue {
         if ( ! empty( $atts['subject'] ) && false !== strpos( $atts['subject'], 'Test Email' ) ) {
             return $result;
         }
+        /**
+         * Filters whether to bypass the queue and send the email immediately.
+         *
+         * @since 1.0.0
+         * @param bool  $bypass Whether to bypass the queue. Default false.
+         * @param array $atts   Email attributes (to, subject, message, headers, attachments).
+         */
         if ( apply_filters( 'PSM_bypass_queue', false, $atts ) ) {
             return $result;
         }
@@ -91,6 +99,10 @@ class PSM_Queue {
         $to = isset( $email_data['to'] ) ? $email_data['to'] : '';
         if ( is_array( $to ) ) {
             $to = implode( ', ', $to );
+        }
+
+        if ( empty( $to ) ) {
+            return false;
         }
 
         $headers = isset( $email_data['headers'] ) ? $email_data['headers'] : array();

@@ -18,6 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
+#[AllowDynamicProperties]
 class PSM_Logger {
 
     /**
@@ -82,13 +83,55 @@ class PSM_Logger {
             'subject'     => isset( $mail_data['subject'] ) ? $mail_data['subject'] : '',
             'message'     => $message,
             'headers'     => $headers,
-            'attachments' => isset( $mail_data['attachments'] ) ? $mail_data['attachments'] : array(),
+            'attachments' => $this->sanitize_attachments( isset( $mail_data['attachments'] ) ? $mail_data['attachments'] : array() ),
             'status'      => 'sent',
             'provider'    => $this->get_current_provider(),
             'mailer_type' => 'smtp',
             'sent_at'     => current_time( 'mysql' ),
             'created_at'  => current_time( 'mysql' ),
         ) );
+    }
+
+    /**
+     * Sanitize attachments for logging.
+     *
+     * Prevents logging of large file contents if passed as string.
+     *
+     * @since 1.0.1
+     * @param array|string $attachments Attachments.
+     * @return array|string Sanitized attachments.
+     */
+    private function sanitize_attachments( $attachments ) {
+        if ( empty( $attachments ) ) {
+            return array();
+        }
+
+        if ( is_string( $attachments ) ) {
+            // Check if it's a file path or potentially content.
+            if ( strlen( $attachments ) > 255 && ! file_exists( $attachments ) ) {
+                return __( '[Large attachment content truncated]', 'polar-smtp-mailer' );
+            }
+            return array( $attachments );
+        }
+
+        if ( is_array( $attachments ) ) {
+            $sanitized = array();
+            foreach ( $attachments as $attachment ) {
+                if ( is_string( $attachment ) ) {
+                    if ( strlen( $attachment ) > 255 && ! file_exists( $attachment ) ) {
+                        $sanitized[] = __( '[Large attachment content truncated]', 'polar-smtp-mailer' );
+                    } else {
+                        $sanitized[] = $attachment;
+                    }
+                } elseif ( is_array( $attachment ) && isset( $attachment[0] ) ) {
+                    // PHPMailer complex format [path, name, encoding, type]
+                    $sanitized[] = $attachment[0]; // Log just the path.
+                }
+            }
+            return $sanitized;
+        }
+
+        return $attachments;
     }
 
     /**
