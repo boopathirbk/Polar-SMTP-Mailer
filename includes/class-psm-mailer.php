@@ -198,6 +198,7 @@ class PSM_Mailer {
         } catch ( \Exception $e ) {
             // Log error if debug mode is enabled.
             if ( $this->settings['debug_mode'] ) {
+                // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Intentional debug logging for configuration errors.
                 error_log( 'Polar SMTP Mailer: PHPMailer configuration error: ' . $e->getMessage() );
             }
         }
