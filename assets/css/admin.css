@@ -1039,3 +1039,91 @@ body .ssm-wrap table.wp-list-table td {
     color: var(--ssm-text-light);
     font-size: 14px;
 }
+/* ==========================================================================
+   ThickBox Customization (Modal Styles)
+   ========================================================================== */
+
+/* Wrapper for our injected content */
+.ssm-view-log-content {
+    padding: 15px;
+    font-family: var(--ssm-font-family);
+    color: var(--ssm-text-dark);
+}
+
+/* Ensure ThickBox container inherits our font */
+#TB_ajaxContent {
+    font-family: var(--ssm-font-family) !important;
+    padding: 0 !important; /* Let our inner wrapper handle padding */
+    width: 100% !important;
+    box-sizing: border-box;
+}
+
+/* Modal Table Styling */
+.ssm-email-details.widefat {
+    border: none !important;
+    box-shadow: none !important;
+    margin-bottom: 24px !important;
+    background: transparent !important;
+}
+
+.ssm-email-details th {
+    font-weight: 500 !important;
+    color: var(--ssm-text-light) !important;
+    width: 100px;
+    padding: 8px 0 !important;
+    vertical-align: top;
+}
+
+.ssm-email-details td {
+    padding: 8px 0 !important;
+    vertical-align: top;
+    color: var(--ssm-text-dark);
+    font-size: 14px;
+}
+
+/* Message Preview Box */
+.ssm-message-preview {
+    background: #fcfcfc;
+    border: 1px solid var(--ssm-border-color);
+    border-radius: 6px;
+    padding: 16px;
+    max-height: 400px;
+    overflow-y: auto;
+    font-size: 13px;
+    line-height: 1.5;
+    box-shadow: inset 0 1px 4px rgba(0,0,0,0.02);
+}
+
+/* Scrollbar for preview */
+.ssm-message-preview::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.ssm-message-preview::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.ssm-message-preview::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}
+
+.ssm-message-preview::-webkit-scrollbar-thumb:hover {
+    background: #b3b3b3;
+}
+
+/* Status in modal */
+.ssm-email-details .ssm-status {
+    font-size: 11px;
+    padding: 3px 10px;
+    letter-spacing: 0.5px;
+}
+
+/* Responsive modal adjustments */
+@media (max-width: 600px) {
+    .ssm-email-details th {
+        width: 70px;
+    }
+}
+

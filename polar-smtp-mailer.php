@@ -154,6 +154,7 @@ final class Polar_SMTP_Mailer {
         require_once PSM_PLUGIN_DIR . 'includes/class-psm-queue.php';
         require_once PSM_PLUGIN_DIR . 'includes/class-psm-ajax.php';
         require_once PSM_PLUGIN_DIR . 'includes/class-psm-privacy.php';
+        require_once PSM_PLUGIN_DIR . 'includes/class-psm-debug-logger.php';
 
         // Admin includes.
         if ( is_admin() ) {
@@ -175,9 +176,13 @@ final class Polar_SMTP_Mailer {
         register_activation_hook( __FILE__, array( $this, 'activate' ) );
         register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
 
-        // Initialize plugin after plugins are loaded.
-        add_action( 'plugins_loaded', array( $this, 'init' ) );
+        // Initialize mailer IMMEDIATELY to capture all wp_mail calls.
+        // This must run before any other plugin can call wp_mail.
+        $this->mailer = new PSM_Mailer();
+        $this->logger = new PSM_Logger();
 
+        // Initialize other components after plugins are loaded.
+        add_action( 'plugins_loaded', array( $this, 'init' ) );
 
         // Add settings link to plugins page.
         add_filter( 'plugin_action_links_' . PSM_PLUGIN_BASENAME, array( $this, 'add_settings_link' ) );
@@ -193,10 +198,8 @@ final class Polar_SMTP_Mailer {
      * @return void
      */
     public function init() {
-        // Initialize core components.
-        $this->mailer = new PSM_Mailer();
-        $this->logger = new PSM_Logger();
-        $this->queue  = new PSM_Queue();
+        // Initialize queue (can wait for plugins_loaded).
+        $this->queue = new PSM_Queue();
 
         // Initialize admin.
         if ( is_admin() ) {

@@ -84,6 +84,26 @@ function PSM_uninstall() {
 
     // Clear cache.
     wp_cache_flush();
+
+    // Delete physical log files (Security cleanup).
+    $upload_dir = wp_upload_dir();
+    $log_dir    = $upload_dir['basedir'] . '/psm-debug';
+
+    if ( is_dir( $log_dir ) ) {
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator( $log_dir, RecursiveDirectoryIterator::SKIP_DOTS ),
+            RecursiveIteratorIterator::CHILD_FIRST
+        );
+
+        foreach ( $files as $fileinfo ) {
+            $todo = ( $fileinfo->isDir() ? 'rmdir' : 'unlink' );
+            // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_rmdir, WordPress.WP.AlternativeFunctions.unlink_unlink
+            @$todo( $fileinfo->getRealPath() );
+        }
+
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_rmdir
+        @rmdir( $log_dir );
+    }
 }
 
 // Run uninstall.

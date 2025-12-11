@@ -134,6 +134,11 @@ Enable Backup SMTP in Settings. When primary SMTP fails, emails automatically ro
 
 == Changelog ==
 
+= 1.0.4 (2025-12-11) =
+* Added Debug Logs admin page (visible when debug mode enabled)
+* Fixed duplicate email logs when sending test emails
+* Fixed global wp_mail capture for early emails
+
 = 1.0.3 (2025-12-10) =
 * Removed debug logging to pass Plugin Check requirements
 

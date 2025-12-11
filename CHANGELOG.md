@@ -2,6 +2,20 @@
 
 All notable changes to the Polar SMTP Mailer plugin will be documented in this file.
 
+## [1.0.4] - 2025-12-11
+
+### Added
+
+- **Debug Logs admin page** - New "Debug Logs" menu appears when debug mode is enabled. View SMTP communication logs directly in the plugin.
+- **Custom debug file logging** - Debug logs now write to `wp-content/uploads/psm-debug/debug.log` with proper security protections.
+
+### Fixed
+
+- **Duplicate email logs** - Fixed issue where test emails created two log entries.
+- **Global wp_mail capture** - Mailer now hooks immediately during plugin load to capture ALL emails including early ones like profile changes.
+
+---
+
 ## [1.0.3] - 2025-12-10
 
 ### Fixed

@@ -20,21 +20,27 @@ var SSMSettings, SSMTestEmail, SSMLogs;
         },
 
         bindEvents: function () {
+            const self = this;
+
             $('#PSM_smtp_auth').on('change', this.toggleAuthFields);
             $('[name="PSM_enable_queue"]').on('change', this.toggleQueueFields);
             $('#PSM_enable_backup_smtp').on('change', this.toggleBackupFields);
 
             // Primary provider change - direct binding
             $('#PSM_smtp_provider').on('change', function () {
-                SSMSettings.onProviderChange(this, 'primary');
+                self.onProviderChange(this, 'primary');
             });
 
             // Backup provider change - use event delegation for hidden elements
             $(document).on('change', '#PSM_backup_smtp_provider', function () {
-                SSMSettings.onProviderChange(this, 'backup');
+                self.onProviderChange(this, 'backup');
             });
 
             $('#ssm-test-connection').on('click', this.testConnection);
+            $('#ssm-test-backup-connection').on('click', function (e) {
+                e.preventDefault();
+                self.testConnection.call(this, 'backup');
+            });
             $('.ssm-toggle-password').on('click', this.togglePassword);
         },
 
@@ -111,15 +117,23 @@ var SSMSettings, SSMTestEmail, SSMLogs;
             });
         },
 
-        testConnection: function () {
+        testConnection: function (type) {
+            const isBackup = type === 'backup';
             const $btn = $(this);
-            const $result = $('.ssm-test-result');
-            const password = $('#PSM_smtp_password').val();
-            const isAuthEnabled = $('#PSM_smtp_auth').is(':checked');
+            const $result = isBackup ? $('.ssm-backup-test-result') : $('.ssm-test-result'); // Ensure distinct result containers
+            const prefix = isBackup ? '#PSM_backup_' : '#PSM_';
+
+            const host = $(prefix + 'smtp_host').val();
+            const port = $(prefix + 'smtp_port').val();
+            const encryption = $(prefix + 'smtp_encryption').val();
+            const username = $(prefix + 'smtp_username').val();
+            const password = $(prefix + 'smtp_password').val();
+            // Backup always assumes Auth is true if fields are filled, but for Primary checks checkbox
+            const auth = isBackup ? 'true' : ($('#PSM_smtp_auth').is(':checked') ? 'true' : 'false');
 
             // Check if password is the masked placeholder (bullets)
-            if (isAuthEnabled && password && /^[•]+$/.test(password)) {
-                $result.addClass('error').html('✗ Please re-enter your password to test the connection. For security, saved passwords are masked and cannot be used for testing.');
+            if (password && /^[•]+$/.test(password)) {
+                $result.addClass('error').html('✗ Please re-enter your password to test the connection. For security, saved passwords are masked.');
                 return;
             }
 
@@ -132,11 +146,11 @@ var SSMSettings, SSMTestEmail, SSMLogs;
                 data: {
                     action: 'PSM_test_connection',
                     nonce: PSM_ajax.nonce,
-                    host: $('#PSM_smtp_host').val(),
-                    port: $('#PSM_smtp_port').val(),
-                    encryption: $('#PSM_smtp_encryption').val(),
-                    auth: isAuthEnabled ? 'true' : 'false',
-                    username: $('#PSM_smtp_username').val(),
+                    host: host,
+                    port: port,
+                    encryption: encryption,
+                    auth: auth,
+                    username: username,
                     password: password
                 },
                 success: function (response) {
@@ -241,32 +255,46 @@ var SSMSettings, SSMTestEmail, SSMLogs;
                 success: function (response) {
                     if (response.success && response.data.log) {
                         const log = response.data.log;
-                        $('#ssm-log-to').text(log.to_email);
-                        $('#ssm-log-subject').text(log.subject || '(no subject)');
-                        $('#ssm-log-status').html('<span class="ssm-status ssm-status-' + log.status + '">' + log.status.charAt(0).toUpperCase() + log.status.slice(1) + '</span>');
-                        $('#ssm-log-provider').text(log.provider || '-');
-                        $('#ssm-log-date').text(log.created_at);
+
+                        // Build the modal content HTML with custom classes and font enforcement
+                        let statusClass = 'ssm-status-' + log.status;
+                        let statusText = log.status.charAt(0).toUpperCase() + log.status.slice(1);
+
+                        // Main wrapper with plugin font family
+                        let html = '<div class="ssm-view-log-content" style="font-family: var(--ssm-font-family); color: var(--ssm-text-dark);">';
+
+                        // Header Details
+                        html += '<table class="ssm-email-details widefat" style="border:none; box-shadow:none; margin-bottom: 20px;">';
+                        html += '<tr><th style="width: 100px; padding-left:0;">To:</th><td><strong>' + SSMLogs.escapeHtml(log.to_email) + '</strong></td></tr>';
+                        html += '<tr><th style="padding-left:0;">Subject:</th><td>' + SSMLogs.escapeHtml(log.subject || '(no subject)') + '</td></tr>';
+                        html += '<tr><th style="padding-left:0;">Status:</th><td><span class="ssm-status ' + statusClass + '">' + statusText + '</span></td></tr>';
+                        html += '<tr><th style="padding-left:0;">Provider:</th><td>' + SSMLogs.escapeHtml(log.provider || '-') + '</td></tr>';
+                        html += '<tr><th style="padding-left:0;">Date:</th><td>' + SSMLogs.escapeHtml(log.created_at) + '</td></tr>';
 
                         if (log.error) {
-                            $('#ssm-log-error').text(log.error);
-                            $('#ssm-log-error-row').show();
+                            html += '<tr><th style="padding-left:0;">Error:</th><td class="ssm-error-text">' + SSMLogs.escapeHtml(log.error) + '</td></tr>';
+                        }
+                        html += '</table>';
+
+                        // Message Content
+                        html += '<h4 style="margin: 0 0 10px 0; font-size: 14px; text-transform: uppercase; color: var(--ssm-text-light);">Message Content</h4>';
+                        html += '<div class="ssm-message-preview">';
+
+                        // Check if HTML content
+                        if (log.message && log.message.indexOf('<') !== -1 && log.message.indexOf('>') !== -1) {
+                            const srcdoc = log.message.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+                            html += '<iframe sandbox="" srcdoc="' + srcdoc + '" style="width:100%; min-height:300px; border:none; background:#fff;"></iframe>';
                         } else {
-                            $('#ssm-log-error-row').hide();
+                            html += '<pre style="white-space: pre-wrap; margin: 0; font-family: monospace; font-size: 13px;">' + SSMLogs.escapeHtml(log.message || '(no content)') + '</pre>';
                         }
 
-                        // Safely display message content - use text() for plain text or create iframe sandbox for HTML
-                        const messageContainer = $('#ssm-log-message');
-                        if (log.message && log.message.indexOf('<') !== -1 && log.message.indexOf('>') !== -1) {
-                            // HTML content - use srcdoc iframe for sandboxed display
-                            // Escape & and " for srcdoc attribute, but preserve HTML tags
-                            const srcdoc = log.message.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
-                            messageContainer.html('<iframe sandbox="" srcdoc="' + srcdoc + '" style="width:100%;min-height:200px;border:none;"></iframe>');
-                        } else {
-                            // Plain text - safe to use text()
-                            messageContainer.text(log.message || '(no content)');
-                        }
-                        $('#ssm-log-modal').show();
-                        $('.ssm-modal-close').focus();
+                        html += '</div></div>';
+
+                        // Update the ThickBox inline content
+                        $('#psm-thickbox-content').html(html);
+
+                        // Open ThickBox
+                        tb_show('Email Details', '#TB_inline?width=650&height=500&inlineId=psm-thickbox-content');
                     } else {
                         alert('Error: ' + (response.data ? response.data.message : 'Failed to load log'));
                     }
@@ -275,6 +303,13 @@ var SSMSettings, SSMTestEmail, SSMLogs;
                     alert('AJAX Error: ' + error);
                 }
             });
+        },
+
+        escapeHtml: function (text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         },
 
         deleteLog: function () {

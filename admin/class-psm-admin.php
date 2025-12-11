@@ -86,6 +86,18 @@ class PSM_Admin {
             'polar-smtp-mailer-about',
             array( $this, 'render_about' )
         );
+
+        // Add Debug Logs menu only when debug mode is enabled.
+        if ( get_option( 'PSM_debug_mode', false ) ) {
+            add_submenu_page(
+                'polar-smtp-mailer',
+                __( 'Debug Logs', 'polar-smtp-mailer' ),
+                '<span style="color:#f0ad4e;">⚠ ' . __( 'Debug Logs', 'polar-smtp-mailer' ) . '</span>',
+                'manage_options',
+                'polar-smtp-mailer-debug',
+                array( $this, 'render_debug_logs' )
+            );
+        }
     }
 
     /**
@@ -96,17 +108,20 @@ class PSM_Admin {
             return;
         }
 
+        // Add WordPress native ThickBox modal.
+        add_thickbox();
+
         wp_enqueue_style(
             'ssm-admin',
             PSM_PLUGIN_URL . 'assets/css/admin.css',
-            array(),
+            array( 'thickbox' ),
             PSM_VERSION
         );
 
         wp_enqueue_script(
             'ssm-admin',
             PSM_PLUGIN_URL . 'assets/js/admin.js',
-            array( 'jquery' ),
+            array( 'jquery', 'thickbox' ),
             PSM_VERSION,
             true
         );
@@ -171,5 +186,22 @@ class PSM_Admin {
      */
     public function render_about() {
         require_once PSM_PLUGIN_DIR . 'admin/views/about-page.php';
+    }
+
+    /**
+     * Render debug logs page.
+     *
+     * @since 1.0.4
+     */
+    public function render_debug_logs() {
+        // Handle clear logs action.
+        if ( isset( $_POST['psm_clear_logs'] ) && isset( $_POST['psm_debug_nonce'] ) ) {
+            if ( wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['psm_debug_nonce'] ) ), 'psm_clear_debug_logs' ) ) {
+                PSM_Debug_Logger::clear_logs();
+                echo '<div class="notice notice-success"><p>' . esc_html__( 'Debug logs cleared.', 'polar-smtp-mailer' ) . '</p></div>';
+            }
+        }
+
+        require_once PSM_PLUGIN_DIR . 'admin/views/debug-logs-page.php';
     }
 }

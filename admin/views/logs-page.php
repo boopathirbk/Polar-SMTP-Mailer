@@ -43,43 +43,8 @@ $logs_table->prepare_items();
     </form>
 </div>
 
-<!-- Email Preview Modal -->
-<div id="ssm-log-modal" class="ssm-modal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="ssm-modal-title">
-    <div class="ssm-modal-overlay"></div>
-    <div class="ssm-modal-content">
-        <button type="button" class="ssm-modal-close" aria-label="<?php esc_attr_e( 'Close', 'polar-smtp-mailer' ); ?>">&times;</button>
-        <h2 id="ssm-modal-title"><?php esc_html_e( 'Email Details', 'polar-smtp-mailer' ); ?></h2>
-        <div class="ssm-modal-body">
-            <table class="ssm-email-details">
-                <tr>
-                    <th><?php esc_html_e( 'To', 'polar-smtp-mailer' ); ?></th>
-                    <td id="ssm-log-to"></td>
-                </tr>
-                <tr>
-                    <th><?php esc_html_e( 'Subject', 'polar-smtp-mailer' ); ?></th>
-                    <td id="ssm-log-subject"></td>
-                </tr>
-                <tr>
-                    <th><?php esc_html_e( 'Status', 'polar-smtp-mailer' ); ?></th>
-                    <td id="ssm-log-status"></td>
-                </tr>
-                <tr>
-                    <th><?php esc_html_e( 'Provider', 'polar-smtp-mailer' ); ?></th>
-                    <td id="ssm-log-provider"></td>
-                </tr>
-                <tr>
-                    <th><?php esc_html_e( 'Date', 'polar-smtp-mailer' ); ?></th>
-                    <td id="ssm-log-date"></td>
-                </tr>
-                <tr id="ssm-log-error-row" style="display:none;">
-                    <th><?php esc_html_e( 'Error', 'polar-smtp-mailer' ); ?></th>
-                    <td id="ssm-log-error" class="ssm-error-text"></td>
-                </tr>
-            </table>
-            <div class="ssm-email-content">
-                <h3><?php esc_html_e( 'Message Content', 'polar-smtp-mailer' ); ?></h3>
-                <div id="ssm-log-message" class="ssm-message-preview"></div>
-            </div>
-        </div>
-    </div>
+<!-- ThickBox Inline Content Container (hidden, used by WordPress ThickBox) -->
+<div id="psm-thickbox-content" style="display:none;">
+    <p><?php esc_html_e( 'Loading...', 'polar-smtp-mailer' ); ?></p>
 </div>
+

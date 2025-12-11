@@ -80,6 +80,7 @@ class PSM_Mailer {
             // Handle decryption failure (e.g., if AUTH_KEY changed).
             if ( false === $decrypted ) {
                 $this->settings['password'] = '';
+                PSM_Debug_Logger::log( 'Password decryption failed. AUTH_KEY may have changed. Please re-enter SMTP password.', 'error' );
             } else {
                 $this->settings['password'] = $decrypted;
             }
@@ -100,10 +101,13 @@ class PSM_Mailer {
         add_action( 'phpmailer_init', array( $this, 'configure_phpmailer' ), 10, 1 );
 
         // Hook before mail is sent to capture data.
-        add_filter( 'wp_mail', array( $this, 'capture_mail_data' ), 10, 1 );
+        add_filter( 'wp_mail', array( $this, 'capture_mail_data' ), 1, 1 ); // Priority 1 to run early.
 
         // Hook for mail failure.
         add_action( 'wp_mail_failed', array( $this, 'handle_mail_failed' ), 10, 1 );
+        
+        // Log that hooks are registered.
+        PSM_Debug_Logger::log( 'PSM_Mailer hooks registered', 'info' );
     }
 
     /**
@@ -115,6 +119,7 @@ class PSM_Mailer {
      */
     public function configure_phpmailer( $phpmailer ) {
         if ( ! $this->enabled ) {
+            PSM_Debug_Logger::log( 'PSM Mailer is disabled via settings (host missing), skipping PHPMailer configuration.', 'warning' );
             return;
         }
 
@@ -145,12 +150,24 @@ class PSM_Mailer {
                 $phpmailer->SMTPAuth = false;
             }
 
+            // Identify default WordPress email to allow overriding it.
+            $sitename = wp_parse_url( network_home_url(), PHP_URL_HOST );
+            if ( 'www.' === substr( $sitename, 0, 4 ) ) {
+                $sitename = substr( $sitename, 4 );
+            }
+            $default_wp_email = 'wordpress@' . $sitename;
+
             // From Email.
             if ( $this->settings['force_from_email'] && ! empty( $this->settings['from_email'] ) ) {
                 $phpmailer->From = $this->settings['from_email'];
                 $phpmailer->Sender = $this->settings['from_email'];
-            } elseif ( ! empty( $this->settings['from_email'] ) && empty( $phpmailer->From ) ) {
-                $phpmailer->From = $this->settings['from_email'];
+            } elseif ( ! empty( $this->settings['from_email'] ) ) {
+                // If From is empty OR it matches the default WordPress email, use our configured email.
+                // This prevents "Sender address rejected" errors on strict SMTP servers (like Hostinger/Gmail).
+                if ( empty( $phpmailer->From ) || $phpmailer->From === $default_wp_email ) {
+                    $phpmailer->From = $this->settings['from_email'];
+                    $phpmailer->Sender = $this->settings['from_email'];
+                }
             }
 
             // From Name.
@@ -165,9 +182,13 @@ class PSM_Mailer {
                 $phpmailer->Sender = $phpmailer->From;
             }
 
-            // Debug mode - enable verbose SMTP output.
+            // Debug mode - enable verbose SMTP output and log to debug file.
             if ( $this->settings['debug_mode'] ) {
                 $phpmailer->SMTPDebug = 2;
+                $phpmailer->Debugoutput = array( 'PSM_Debug_Logger', 'log_smtp' );
+                
+                // Log that we're configuring PHPMailer.
+                PSM_Debug_Logger::log( 'Configuring PHPMailer for: ' . $phpmailer->Host, 'info' );
             }
 
             // Set timeout.
@@ -199,6 +220,10 @@ class PSM_Mailer {
      * @return array Modified mail arguments.
      */
     public function capture_mail_data( $args ) {
+        // Log every wp_mail call for debugging.
+        $to = is_array( $args['to'] ) ? implode( ', ', $args['to'] ) : $args['to'];
+        PSM_Debug_Logger::log( 'wp_mail called. To: ' . $to . ', Subject: ' . $args['subject'], 'info' );
+        
         // Store current email data for logging.
         $this->current_email = array(
             'to'          => $args['to'],
@@ -312,6 +337,10 @@ class PSM_Mailer {
         $original_settings = $this->settings;
 
         // Load backup settings.
+        // Load backup settings.
+        $backup_from_email = get_option( 'PSM_backup_from_email', '' );
+        $backup_from_name  = get_option( 'PSM_backup_from_name', '' );
+
         $this->settings = array(
             'host'       => $backup_host,
             'port'       => (int) get_option( 'PSM_backup_smtp_port', 587 ),
@@ -319,6 +348,11 @@ class PSM_Mailer {
             'auth'       => true,
             'username'   => get_option( 'PSM_backup_smtp_username', '' ),
             'password'   => PSM_Encryption::decrypt( get_option( 'PSM_backup_smtp_password', '' ) ),
+            'from_email' => ! empty( $backup_from_email ) ? $backup_from_email : $this->settings['from_email'],
+            'from_name'  => ! empty( $backup_from_name ) ? $backup_from_name : $this->settings['from_name'],
+            'force_from_email' => true, // Force the backup email to prevent WordPress override
+            'force_from_name'  => false,
+            'debug_mode' => (bool) get_option( 'PSM_debug_mode', false ), // Maintain debug mode
         );
 
         // Temporarily disable failure hook to prevent recursion loop if backup fails too.
@@ -616,15 +650,6 @@ class PSM_Mailer {
         $result = wp_mail( $to, $subject, $message, $headers );
 
         if ( $result ) {
-            // Log successful test email.
-            $this->log_success( array(
-                'to'          => $to,
-                'subject'     => $subject,
-                'message'     => $message,
-                'headers'     => $headers,
-                'attachments' => array(),
-            ) );
-
             return array(
                 'success' => true,
                 'message' => sprintf(

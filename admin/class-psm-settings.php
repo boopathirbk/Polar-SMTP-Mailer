@@ -58,6 +58,8 @@ class PSM_Settings {
         register_setting( 'PSM_settings', 'PSM_backup_smtp_encryption', array( 'sanitize_callback' => 'sanitize_text_field' ) );
         register_setting( 'PSM_settings', 'PSM_backup_smtp_username', array( 'sanitize_callback' => 'sanitize_text_field' ) );
         register_setting( 'PSM_settings', 'PSM_backup_smtp_password', array( 'sanitize_callback' => array( $this, 'sanitize_backup_password' ) ) );
+        register_setting( 'PSM_settings', 'PSM_backup_from_email', array( 'sanitize_callback' => 'sanitize_email' ) );
+        register_setting( 'PSM_settings', 'PSM_backup_from_name', array( 'sanitize_callback' => 'sanitize_text_field' ) );
 
         // Debug Settings.
         register_setting( 'PSM_settings', 'PSM_debug_mode', array( 'sanitize_callback' => 'rest_sanitize_boolean' ) );

@@ -223,7 +223,29 @@ $encryption_options = PSM_Providers::get_encryption_options();
                             <p class="description"><?php esc_html_e( 'Password is encrypted before storage.', 'polar-smtp-mailer' ); ?></p>
                         </td>
                     </tr>
+                    <tr class="ssm-backup-field">
+                        <th scope="row"><label for="PSM_backup_from_email"><?php esc_html_e( 'Prioritize Backup From Email', 'polar-smtp-mailer' ); ?></label></th>
+                        <td>
+                            <input type="email" name="PSM_backup_from_email" id="PSM_backup_from_email" value="<?php echo esc_attr( get_option( 'PSM_backup_from_email' ) ); ?>" class="regular-text" placeholder="backup@example.com">
+                            <p class="description"><?php esc_html_e( 'Optional. Leave empty to use primary "From Email".', 'polar-smtp-mailer' ); ?></p>
+                        </td>
+                    </tr>
+                    <tr class="ssm-backup-field">
+                        <th scope="row"><label for="PSM_backup_from_name"><?php esc_html_e( 'Prioritize Backup From Name', 'polar-smtp-mailer' ); ?></label></th>
+                        <td>
+                            <input type="text" name="PSM_backup_from_name" id="PSM_backup_from_name" value="<?php echo esc_attr( get_option( 'PSM_backup_from_name' ) ); ?>" class="regular-text" placeholder="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
+                            <p class="description"><?php esc_html_e( 'Optional. Leave empty to use primary "From Name".', 'polar-smtp-mailer' ); ?></p>
+                        </td>
+                    </tr>
                 </table>
+                <p class="ssm-test-connection">
+                    <button type="button" class="button button-secondary" id="ssm-test-backup-connection"><?php esc_html_e( 'Test Backup Connection', 'polar-smtp-mailer' ); ?></button>
+                    <span class="ssm-backup-test-result"></span>
+                </p>
+                <p class="description ssm-test-note">
+                     <span class="dashicons dashicons-info"></span>
+                     <?php esc_html_e( 'Note: Similar to primary settings, please re-enter passwords, save settings and then click Test Backup Connection.', 'polar-smtp-mailer' ); ?>
+                 </p>
             </div>
 
             <!-- Debug -->
