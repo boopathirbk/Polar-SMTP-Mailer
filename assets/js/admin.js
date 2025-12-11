@@ -261,23 +261,28 @@ var SSMSettings, SSMTestEmail, SSMLogs;
                         let statusText = log.status.charAt(0).toUpperCase() + log.status.slice(1);
 
                         // Main wrapper with plugin font family
-                        let html = '<div class="ssm-view-log-content" style="font-family: var(--ssm-font-family); color: var(--ssm-text-dark);">';
+                        let html = '<div class="ssm-view-log-content">';
 
-                        // Header Details
-                        html += '<table class="ssm-email-details widefat" style="border:none; box-shadow:none; margin-bottom: 20px;">';
-                        html += '<tr><th style="width: 100px; padding-left:0;">To:</th><td><strong>' + SSMLogs.escapeHtml(log.to_email) + '</strong></td></tr>';
-                        html += '<tr><th style="padding-left:0;">Subject:</th><td>' + SSMLogs.escapeHtml(log.subject || '(no subject)') + '</td></tr>';
-                        html += '<tr><th style="padding-left:0;">Status:</th><td><span class="ssm-status ' + statusClass + '">' + statusText + '</span></td></tr>';
-                        html += '<tr><th style="padding-left:0;">Provider:</th><td>' + SSMLogs.escapeHtml(log.provider || '-') + '</td></tr>';
-                        html += '<tr><th style="padding-left:0;">Date:</th><td>' + SSMLogs.escapeHtml(log.created_at) + '</td></tr>';
+                        // Info Grid Section - Server Details
+                        html += '<div class="ssm-modal-info-grid">';
+                        html += '<div class="ssm-modal-info-item"><span class="ssm-modal-info-label">To</span><span class="ssm-modal-info-value">' + SSMLogs.escapeHtml(log.to_email) + '</span></div>';
+                        html += '<div class="ssm-modal-info-item"><span class="ssm-modal-info-label">From</span><span class="ssm-modal-info-value">' + SSMLogs.escapeHtml(log.from_email || 'N/A') + '</span></div>';
+                        html += '<div class="ssm-modal-info-item"><span class="ssm-modal-info-label">Subject</span><span class="ssm-modal-info-value">' + SSMLogs.escapeHtml(log.subject || '(no subject)') + '</span></div>';
+                        html += '<div class="ssm-modal-info-item"><span class="ssm-modal-info-label">Status</span><span class="ssm-modal-info-value"><span class="ssm-status ' + statusClass + '">' + statusText + '</span></span></div>';
+                        html += '<div class="ssm-modal-info-item"><span class="ssm-modal-info-label">Provider</span><span class="ssm-modal-info-value">' + SSMLogs.escapeHtml(log.provider || 'Unknown') + '</span></div>';
+                        html += '<div class="ssm-modal-info-item"><span class="ssm-modal-info-label">Date</span><span class="ssm-modal-info-value">' + SSMLogs.escapeHtml(log.created_at) + '</span></div>';
+                        html += '</div>';
 
+                        // Error message if present
                         if (log.error) {
-                            html += '<tr><th style="padding-left:0;">Error:</th><td class="ssm-error-text">' + SSMLogs.escapeHtml(log.error) + '</td></tr>';
+                            html += '<div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; padding: 12px; margin-bottom: 20px; color: #991b1b;">';
+                            html += '<strong style="display: block; margin-bottom: 4px;">⚠️ Error</strong>';
+                            html += SSMLogs.escapeHtml(log.error);
+                            html += '</div>';
                         }
-                        html += '</table>';
 
                         // Message Content
-                        html += '<h4 style="margin: 0 0 10px 0; font-size: 14px; text-transform: uppercase; color: var(--ssm-text-light);">Message Content</h4>';
+                        html += '<h4 style="margin: 0 0 12px 0; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #646970; font-weight: 600;">Message Content</h4>';
                         html += '<div class="ssm-message-preview">';
 
                         // Check if HTML content
@@ -285,7 +290,7 @@ var SSMSettings, SSMTestEmail, SSMLogs;
                             const srcdoc = log.message.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
                             html += '<iframe sandbox="" srcdoc="' + srcdoc + '" style="width:100%; min-height:300px; border:none; background:#fff;"></iframe>';
                         } else {
-                            html += '<pre style="white-space: pre-wrap; margin: 0; font-family: monospace; font-size: 13px;">' + SSMLogs.escapeHtml(log.message || '(no content)') + '</pre>';
+                            html += '<pre style="white-space: pre-wrap; word-wrap: break-word; margin: 0; font-family: monospace; font-size: 13px; line-height: 1.6;">' + SSMLogs.escapeHtml(log.message || '(no content)') + '</pre>';
                         }
 
                         html += '</div></div>';

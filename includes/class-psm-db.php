@@ -27,7 +27,7 @@ class PSM_DB {
      *
      * @var string
      */
-    const DB_VERSION = '1.0.0';
+    const DB_VERSION = '1.0.1';
 
     /**
      * Email logs table name.
@@ -72,6 +72,7 @@ class PSM_DB {
         $logs_sql = "CREATE TABLE " . self::$logs_table . " (
             id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
             to_email VARCHAR(255) NOT NULL,
+            from_email VARCHAR(255),
             cc_email TEXT,
             bcc_email TEXT,
             subject VARCHAR(255),
@@ -158,6 +159,7 @@ class PSM_DB {
 
         $defaults = array(
             'to_email'      => '',
+            'from_email'    => '',
             'cc_email'      => '',
             'bcc_email'     => '',
             'subject'       => '',
@@ -189,6 +191,7 @@ class PSM_DB {
             $data,
             array(
                 '%s', // to_email
+                '%s', // from_email
                 '%s', // cc_email
                 '%s', // bcc_email
                 '%s', // subject

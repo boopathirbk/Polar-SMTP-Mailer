@@ -9,6 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- View template variable.
 $psm_logs_table = PSM_Logs::get_table();
 $psm_logs_table->process_bulk_action();
 $psm_logs_table->prepare_items();

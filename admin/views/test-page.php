@@ -9,6 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- View template variables.
 $psm_admin_email = get_option( 'admin_email' );
 $psm_smtp_configured = ! empty( get_option( 'PSM_smtp_host', '' ) );
 ?>

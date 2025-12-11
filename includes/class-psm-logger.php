@@ -65,9 +65,23 @@ class PSM_Logger {
             $to = implode( ', ', $to );
         }
 
-        // Parse headers for CC and BCC.
+        // Parse headers for CC, BCC, and From.
         $headers = isset( $mail_data['headers'] ) ? $mail_data['headers'] : array();
         $parsed = $this->parse_headers( $headers );
+
+        // Extract from_email - check parsed headers first, then fall back to plugin settings.
+        $from_email = '';
+        if ( isset( $parsed['from'] ) ) {
+            // Extract email from "Name <email@example.com>" format.
+            if ( preg_match( '/<([^>]+)>/', $parsed['from'], $matches ) ) {
+                $from_email = $matches[1];
+            } else {
+                $from_email = $parsed['from'];
+            }
+        }
+        if ( empty( $from_email ) ) {
+            $from_email = get_option( 'PSM_from_email', get_option( 'admin_email' ) );
+        }
 
         // Check privacy setting - exclude message content if enabled.
         $message = isset( $mail_data['message'] ) ? $mail_data['message'] : '';
@@ -78,6 +92,7 @@ class PSM_Logger {
         // Insert log.
         PSM_DB::insert_log( array(
             'to_email'    => $to,
+            'from_email'  => $from_email,
             'cc_email'    => isset( $parsed['cc'] ) ? $parsed['cc'] : '',
             'bcc_email'   => isset( $parsed['bcc'] ) ? $parsed['bcc'] : '',
             'subject'     => isset( $mail_data['subject'] ) ? $mail_data['subject'] : '',

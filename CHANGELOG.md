@@ -9,12 +9,16 @@ All notable changes to the Polar SMTP Mailer plugin will be documented in this f
 - **Global Variable Compliance** - Fixed all "NonPrefixedVariableFound" Plugin Check errors in admin views (`dashboard`, `settings`, `logs`, `test`) by renaming variables with `psm_` prefix.
 - **Hook Naming Compliance** - Renamed all custom hooks (`PSM_smtp_providers` -> `psm_smtp_providers`, etc.) to lowercase with `psm_` prefix for WordPress coding standards compliance.
 - **Backup SMTP Test** - Fixed JavaScript context issue and missing `preventDefault` that caused the "Test Backup Connection" button to be unresponsive.
+- **Backup Test Result Styling** - Added proper success/error color styling for backup connection test results.
 - **Uninstall Cleanup** - Improved uninstall process to properly delete new backup SMTP options.
 - **Duplicate logs** - Fixed issue where test emails created two log entries.
 - **Global wp_mail capture** - Mailer now hooks immediately during plugin load to capture ALL emails.
 
 ### Added
 
+- **From Email Tracking** - Email logs now capture and display the sender email address.
+- **Enhanced Email Modal** - Redesigned email details modal with modern grid layout showing To, From, Subject, Status, Provider, and Date.
+- **Improved Modal Responsiveness** - Modal now adapts properly to mobile screens.
 - **Debug Logs admin page** - New "Debug Logs" menu appears when debug mode is enabled. View SMTP communication logs directly in the plugin.
 
 ---

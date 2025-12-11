@@ -76,6 +76,7 @@ class PSM_Queue {
          * @param bool  $bypass Whether to bypass the queue. Default false.
          * @param array $atts   Email attributes (to, subject, message, headers, attachments).
          */
+        // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- PSM is the established plugin prefix.
         if ( apply_filters( 'psm_bypass_queue', false, $atts ) ) {
             return $result;
         }

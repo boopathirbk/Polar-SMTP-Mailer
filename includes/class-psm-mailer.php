@@ -204,6 +204,7 @@ class PSM_Mailer {
              * @param PHPMailer\PHPMailer\PHPMailer $phpmailer PHPMailer instance.
              * @param array $settings SMTP settings.
              */
+            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- PSM is the established plugin prefix.
             do_action( 'psm_phpmailer_configured', $phpmailer, $this->settings );
 
         } catch ( \Exception $e ) {
@@ -336,7 +337,6 @@ class PSM_Mailer {
         // Store original settings.
         $original_settings = $this->settings;
 
-        // Load backup settings.
         // Load backup settings.
         $backup_from_email = get_option( 'PSM_backup_from_email', '' );
         $backup_from_name  = get_option( 'PSM_backup_from_name', '' );
@@ -722,6 +722,7 @@ class PSM_Mailer {
          * @since 1.0.0
          * @param array $log_data Failed authentication data.
          */
+        // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- PSM is the established plugin prefix.
         do_action( 'psm_auth_failure', $log_data );
     }
 

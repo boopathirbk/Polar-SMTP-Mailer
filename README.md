@@ -224,7 +224,9 @@ add_filter( 'psm_bypass_queue', function( $bypass, $atts ) {
 ### 1.0.4 (2025-12-11)
 - **Compliance:** Fixed global variable naming conventions in admin views.
 - **Compliance:** Fixed hook naming conventions.
-- **Fix:** Backup SMTP connection test.
+- **UI:** Enhanced email log modal with From Email tracking and grid layout.
+- **UI:** Improved modal responsiveness for mobile devices.
+- **Fix:** Backup SMTP connection test and result styling.
 - **Fix:** Uninstall cleanup.
 
 ### 1.0.3 (2025-12-10)

@@ -159,6 +159,7 @@ class PSM_Ajax {
             'log' => array(
                 'id'         => $log->id,
                 'to_email'   => esc_html( $log->to_email ),
+                'from_email' => esc_html( isset( $log->from_email ) ? $log->from_email : '' ),
                 'subject'    => esc_html( $log->subject ),
                 'message'    => wp_kses_post( $log->message ),
                 'headers'    => esc_html( $log->headers ),

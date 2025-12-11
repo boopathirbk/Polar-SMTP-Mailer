@@ -137,6 +137,10 @@ Enable Backup SMTP in Settings. When primary SMTP fails, emails automatically ro
 = 1.0.4 (2025-12-11) =
 * **Compliance:** Fixed global variable naming conventions in admin views (Plugin Check).
 * **Compliance:** Fixed hook naming conventions to use proper `psm_` prefix (Plugin Check).
+* **UI:** Enhanced email log modal with grid layout and sender details.
+* **UI:** Added From Email tracking to email logs.
+* **UI:** Improved modal responsiveness for mobile devices.
+* **UI:** Fixed backup test connection result color styling.
 * **Fix:** Resolved JavaScript context issue in backup SMTP connection test.
 * **Fix:** Improved uninstall cleanup to remove backup options.
 * **Fix:** Various minor naming convention fixes across the codebase.

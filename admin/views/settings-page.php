@@ -9,6 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- View template variables.
 $psm_settings = PSM_Settings::get_settings();
 $psm_providers = PSM_Providers::get_providers();
 $psm_encryption_options = PSM_Providers::get_encryption_options();
@@ -35,6 +36,7 @@ $psm_encryption_options = PSM_Providers::get_encryption_options();
                         <th scope="row"><label for="PSM_smtp_provider"><?php esc_html_e( 'SMTP Provider', 'polar-smtp-mailer' ); ?></label></th>
                         <td>
                             <select name="PSM_smtp_provider" id="PSM_smtp_provider" class="regular-text">
+                                <?php // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- View template loop variables. ?>
                                 <?php foreach ( $psm_providers as $psm_key => $psm_provider ) : ?>
                                     <option value="<?php echo esc_attr( $psm_key ); ?>" <?php selected( $psm_settings['smtp_provider'], $psm_key ); ?>><?php echo esc_html( $psm_provider['name'] ); ?></option>
                                 <?php endforeach; ?>
@@ -62,6 +64,7 @@ $psm_encryption_options = PSM_Providers::get_encryption_options();
                         <th scope="row"><label for="PSM_smtp_encryption"><?php esc_html_e( 'Encryption', 'polar-smtp-mailer' ); ?></label></th>
                         <td>
                             <select name="PSM_smtp_encryption" id="PSM_smtp_encryption">
+                                <?php // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- View template loop variables. ?>
                                 <?php foreach ( $psm_encryption_options as $psm_key => $psm_label ) : ?>
                                     <option value="<?php echo esc_attr( $psm_key ); ?>" <?php selected( $psm_settings['smtp_encryption'], $psm_key ); ?>><?php echo esc_html( $psm_label ); ?></option>
                                 <?php endforeach; ?>
@@ -178,6 +181,7 @@ $psm_encryption_options = PSM_Providers::get_encryption_options();
                         <th scope="row"><label for="PSM_backup_smtp_provider"><?php esc_html_e( 'Backup Provider', 'polar-smtp-mailer' ); ?></label></th>
                         <td>
                             <select name="PSM_backup_smtp_provider" id="PSM_backup_smtp_provider">
+                                <?php // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- View template loop variables. ?>
                                 <?php foreach ( $psm_providers as $psm_key => $psm_provider ) : ?>
                                     <option value="<?php echo esc_attr( $psm_key ); ?>" <?php selected( $psm_settings['backup_smtp_provider'], $psm_key ); ?>><?php echo esc_html( $psm_provider['name'] ); ?></option>
                                 <?php endforeach; ?>
@@ -205,6 +209,7 @@ $psm_encryption_options = PSM_Providers::get_encryption_options();
                         <th scope="row"><label for="PSM_backup_smtp_encryption"><?php esc_html_e( 'Encryption', 'polar-smtp-mailer' ); ?></label></th>
                         <td>
                             <select name="PSM_backup_smtp_encryption" id="PSM_backup_smtp_encryption">
+                                <?php // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- View template loop variables. ?>
                                 <?php foreach ( $psm_encryption_options as $psm_key => $psm_label ) : ?>
                                     <option value="<?php echo esc_attr( $psm_key ); ?>" <?php selected( $psm_settings['backup_smtp_encryption'], $psm_key ); ?>><?php echo esc_html( $psm_label ); ?></option>
                                 <?php endforeach; ?>

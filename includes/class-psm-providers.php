@@ -210,6 +210,7 @@ class PSM_Providers {
          * @since 1.0.0
          * @param array $providers Array of provider configurations.
          */
+        // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- PSM is the established plugin prefix.
         return apply_filters( 'psm_smtp_providers', $providers );
     }
 
