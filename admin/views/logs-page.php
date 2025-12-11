@@ -9,9 +9,9 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$logs_table = PSM_Logs::get_table();
-$logs_table->process_bulk_action();
-$logs_table->prepare_items();
+$psm_logs_table = PSM_Logs::get_table();
+$psm_logs_table->process_bulk_action();
+$psm_logs_table->prepare_items();
 ?>
 
 <div class="wrap ssm-wrap">
@@ -35,10 +35,10 @@ $logs_table->prepare_items();
     <form method="post" class="ssm-logs-form">
         <input type="hidden" name="page" value="polar-smtp-mailer-logs">
         <?php wp_nonce_field( 'bulk-email-logs' ); ?>
-        <?php $logs_table->search_box( __( 'Search', 'polar-smtp-mailer' ), 'ssm-search' ); ?>
+        <?php $psm_logs_table->search_box( __( 'Search', 'polar-smtp-mailer' ), 'ssm-search' ); ?>
         
         <div class="ssm-table-responsive">
-            <?php $logs_table->display(); ?>
+            <?php $psm_logs_table->display(); ?>
         </div>
     </form>
 </div>

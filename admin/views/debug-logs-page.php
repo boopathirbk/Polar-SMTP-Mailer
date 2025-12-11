@@ -12,8 +12,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Get log data.
-$logs = PSM_Debug_Logger::get_logs( 200 );
-$log_size = PSM_Debug_Logger::get_log_size();
+$psm_logs = PSM_Debug_Logger::get_logs( 200 );
+$psm_log_size = PSM_Debug_Logger::get_log_size();
 ?>
 
 <div class="wrap ssm-wrap">
@@ -31,7 +31,7 @@ $log_size = PSM_Debug_Logger::get_log_size();
                     printf(
                         /* translators: %s: Log file size */
                         esc_html__( 'Log size: %s', 'polar-smtp-mailer' ),
-                        esc_html( $log_size )
+                        esc_html( $psm_log_size )
                     );
                     ?>
                 </span>
@@ -50,13 +50,13 @@ $log_size = PSM_Debug_Logger::get_log_size();
         </div>
 
         <div class="ssm-card-body">
-            <?php if ( empty( $logs ) ) : ?>
+            <?php if ( empty( $psm_logs ) ) : ?>
                 <div class="ssm-notice ssm-notice-info">
                     <p><?php esc_html_e( 'No debug logs yet. Send a test email to generate logs.', 'polar-smtp-mailer' ); ?></p>
                 </div>
             <?php else : ?>
                 <div class="ssm-debug-log-container">
-                    <pre class="ssm-debug-log"><?php echo esc_html( $logs ); ?></pre>
+                    <pre class="ssm-debug-log"><?php echo esc_html( $psm_logs ); ?></pre>
                 </div>
             <?php endif; ?>
         </div>

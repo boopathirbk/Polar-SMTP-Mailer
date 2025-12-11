@@ -204,7 +204,7 @@ class PSM_Mailer {
              * @param PHPMailer\PHPMailer\PHPMailer $phpmailer PHPMailer instance.
              * @param array $settings SMTP settings.
              */
-            do_action( 'PSM_phpmailer_configured', $phpmailer, $this->settings );
+            do_action( 'psm_phpmailer_configured', $phpmailer, $this->settings );
 
         } catch ( \Exception $e ) {
             // Silently handle configuration errors.
@@ -722,7 +722,7 @@ class PSM_Mailer {
          * @since 1.0.0
          * @param array $log_data Failed authentication data.
          */
-        do_action( 'PSM_auth_failure', $log_data );
+        do_action( 'psm_auth_failure', $log_data );
     }
 
     /**

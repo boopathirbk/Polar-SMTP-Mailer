@@ -19,7 +19,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
  * @since 1.0.0
  * @return void
  */
-function PSM_uninstall() {
+call_user_func( function() {
     // Check if user has opted to delete data.
     if ( ! get_option( 'PSM_delete_data_on_uninstall', false ) ) {
         return;
@@ -52,6 +52,8 @@ function PSM_uninstall() {
         'PSM_backup_smtp_encryption',
         'PSM_backup_smtp_username',
         'PSM_backup_smtp_password',
+        'PSM_backup_from_email',
+        'PSM_backup_from_name',
         'PSM_debug_mode',
         'PSM_db_version',
         'PSM_privacy_exclude_content',
@@ -104,7 +106,4 @@ function PSM_uninstall() {
         // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_rmdir
         @rmdir( $log_dir );
     }
-}
-
-// Run uninstall.
-PSM_uninstall();
+} );

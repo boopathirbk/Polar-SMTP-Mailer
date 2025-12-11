@@ -76,7 +76,7 @@ class PSM_Queue {
          * @param bool  $bypass Whether to bypass the queue. Default false.
          * @param array $atts   Email attributes (to, subject, message, headers, attachments).
          */
-        if ( apply_filters( 'PSM_bypass_queue', false, $atts ) ) {
+        if ( apply_filters( 'psm_bypass_queue', false, $atts ) ) {
             return $result;
         }
         $this->add_to_queue( $atts );

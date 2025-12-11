@@ -9,8 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$admin_email = get_option( 'admin_email' );
-$smtp_configured = ! empty( get_option( 'PSM_smtp_host', '' ) );
+$psm_admin_email = get_option( 'admin_email' );
+$psm_smtp_configured = ! empty( get_option( 'PSM_smtp_host', '' ) );
 ?>
 
 <div class="wrap ssm-wrap">
@@ -19,7 +19,7 @@ $smtp_configured = ! empty( get_option( 'PSM_smtp_host', '' ) );
         <?php esc_html_e( 'Send Test Email', 'polar-smtp-mailer' ); ?>
     </h1>
 
-    <?php if ( ! $smtp_configured ) : ?>
+    <?php if ( ! $psm_smtp_configured ) : ?>
         <div class="notice notice-warning">
             <p>
                 <?php
@@ -43,14 +43,14 @@ $smtp_configured = ! empty( get_option( 'PSM_smtp_host', '' ) );
                     <tr>
                         <th scope="row"><label for="PSM_test_email"><?php esc_html_e( 'Send To', 'polar-smtp-mailer' ); ?></label></th>
                         <td>
-                            <input type="email" name="PSM_test_email" id="PSM_test_email" value="<?php echo esc_attr( $admin_email ); ?>" class="regular-text" placeholder="you@example.com" required>
+                            <input type="email" name="PSM_test_email" id="PSM_test_email" value="<?php echo esc_attr( $psm_admin_email ); ?>" class="regular-text" placeholder="you@example.com" required>
                             <p class="description"><?php esc_html_e( 'Enter the email address to send the test email to.', 'polar-smtp-mailer' ); ?></p>
                         </td>
                     </tr>
                 </table>
 
                 <p class="submit">
-                    <button type="submit" class="button button-primary" id="ssm-send-test" <?php disabled( ! $smtp_configured ); ?>>
+                    <button type="submit" class="button button-primary" id="ssm-send-test" <?php disabled( ! $psm_smtp_configured ); ?>>
                         <span class="dashicons dashicons-email-alt"></span>
                         <?php esc_html_e( 'Send Test Email', 'polar-smtp-mailer' ); ?>
                     </button>

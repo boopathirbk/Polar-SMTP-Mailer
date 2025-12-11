@@ -210,7 +210,7 @@ class PSM_Providers {
          * @since 1.0.0
          * @param array $providers Array of provider configurations.
          */
-        return apply_filters( 'PSM_smtp_providers', $providers );
+        return apply_filters( 'psm_smtp_providers', $providers );
     }
 
     /**
