@@ -9,10 +9,11 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- View template variables.
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- View template variables.
 $psm_stats = PSM_Dashboard::get_stats();
 $psm_status = PSM_Dashboard::get_system_status();
 $psm_recent_logs = PSM_Dashboard::get_recent_logs( 5 );
+// phpcs:enable
 ?>
 
 <div class="wrap ssm-wrap">

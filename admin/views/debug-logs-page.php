@@ -12,9 +12,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Get log data.
-// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- View template variables.
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- View template variables.
 $psm_logs = PSM_Debug_Logger::get_logs( 200 );
 $psm_log_size = PSM_Debug_Logger::get_log_size();
+// phpcs:enable
 ?>
 
 <div class="wrap ssm-wrap">
