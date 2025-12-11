@@ -183,7 +183,7 @@ git clone https://github.com/boopathirbk/polar-smtp-mailer.git
 
 ### Add Custom Provider
 ```php
-add_filter( 'PSM_smtp_providers', function( $providers ) {
+add_filter( 'psm_smtp_providers', function( $providers ) {
     $providers['my_provider'] = array(
         'name'       => 'My Custom Provider',
         'host'       => 'smtp.example.com',
@@ -197,7 +197,7 @@ add_filter( 'PSM_smtp_providers', function( $providers ) {
 
 ### Bypass Queue for Urgent Emails
 ```php
-add_filter( 'PSM_bypass_queue', function( $bypass, $atts ) {
+add_filter( 'psm_bypass_queue', function( $bypass, $atts ) {
     if ( strpos( $atts['subject'], 'Urgent' ) !== false ) {
         return true; // Send immediately
     }
@@ -220,6 +220,25 @@ add_filter( 'PSM_bypass_queue', function( $bypass, $atts ) {
 ---
 
 ## 📝 Changelog
+
+### 1.0.4 (2025-12-11)
+- **Compliance:** Fixed global variable naming conventions in admin views.
+- **Compliance:** Fixed hook naming conventions.
+- **Fix:** Backup SMTP connection test.
+- **Fix:** Uninstall cleanup.
+
+### 1.0.3 (2025-12-10)
+- Removed debug logging for compliance.
+
+### 1.0.2 (2025-12-10)
+- Fixed HTML email display in log viewer.
+- Fixed empty recipient validation in queue.
+- Improved PHP 8.2 compatibility.
+
+### 1.0.1 (2025-12-10)
+- Security fixes (Encryption, SQL prep).
+- Fixed race condition in queue processing.
+- TLS 1.2/1.3 support.
 
 ### 1.0.0 (2025-12-06)
 **Initial Release:**

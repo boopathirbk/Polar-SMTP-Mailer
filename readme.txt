@@ -3,7 +3,7 @@ Contributors: boopathir
 Tags: smtp, email, wp mail, email log, gmail
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -135,6 +135,11 @@ Enable Backup SMTP in Settings. When primary SMTP fails, emails automatically ro
 == Changelog ==
 
 = 1.0.4 (2025-12-11) =
+* **Compliance:** Fixed global variable naming conventions in admin views (Plugin Check).
+* **Compliance:** Fixed hook naming conventions to use proper `psm_` prefix (Plugin Check).
+* **Fix:** Resolved JavaScript context issue in backup SMTP connection test.
+* **Fix:** Improved uninstall cleanup to remove backup options.
+* **Fix:** Various minor naming convention fixes across the codebase.
 * Added Debug Logs admin page (visible when debug mode enabled)
 * Fixed duplicate email logs when sending test emails
 * Fixed global wp_mail capture for early emails
