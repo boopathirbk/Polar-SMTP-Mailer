@@ -3,12 +3,12 @@ Contributors: boopathir
 Tags: smtp, email, wp mail, email log, gmail
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Stop losing emails. Start delivering with confidence. The lightweight, feature-packed SMTP plugin WordPress deserves — 100% free, no upsells.
+A lightweight, open-source WordPress SMTP plugin with email logging, queue management, backup failover, and a modern dashboard.
 
 == Description ==
 
@@ -16,7 +16,7 @@ Stop losing emails. Start delivering with confidence. The lightweight, feature-p
 
 = 🚀 Why Choose Polar SMTP Mailer? =
 
-Unlike other SMTP plugins that lock essential features behind paywalls, Polar SMTP Mailer gives you **everything for free**:
+Polar SMTP Mailer provides a complete email delivery solution with these key features:
 
 * ✅ **Email Logging** - Track all sent, failed, and queued emails
 * ✅ **Backup SMTP Failover** - Automatic switch when primary fails
@@ -86,6 +86,27 @@ Unlike other SMTP plugins that lock essential features behind paywalls, Polar SM
 * PHP 7.4 or higher
 * OpenSSL extension (for encryption)
 
+= External Services =
+
+This plugin connects to external SMTP servers to send emails. When you configure SMTP settings, the plugin will connect to your chosen email service provider to deliver emails on behalf of your WordPress site.
+
+**Data transmitted:**
+* Email recipient addresses, subject, and message content
+* SMTP authentication credentials (username/password)
+* Connection is made when: sending emails, testing connection, or processing queued emails
+
+**Supported SMTP Providers:**
+Each provider has their own terms of service and privacy policy:
+
+* **Gmail / Google Workspace** - [Terms](https://policies.google.com/terms), [Privacy](https://policies.google.com/privacy)
+* **Microsoft Outlook / 365** - [Terms](https://www.microsoft.com/servicesagreement), [Privacy](https://privacy.microsoft.com/privacystatement)
+* **Amazon SES** - [Terms](https://aws.amazon.com/service-terms/), [Privacy](https://aws.amazon.com/privacy/)
+* **SendGrid** - [Terms](https://www.twilio.com/legal/tos), [Privacy](https://www.twilio.com/legal/privacy)
+* **Mailgun** - [Terms](https://www.mailgun.com/legal/terms/), [Privacy](https://www.mailgun.com/legal/privacy-policy/)
+* **Brevo (Sendinblue)** - [Terms](https://www.brevo.com/legal/termsofuse/), [Privacy](https://www.brevo.com/legal/privacypolicy/)
+* **Postmark** - [Terms](https://postmarkapp.com/terms-of-service), [Privacy](https://postmarkapp.com/privacy-policy)
+* **Custom SMTP** - Terms and privacy depend on your chosen provider
+
 == Installation ==
 
 1. Upload the plugin files to `/wp-content/plugins/polar-smtp-mailer/`
@@ -133,6 +154,10 @@ Enable Backup SMTP in Settings. When primary SMTP fails, emails automatically ro
 5. Email preview modal
 
 == Changelog ==
+
+= 1.0.5 (2025-12-17) =
+* **Compliance:** Removed promotional/comparative language from readme files.
+* **Compliance:** Added External Services section documenting SMTP provider connections.
 
 = 1.0.4 (2025-12-11) =
 * **Compliance:** Fixed global variable naming conventions in admin views (Plugin Check).

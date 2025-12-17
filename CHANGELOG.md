@@ -2,6 +2,15 @@
 
 All notable changes to the Polar SMTP Mailer plugin will be documented in this file.
 
+## [1.0.5] - 2025-12-17
+
+### Fixed
+
+- **WordPress.org Review Compliance** - Removed promotional/comparative language from readme files.
+- **External Services Documentation** - Added required section documenting SMTP provider connections with Terms/Privacy links.
+
+---
+
 ## [1.0.4] - 2025-12-11
 
 ### Fixed

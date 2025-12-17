@@ -6,10 +6,10 @@
 [![License](https://img.shields.io/badge/License-GPLv2-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://paypal.me/boopathirbk)
 
-### 🚀 *The lightweight, feature-packed SMTP plugin WordPress deserves.*
+### A lightweight, open-source WordPress SMTP plugin
 
-> **Stop losing emails. Start delivering with confidence.**  
-> A 100% open-source SMTP mailer with email logging, queue management, backup failover, and a beautiful dashboard — no premium upsells, no feature restrictions.
+> **Reliable email delivery for WordPress.**  
+> Features email logging, queue management, backup failover, and a modern dashboard.
 
 ![Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen.svg)
 
@@ -17,19 +17,18 @@
 
 ## 🏆 Why Choose Polar SMTP Mailer?
 
-| Feature | Polar SMTP Mailer | WP Mail SMTP | Post SMTP | FluentSMTP | Easy WP SMTP |
-|---------|:----------------:|:------------:|:---------:|:----------:|:------------:|
-| **100% Free & Open Source** | ✅ | ❌ Pro | ❌ Pro | ✅ | ❌ Pro |
-| **Email Logging** | ✅ | ❌ Pro | ✅ | ✅ | ✅ |
-| **Backup SMTP Failover** | ✅ | ❌ Pro | ✅ | ❌ | ❌ |
-| **Email Queue** | ✅ | ❌ Pro | ✅ | ❌ | ❌ |
-| **15+ Provider Presets** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Password Encryption** | ✅ AES-256 | ✅ | ✅ | ✅ | ✅ |
-| **GDPR Privacy Tools** | ✅ | ❌ Pro | ❌ | ❌ | ❌ |
-| **Modern Dashboard** | ✅ | ❌ Pro | ✅ | ✅ | ❌ |
-| **Self-Healing Database** | ✅ | ❌ | ❌ | ❌ | ❌ |
-| **Clean Uninstall Option** | ✅ | ❌ | ❌ | ❌ | ❌ |
-| **No Upsells/Ads** | ✅ | ❌ | ❌ | ✅ | ❌ |
+Polar SMTP Mailer provides a complete email delivery solution:
+
+- ✅ **100% Free & Open Source** - No premium tiers or feature locks
+- ✅ **Email Logging** - Complete history with search, filter, export
+- ✅ **Backup SMTP Failover** - Automatic switch when primary fails
+- ✅ **Email Queue** - Background processing with priority & retry
+- ✅ **15+ Provider Presets** - Gmail, Outlook, SendGrid, Mailgun, and more
+- ✅ **Password Encryption** - AES-256-CBC with WordPress salts
+- ✅ **GDPR Privacy Tools** - Exporter, eraser, anonymization
+- ✅ **Modern Dashboard** - Statistics, charts, quick actions
+- ✅ **Self-Healing Database** - Automatic table creation & repair
+- ✅ **Clean Uninstall Option** - Remove all data on deletion
 
 ---
 
@@ -220,6 +219,10 @@ add_filter( 'psm_bypass_queue', function( $bypass, $atts ) {
 ---
 
 ## 📝 Changelog
+
+### 1.0.5 (2025-12-17)
+- **Compliance:** Removed promotional/comparative language from readme files.
+- **Compliance:** Added External Services section for SMTP provider documentation.
 
 ### 1.0.4 (2025-12-11)
 - **Compliance:** Fixed global variable naming conventions in admin views.
